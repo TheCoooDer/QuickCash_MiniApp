@@ -1,0 +1,2007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickCash - Telegram Mini App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <!-- Telegram SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --primary: #FF5252;
+            --secondary: #FF4081;
+            --success: #00C853;
+            --danger: #FF1744;
+            --warning: #FFD600;
+            --dark: #263238;
+            --light: #F5F5F5;
+            --gray: #78909C;
+            --youtube: #FF0000;
+            --telegram: #0088CC;
+            --social: #9C27B0;
+            --external: #673AB7;
+            --checkin: #00897B;
+            --link: #2962FF;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #ECEFF1;
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+            height: 100vh;
+        }
+        .app-container {
+            max-width: 500px;
+            margin: 0 auto;
+            height: 100vh;
+            background-color: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        /* Top Bar */
+        .top-bar {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid white;
+            object-fit: cover;
+            background-color: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .user-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        .balance {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            padding-bottom: 80px;
+            overflow-y: auto;
+            position: relative;
+            height: calc(100vh - 140px);
+        }
+        .tab-content {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            padding-bottom: 80px;
+            overflow-y: auto;
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+        }
+        .tab-content.active {
+            display: block;
+            opacity: 1;
+        }
+        /* Dashboard */
+        .dashboard-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 20px;
+            text-align: center;
+            position: relative;
+        }
+        .dashboard-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            border-radius: 3px 0 0 3px;
+        }
+        .stat-card h3 {
+            font-size: 14px;
+            color: var(--gray);
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: auto;
+        }
+        .stat-icon {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            font-size: 36px;
+            opacity: 0.1;
+            color: var(--primary);
+        }
+        /* Progress Container */
+        .progress-container {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+        }
+        .progress-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .progress-bar {
+            height: 12px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        .countdown-container {
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(135deg, #FFF8E1, #FFECB3);
+            border: 2px solid var(--warning);
+            border-radius: 12px;
+            margin-top: 15px;
+            box-shadow: 0 4px 12px rgba(255, 214, 0, 0.2);
+            display: none;
+        }
+        .countdown-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+        .countdown {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--warning);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .countdown-icon {
+            font-size: 20px;
+            color: var(--warning);
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        /* Tasks - NEW DESIGN */
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        /* Daily Check In Card */
+        .checkin-task {
+            background: linear-gradient(135deg, var(--checkin), #4DB6AC);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0, 137, 123, 0.15);
+            color: white;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .checkin-task::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(45deg);
+        }
+        .checkin-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .checkin-icon {
+            font-size: 36px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        .checkin-info {
+            text-align: left;
+        }
+        .checkin-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .checkin-description {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+        .checkin-reward {
+            font-size: 16px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+        .checkin-btn {
+            background: white;
+            color: var(--checkin);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            white-space: nowrap;
+            z-index: 0;
+        }
+        .checkin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+        .checkin-btn:disabled {
+            background: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
+            transform: none;
+        }
+        /* Featured Ad Task */
+        .featured-task {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(255, 82, 82, 0.15);
+            color: white;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .featured-task::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(45deg);
+        }
+        .featured-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .featured-icon {
+            font-size: 36px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        .featured-info {
+            text-align: left;
+        }
+        .featured-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .featured-description {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+        .featured-reward {
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--warning);
+        }
+        .featured-btn {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            white-space: nowrap;
+            z-index: 0;
+            position: relative;
+        }
+        .featured-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+        .featured-btn:disabled {
+            background: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
+            transform: none;
+        }
+        /* Link Ad Task */
+        .link-ad-task {
+            background: linear-gradient(135deg, var(--link), #1565C0);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(41, 98, 255, 0.15);
+            color: white;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .link-ad-task::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(45deg);
+        }
+        .link-ad-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .link-ad-icon {
+            font-size: 36px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        .link-ad-info {
+            text-align: left;
+        }
+        .link-ad-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .link-ad-description {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+        .link-ad-reward {
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--warning);
+        }
+        .link-ad-btn {
+            background: white;
+            color: var(--link);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            white-space: nowrap;
+            z-index: 0;
+            position: relative;
+        }
+        .link-ad-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+        .link-ad-btn:disabled {
+            background: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
+            transform: none;
+        }
+        /* Ad loading overlay */
+        .ad-loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            color: white;
+        }
+        .ad-loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        /* YouTube and Telegram Tasks */
+        .youtube-task {
+            background: linear-gradient(135deg, var(--youtube), #D50000);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(255, 0, 0, 0.15);
+            color: white;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .youtube-task::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(45deg);
+        }
+        .telegram-task {
+            background: linear-gradient(135deg, var(--telegram), #006699);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0, 136, 204, 0.15);
+            color: white;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .telegram-task::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(45deg);
+        }
+        .task-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .task-icon {
+            font-size: 36px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        .task-info {
+            text-align: left;
+        }
+        .task-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .task-description {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+        .task-reward {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--warning);
+        }
+        .task-btn {
+            background: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            white-space: nowrap;
+            position: relative;
+            z-index: 1;
+        }
+        .youtube-task .task-btn {
+            color: var(--youtube);
+        }
+        .telegram-task .task-btn {
+            color: var(--telegram);
+        }
+        .task-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+        .task-btn:disabled {
+            background: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
+            transform: none;
+        }
+        /* Referral */
+        .referral-container {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+        }
+        .referral-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .referral-header h2 {
+            font-size: 22px;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        .referral-header p {
+            color: var(--gray);
+            font-size: 14px;
+        }
+        .referral-link-container {
+            background: #F5F5F5;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .referral-link {
+            flex: 1;
+            margin-right: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--gray);
+            word-break: break-all;
+        }
+        .copy-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .copy-btn:hover {
+            background: var(--secondary);
+        }
+        .referral-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .referral-stat {
+            background: #F5F5F5;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+        }
+        .referral-stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+            min-height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .referral-stat-label {
+            font-size: 14px;
+            color: var(--gray);
+        }
+        .referral-info {
+            background: #F5F5F5;
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        .referral-info h3 {
+            font-size: 16px;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        .referral-info ul {
+            padding-left: 20px;
+            color: var(--gray);
+            font-size: 14px;
+        }
+        .referral-info li {
+            margin-bottom: 5px;
+        }
+        .referral-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        /* Support */
+        .support-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+        }
+        .support-card h3 {
+            margin-bottom: 20px;
+            color: var(--dark);
+            font-size: 22px;
+            text-align: center;
+        }
+        .support-card p {
+            margin-bottom: 20px;
+            text-align: center;
+            color: var(--gray);
+        }
+        .support-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #F5F5F5;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.2s;
+        }
+        .support-link:hover {
+            background: #E0E0E0;
+            transform: translateX(5px);
+        }
+        .support-link i {
+            font-size: 24px;
+        }
+        .support-link-details {
+            flex: 1;
+        }
+        .support-link-title {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        .support-link-subtitle {
+            font-size: 12px;
+            color: var(--gray);
+        }
+        .telegram { color: var(--telegram); }
+        .facebook { color: #1877f2; }
+        /* Withdraw */
+        .withdraw-container {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+        .withdraw-container h2 {
+            margin-bottom: 25px;
+            text-align: center;
+            color: var(--dark);
+        }
+        .withdraw-info {
+            background: #F5F5F5;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .withdraw-info h3 {
+            margin-bottom: 15px;
+            color: var(--dark);
+            font-size: 18px;
+        }
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #E0E0E0;
+        }
+        .info-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        .withdraw-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .form-group label {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        .form-group select,
+        .form-group input {
+            padding: 15px;
+            border: 1px solid #E0E0E0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        .form-group select:focus,
+        .form-group input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        .withdraw-btn {
+            background: linear-gradient(135deg, var(--success), #00A152);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .withdraw-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 200, 83, 0.3);
+        }
+        .withdraw-btn:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+        }
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            flex-shrink: 0;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            color: var(--gray);
+            text-decoration: none;
+            padding: 5px 15px;
+            border-radius: 8px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .nav-item.active {
+            color: var(--primary);
+            background: rgba(255, 82, 82, 0.1);
+        }
+        .nav-item i {
+            font-size: 22px;
+        }
+        .nav-item span {
+            font-size: 12px;
+            font-weight: 600;
+        }
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 200;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            max-width: 90%;
+        }
+        .notification.show {
+            display: flex;
+            animation: slideDown 0.3s ease-out;
+        }
+        @keyframes slideDown {
+            from { transform: translate(-50%, -100%); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+        .notification.success {
+            border-left: 4px solid var(--success);
+        }
+        .notification.error {
+            border-left: 4px solid var(--danger);
+        }
+        .notification.info {
+            border-left: 4px solid var(--primary);
+        }
+        .notification i {
+            font-size: 20px;
+        }
+        .notification.success i {
+            color: var(--success);
+        }
+        .notification.error i {
+            color: var(--danger);
+        }
+        .notification.info i {
+            color: var(--primary);
+        }
+        /* Responsive */
+        @media (max-width: 500px) {
+            .app-container {
+                max-width: 100%;
+            }
+        }
+    </style>
+    <script src='//libtl.com/sdk.js' data-zone='9891560' data-sdk='show_9891560'></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-name" id="userName">Loading...</div>
+            </div>
+            <div class="balance">
+                <i class="fas fa-coins"></i>
+                <span id="userBalance">৳0.00</span>
+            </div>
+        </div>
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Home Tab -->
+            <div class="tab-content active" id="home-tab">
+                <h2 class="dashboard-title">QuickCash Dashboard</h2>
+                <div class="dashboard">
+                    <div class="stat-card">
+                        <h3>Tasks Done</h3>
+                        <div class="stat-value" id="tasksDone">0</div>
+                        <i class="fas fa-tasks stat-icon"></i>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Clicks</h3>
+                        <div class="stat-value" id="clicks">0</div>
+                        <i class="fas fa-mouse-pointer stat-icon"></i>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Earning</h3>
+                        <div class="stat-value">৳<span id="totalEarning">0.00</span></div>
+                        <i class="fas fa-coins stat-icon"></i>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Refers</h3>
+                        <div class="stat-value" id="totalRefers">0</div>
+                        <i class="fas fa-users stat-icon"></i>
+                    </div>
+                </div>
+                <!-- Progress Container -->
+                <div class="progress-container">
+                    <h3 class="progress-title">Daily Task Limit</h3>
+                    <div class="progress-header">
+                        <span>Progress</span>
+                        <span id="taskLimitText">0 of 35</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="taskProgress" style="width: 0%"></div>
+                    </div>
+                    <!-- Enhanced Countdown Timer -->
+                    <div class="countdown-container" id="countdownContainer">
+                        <div class="countdown-label">
+                            <i class="fas fa-clock countdown-icon"></i>
+                            Tasks available in:
+                        </div>
+                        <div class="countdown" id="countdown">--:--:--</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Tasks Tab -->
+            <div class="tab-content" id="tasks-tab">
+                <h2 class="dashboard-title">Daily Tasks</h2>
+                <div class="task-list" id="taskList">
+                    <!-- Daily Check In Card -->
+                    <div class="checkin-task">
+                        <div class="checkin-left">
+                            <div class="checkin-icon">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <div class="checkin-info">
+                                <div class="checkin-title">Daily Check In</div>
+                                <div class="checkin-description">Claim your daily reward</div>
+                                <div class="checkin-reward">Reward: ৳10.00</div>
+                            </div>
+                        </div>
+                        <button onclick="dailyCheckIn()" class="checkin-btn" id="checkinBtn">
+                            Check In
+                        </button>
+                    </div>
+                    <!-- Featured Ad Task -->
+                    <div class="featured-task">
+                        <div class="featured-left">
+                            <div class="featured-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="featured-info">
+                                <div class="featured-title">Featured Ad</div>
+                                <div class="featured-description">Watch premium ad (30/day limit)</div>
+                                <div class="featured-reward">Reward: ৳5.00</div>
+                            </div>
+                        </div>
+                        <button onclick="Watched()" class="featured-btn" id="featuredAdBtn">
+                            Watch Now (0/30)
+                        </button>
+                    </div>
+                    <!-- Link Ad Task -->
+                    <div class="link-ad-task">
+                        <div class="link-ad-left">
+                            <div class="link-ad-icon">
+                                <i class="fas fa-link"></i>
+                            </div>
+                            <div class="link-ad-info">
+                                <div class="link-ad-title">Link Ads</div>
+                                <div class="link-ad-description">Visit partner links (5/day limit)</div>
+                                <div class="link-ad-reward">Reward: ৳6.00</div>
+                            </div>
+                        </div>
+                        <button onclick="visitLinkAd()" class="link-ad-btn" id="linkAdBtn">
+                            Visit Link (0/5)
+                        </button>
+                    </div>
+                    <!-- YouTube Subscribe Task -->
+                    <div class="youtube-task">
+                        <div class="task-left">
+                            <div class="task-icon">
+                                <i class="fab fa-youtube"></i>
+                            </div>
+                            <div class="task-info">
+                                <div class="task-title">Subscribe YouTube</div>
+                                <div class="task-description">Subscribe to our channel</div>
+                                <div class="task-reward">Reward: ৳15.00</div>
+                            </div>
+                        </div>
+                        <button class="task-btn" id="youtubeTaskBtn">
+                            Subscribe Now
+                        </button>
+                    </div>
+                    <!-- Telegram Join Task -->
+                    <div class="telegram-task">
+                        <div class="task-left">
+                            <div class="task-icon">
+                                <i class="fab fa-telegram-plane"></i>
+                            </div>
+                            <div class="task-info">
+                                <div class="task-title">Join Telegram</div>
+                                <div class="task-description">Join our channel</div>
+                                <div class="task-reward">Reward: ৳10.00</div>
+                            </div>
+                        </div>
+                        <button class="task-btn" id="telegramTaskBtn">
+                            Join Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Referral Tab -->
+            <div class="tab-content" id="referral-tab">
+                <div class="referral-container">
+                    <div class="referral-header">
+                        <h2>Referral Program</h2>
+                        <p>Invite friends and earn ৳50.00 for each qualified referral!</p>
+                    </div>
+                    <div class="referral-link-container">
+                        <div class="referral-link" id="referralLink">Generating...</div>
+                        <button class="copy-btn" id="copyBtn">
+                            <i class="fas fa-copy"></i>
+                            <span>Copy</span>
+                        </button>
+                    </div>
+                    <div class="referral-stats">
+                        <div class="referral-stat">
+                            <div class="referral-stat-value" id="referralCount">0</div>
+                            <div class="referral-stat-label">Total Referrals</div>
+                        </div>
+                        <div class="referral-stat">
+                            <div class="referral-stat-value">৳<span id="referralEarnings">0.00</span></div>
+                            <div class="referral-stat-label">Referral Earnings</div>
+                        </div>
+                    </div>
+                    <div class="referral-info">
+                        <h3>How It Works</h3>
+                        <ul>
+                            <li>Share your unique referral link with friends</li>
+                            <li>They must join using your link and complete at least 5 tasks</li>
+                            <li>You'll earn ৳50.00 for each qualified referral</li>
+                            <li>No limit on how many you can refer!</li>
+                        </ul>
+                        <div class="referral-badge">
+                            <i class="fas fa-star"></i> Premium Referrer
+                        </div>
+                    </div>
+                </div>
+                <div class="support-card">
+                    <h3>Referral Benefits</h3>
+                    <ul style="padding-left: 20px; color: var(--gray);">
+                        <li>Higher withdrawal priority for referrers</li>
+                        <li>Exclusive bonuses for top referrers</li>
+                        <li>Lifetime earnings from your referrals</li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Support Tab -->
+            <div class="tab-content" id="support-tab">
+                <div class="support-card">
+                    <h3>Developer & Support</h3>
+                    <p>Connect with the developer for support and updates</p>
+                    <a href="https://t.me/quickcash_support" class="support-link" target="_blank">
+                        <i class="fab fa-telegram telegram"></i>
+                        <div class="support-link-details">
+                            <div class="support-link-title">Telegram Support</div>
+                            <div class="support-link-subtitle">@quickcash_support</div>
+                        </div>
+                    </a>
+                    <a href="https://www.facebook.com/QuickCashApp" class="support-link" target="_blank">
+                        <i class="fab fa-facebook facebook"></i>
+                        <div class="support-link-details">
+                            <div class="support-link-title">Facebook Page</div>
+                            <div class="support-link-subtitle">QuickCash App</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="support-card">
+                    <h3>App Information</h3>
+                    <div style="padding: 15px; background: #F5F5F5; border-radius: 12px;">
+                        <p style="margin-bottom: 10px; color: var(--gray); font-size: 14px;">
+                            <strong>Version:</strong> 1.0.0
+                        </p>
+                        <p style="margin-bottom: 10px; color: var(--gray); font-size: 14px;">
+                            <strong>Developer:</strong> QuickCash Team
+                        </p>
+                        <p style="color: var(--gray); font-size: 14px;">
+                            <strong>Last Updated:</strong> <span id="lastUpdated"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- Withdraw Tab -->
+            <div class="tab-content" id="withdraw-tab">
+                <div class="withdraw-container">
+                    <h2>Withdraw Funds</h2>
+                    <div class="withdraw-info">
+                        <h3>Withdrawal Information</h3>
+                        <div class="info-item">
+                            <span>Current Balance:</span>
+                            <span>৳<span id="currentBalance">0.00</span></span>
+                        </div>
+                        <div class="info-item">
+                            <span>Minimum Withdrawal:</span>
+                            <span>৳2,000.00</span>
+                        </div>
+                        <div class="info-item">
+                            <span>Referral Requirement:</span>
+                            <span id="referralRequirement">30 referrals needed</span>
+                        </div>
+                        <div class="info-item">
+                            <span>Processing Time:</span>
+                            <span>48 hours</span>
+                        </div>
+                    </div>
+                    <form class="withdraw-form" id="withdrawForm">
+                        <div class="form-group">
+                            <label for="withdrawMethod">Withdrawal Method</label>
+                            <select id="withdrawMethod">
+                                <option value="bkash">bKash</option>
+                                <option value="nagad">Nagad</option>
+                                <option value="rocket">Rocket</option>
+                                <option value="binance">Binance</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="accountNumber" id="accountLabel">Account Number</label>
+                            <input type="text" id="accountNumber" placeholder="Enter your account number" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="withdrawAmount">Amount (৳)</label>
+                            <input type="number" id="withdrawAmount" min="2000" step="0.01" placeholder="Enter amount" required>
+                        </div>
+                        <button type="submit" class="withdraw-btn" id="withdrawBtn">Withdraw Funds</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item active" data-tab="home" onclick="openTab('home')">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </div>
+            <div class="nav-item" data-tab="tasks" onclick="openTab('tasks')">
+                <i class="fas fa-tasks"></i>
+                <span>Tasks</span>
+            </div>
+            <div class="nav-item" data-tab="referral" onclick="openTab('referral')">
+                <i class="fas fa-user-friends"></i>
+                <span>Referral</span>
+            </div>
+            <div class="nav-item" data-tab="support" onclick="openTab('support')">
+                <i class="fas fa-headset"></i>
+                <span>Support</span>
+            </div>
+            <div class="nav-item" data-tab="withdraw" onclick="openTab('withdraw')">
+                <i class="fas fa-money-bill-wave"></i>
+                <span>Withdraw</span>
+            </div>
+        </div>
+        <!-- Notification -->
+        <div class="notification" id="notification">
+            <i class="fas fa-check-circle"></i>
+            <span id="notificationText">Success!</span>
+        </div>
+        <!-- Ad Loading Overlay -->
+        <div class="ad-loading-overlay" id="adLoadingOverlay" style="display: none;">
+            <div class="ad-loading-spinner"></div>
+            <p>Loading ad, please wait...</p>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Telegram Web App
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+
+        // ========================
+        // APP CONFIGURATION
+        // ========================
+        const APP_CONFIG = {
+            DAILY_TASK_LIMIT: 35,
+            DAILY_FEATURED_AD_LIMIT: 30,
+            DAILY_LINK_AD_LIMIT: 5,
+            REWARDS: {
+                DAILY_CHECKIN: 10.00,
+                FEATURED_AD: 5.00,
+                LINK_AD: 6.00,
+                YOUTUBE_SUBSCRIBE: 15.00,
+                TELEGRAM_JOIN: 10.00,
+                REFERRAL_BONUS: 50.00
+            },
+            WITHDRAWAL_MIN_AMOUNT: 2000,
+            FIRST_WITHDRAWAL_REFERRAL_REQUIREMENT: 30,
+            BOT_USERNAME: 'quickcash_bot'
+        };
+
+        // ========================
+        // FIREBASE INITIALIZATION
+        // ========================
+        // ⚠️ REPLACE THIS WITH YOUR ACTUAL FIREBASE CONFIG ⚠️
+        const firebaseConfig = {
+            apiKey: "AIzaSyDfMHu-jojs-moRp2QhQcsJhM1O9L7j_GY",
+            authDomain: "quickcashminiapp.firebaseapp.com",
+            projectId: "quickcashminiapp",
+            storageBucket: "quickcashminiapp.firebasestorage.app",
+            messagingSenderId: "772745138057",
+            appId: "1:772745138057:web:70a1f8763335bbf7645b58"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // ========================
+        // HELPER FUNCTIONS
+        // ========================
+        // Function to get user initials from name
+        function getUserInitials(name) {
+            if (!name) return 'U';
+            const parts = name.trim().split(' ');
+            if (parts.length >= 2) {
+                return (parts[0][0] + parts[1][0]).toUpperCase();
+            } else if (parts.length === 1) {
+                return parts[0][0].toUpperCase();
+            }
+            return 'U';
+        }
+
+        // Function to get user full name
+        function getUserFullName(user) {
+            if (!user) return 'User';
+            let fullName = user.first_name || '';
+            if (user.last_name) {
+                fullName += ' ' + user.last_name;
+            }
+            return fullName.trim() || 'User';
+        }
+
+        // Function to load user profile picture
+        function loadUserProfilePicture(userId, photoUrl, avatarElement) {
+            if (photoUrl) {
+                avatarElement.innerHTML = `<img src="${photoUrl}" alt="User" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+            } else {
+                // Fallback to initials
+                const initials = getUserInitials(userData.name);
+                avatarElement.innerHTML = initials;
+                // Apply styles for initials fallback
+                Object.assign(avatarElement.style, {
+                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '18px',
+                    fontWeight: 'bold'
+                });
+            }
+        }
+
+        // Generic function to complete an ad task
+        function completeAdTask(taskType, reward, maxDailyLimit, updateButtonFunction, adUrls = linkAdUrls) {
+            // Check daily task limit
+            if (userData.tasksDoneToday >= APP_CONFIG.DAILY_TASK_LIMIT) {
+                showNotification('Daily task limit reached. Try again tomorrow.', 'error');
+                return;
+            }
+
+            // Check specific task limit
+            const taskCountKey = `${taskType}Count`;
+            if (userData[taskCountKey] >= maxDailyLimit) {
+                showNotification(`You have reached the daily limit of ${maxDailyLimit} for this task.`, 'error');
+                return;
+            }
+
+            // Show loading overlay
+            document.getElementById('adLoadingOverlay').style.display = 'flex';
+
+            show_9891560()
+                .then(() => {
+                    document.getElementById('adLoadingOverlay').style.display = 'none';
+
+                    // Get a random or sequential link
+                    const linkIndex = userData[taskCountKey] % adUrls.length;
+                    const linkUrl = adUrls[linkIndex];
+
+                    tg.openLink(linkUrl);
+
+                    // Update user data
+                    userData[taskCountKey]++;
+                    addReward(reward);
+
+                    // Update UI
+                    updateButtonFunction();
+                    showNotification(`Congratulations! You have earned ৳${reward.toFixed(2)}`, 'success');
+                })
+                .catch(error => {
+                    document.getElementById('adLoadingOverlay').style.display = 'none';
+                    showNotification('Failed to load ad. Please try again later.', 'error');
+                    console.error('Ad error:', error);
+                    updateButtonFunction();
+                });
+        }
+
+        // ========================
+        // USER DATA MANAGEMENT
+        // ========================
+        let userData = {
+            id: tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : 12345,
+            name: tg.initDataUnsafe.user ? getUserFullName(tg.initDataUnsafe.user) : 'User',
+            photo: tg.initDataUnsafe.user && tg.initDataUnsafe.user.photo_url ? tg.initDataUnsafe.user.photo_url : null,
+            balance: 0.00,
+            tasksDoneToday: 0,
+            clicks: 0,
+            totalEarning: 0.00,
+            totalRefers: 0,
+            hasWithdrawnBefore: false,
+            completedTasks: [],
+            referralCode: '',
+            referredBy: '',
+            referralEarnings: 0.00,
+            withdrawalHistory: [],
+            joinedAt: new Date().toISOString(),
+            lastCheckIn: null,
+            lastTaskReset: null,
+            featuredAdsWatchedToday: 0,
+            linkAdsVisitedToday: 0
+        };
+
+        // Link ad URLs
+        const linkAdUrls = [
+            'https://www.revenuecpmgate.com/kfarq0tuw?key=e6a1cde9dcf8a5bf8f73fb24245c3de5',
+            'https://www.revenuecpmgate.com/tutkw1sahh?key=272554dae7b213c13d92f046080861a2',
+            'https://www.revenuecpmgate.com/tqypp62y2w?key=74cc971fb77af7a1038cdccbafd2432f',
+            'https://www.revenuecpmgate.com/abxysby62i?key=4061879b22a9fa181066a0f2c57ae72d',
+            'https://www.revenuecpmgate.com/ebpv48yuy?key=ec6b3137e555bdf5c6d2e3664ce83ed0'
+        ];
+
+        // Social task URLs
+        const socialTaskUrls = {
+            'youtubeTaskBtn': 'https://www.youtube.com/@QuickCashOfficial',
+            'telegramTaskBtn': 'https://t.me/QuickCashGroup'
+        };
+
+        // Save user data to Firestore
+        async function saveUserData() {
+            try {
+                await db.collection('users').doc(userData.id.toString()).set(userData);
+                console.log("User data saved to Firestore");
+            } catch (error) {
+                console.error("Error saving user data to Firestore: ", error);
+                // Fallback to localStorage if Firestore fails
+                localStorage.setItem('quickcash_userData_' + userData.id, JSON.stringify(userData));
+            }
+        }
+
+        // Load user data from Firestore
+        async function loadUserData() {
+            try {
+                const doc = await db.collection('users').doc(userData.id.toString()).get();
+                if (doc.exists) {
+                    // Load existing user data
+                    userData = doc.data();
+                    // Ensure the ID is correct
+                    userData.id = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : 12345;
+                    // Update name and photo from Telegram if available
+                    if (tg.initDataUnsafe.user) {
+                        userData.name = getUserFullName(tg.initDataUnsafe.user);
+                        if (tg.initDataUnsafe.user.photo_url && !userData.photo) {
+                            userData.photo = tg.initDataUnsafe.user.photo_url;
+                        }
+                    }
+                } else {
+                    // Initialize default user data for new user
+                    initializeDefaultUserData();
+                    // Save the new user immediately
+                    await saveUserData();
+                }
+
+                // Check for referral
+                checkReferral();
+                // Check if task limit needs to be reset
+                checkTaskLimitReset();
+                // Generate referral code if not exists
+                generateReferralCode();
+                // Update referral link
+                document.getElementById('referralLink').textContent = `https://t.me/${APP_CONFIG.BOT_USERNAME}?start=${userData.referralCode}`;
+                // Update last updated date
+                const now = new Date();
+                document.getElementById('lastUpdated').textContent = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
+                // Update UI elements
+                updateTaskButtons();
+                updateCheckInButton();
+                updateFeaturedAdButton();
+                updateLinkAdButton();
+                updateSocialTaskButtons();
+                updateUI();
+                updateTaskLimit();
+                // Load user profile picture
+                loadUserProfilePicture(userData.id, userData.photo, document.getElementById('userAvatar'));
+
+            } catch (error) {
+                console.error("Error loading user data from Firestore: ", error);
+                // Fallback to localStorage
+                const localData = localStorage.getItem('quickcash_userData_' + userData.id);
+                if (localData) {
+                    userData = JSON.parse(localData);
+                } else {
+                    initializeDefaultUserData();
+                }
+                // Proceed with initialization using local data
+                checkReferral();
+                checkTaskLimitReset();
+                generateReferralCode();
+                document.getElementById('referralLink').textContent = `https://t.me/${APP_CONFIG.BOT_USERNAME}?start=${userData.referralCode}`;
+                const now = new Date();
+                document.getElementById('lastUpdated').textContent = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
+                updateTaskButtons();
+                updateCheckInButton();
+                updateFeaturedAdButton();
+                updateLinkAdButton();
+                updateSocialTaskButtons();
+                updateUI();
+                updateTaskLimit();
+                loadUserProfilePicture(userData.id, userData.photo, document.getElementById('userAvatar'));
+            }
+        }
+
+        // Helper function to initialize default user data
+        function initializeDefaultUserData() {
+            userData = {
+                id: tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : 12345,
+                name: tg.initDataUnsafe.user ? getUserFullName(tg.initDataUnsafe.user) : 'User',
+                photo: tg.initDataUnsafe.user && tg.initDataUnsafe.user.photo_url ? tg.initDataUnsafe.user.photo_url : null,
+                balance: 0.00,
+                tasksDoneToday: 0,
+                clicks: 0,
+                totalEarning: 0.00,
+                totalRefers: 0,
+                hasWithdrawnBefore: false,
+                completedTasks: [],
+                referralCode: '',
+                referredBy: '',
+                referralEarnings: 0.00,
+                withdrawalHistory: [],
+                joinedAt: new Date().toISOString(),
+                lastCheckIn: null,
+                lastTaskReset: null,
+                featuredAdsWatchedToday: 0,
+                linkAdsVisitedToday: 0
+            };
+        }
+
+        // ========================
+        // TASK FUNCTIONS
+        // ========================
+        // Daily Check In function
+        function dailyCheckIn() {
+            const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+            // Check if already checked in today
+            if (userData.lastCheckIn === today) {
+                showNotification('You have already checked in today. Come back tomorrow!', 'error');
+                return;
+            }
+            // Check daily task limit
+            if (userData.tasksDoneToday >= APP_CONFIG.DAILY_TASK_LIMIT) {
+                showNotification('Daily task limit reached. Try again tomorrow.', 'error');
+                return;
+            }
+            // Add reward for daily check-in
+            const reward = APP_CONFIG.REWARDS.DAILY_CHECKIN;
+            userData.balance += reward;
+            userData.totalEarning += reward;
+            userData.clicks++;
+            userData.tasksDoneToday++;
+            userData.lastCheckIn = today; // Set last check-in to today
+            saveUserData();
+            updateUI();
+            updateCheckInButton();
+            updateTaskLimit();
+            showNotification(`Daily check-in successful! ৳${reward.toFixed(2)} added to your balance.`);
+        }
+
+        // Update check-in button based on whether user has checked in today
+        function updateCheckInButton() {
+            const checkInBtn = document.getElementById('checkinBtn');
+            const today = new Date().toISOString().split('T')[0];
+            if (userData.lastCheckIn === today) {
+                checkInBtn.disabled = true;
+                checkInBtn.textContent = 'Checked In';
+            } else {
+                checkInBtn.disabled = false;
+                checkInBtn.textContent = 'Check In';
+            }
+        }
+
+        // Featured Ad Task
+        function Watched() {
+            completeAdTask(
+                'featuredAdsWatchedToday',
+                APP_CONFIG.REWARDS.FEATURED_AD,
+                APP_CONFIG.DAILY_FEATURED_AD_LIMIT,
+                updateFeaturedAdButton
+            );
+        }
+
+        // Update featured ad button text and state
+        function updateFeaturedAdButton() {
+            const featuredBtn = document.getElementById('featuredAdBtn');
+            const watchedCount = userData.featuredAdsWatchedToday || 0;
+            if (watchedCount >= APP_CONFIG.DAILY_FEATURED_AD_LIMIT) {
+                featuredBtn.disabled = true;
+                featuredBtn.textContent = `Limit Reached (${watchedCount}/${APP_CONFIG.DAILY_FEATURED_AD_LIMIT})`;
+            } else {
+                featuredBtn.disabled = false;
+                featuredBtn.textContent = `Watch Now (${watchedCount}/${APP_CONFIG.DAILY_FEATURED_AD_LIMIT})`;
+            }
+        }
+
+        // Function to visit link ad
+        function visitLinkAd() {
+            completeAdTask(
+                'linkAdsVisitedToday',
+                APP_CONFIG.REWARDS.LINK_AD,
+                APP_CONFIG.DAILY_LINK_AD_LIMIT,
+                updateLinkAdButton,
+                linkAdUrls
+            );
+        }
+
+        // Update link ad button text and state
+        function updateLinkAdButton() {
+            const linkAdBtn = document.getElementById('linkAdBtn');
+            const visitedCount = userData.linkAdsVisitedToday || 0;
+            if (visitedCount >= APP_CONFIG.DAILY_LINK_AD_LIMIT) {
+                linkAdBtn.disabled = true;
+                linkAdBtn.textContent = `Limit Reached (${visitedCount}/${APP_CONFIG.DAILY_LINK_AD_LIMIT})`;
+            } else {
+                linkAdBtn.disabled = false;
+                linkAdBtn.textContent = `Visit Link (${visitedCount}/${APP_CONFIG.DAILY_LINK_AD_LIMIT})`;
+            }
+        }
+
+        // Function to add reward and update UI
+        function addReward(amount) {
+            userData.balance += amount;
+            userData.totalEarning += amount;
+            userData.tasksDoneToday++;
+            userData.clicks++;
+            saveUserData();
+            updateUI();
+            updateTaskLimit();
+        }
+
+        // Function to open social task (YouTube/Telegram)
+        function openSocialTask(taskId, link, reward) {
+            // Check if task is already completed
+            if (userData.completedTasks.includes(taskId)) {
+                showNotification('You have already completed this task.', 'error');
+                return;
+            }
+            // Check daily task limit
+            if (userData.tasksDoneToday >= APP_CONFIG.DAILY_TASK_LIMIT) {
+                showNotification('Daily task limit reached. Try again tomorrow.', 'error');
+                return;
+            }
+            // Get the button element
+            const button = document.getElementById(taskId);
+            // Show loading state
+            button.disabled = true;
+            button.textContent = 'Opening...';
+            // Open the link in Telegram
+            try {
+                tg.openLink(link);
+                // Add reward and mark task as completed
+                userData.balance += reward;
+                userData.totalEarning += reward;
+                userData.tasksDoneToday++;
+                userData.clicks++;
+                userData.completedTasks.push(taskId);
+                saveUserData();
+                updateUI();
+                updateSocialTaskButton(taskId);
+                updateTaskLimit();
+                showNotification(`Task completed! ৳${reward.toFixed(2)} added to your balance.`);
+                // Check if user completed 5 tasks and was referred
+                if (userData.tasksDoneToday === 5 && userData.referredBy) {
+                    setTimeout(() => {
+                        showNotification(`Congratulations! You've completed 5 tasks. Your referrer (${userData.referredBy}) will receive ৳50.00!`, 'success');
+                    }, 1000);
+                }
+            } catch (error) {
+                console.error('Error opening link:', error);
+                showNotification('Failed to open link. Please try again.', 'error');
+                button.disabled = false;
+                button.textContent = taskId === 'youtubeTaskBtn' ? 'Subscribe Now' : 'Join Now';
+            }
+        }
+
+        // Function to update a specific social task button
+        function updateSocialTaskButton(taskId) {
+            const button = document.getElementById(taskId);
+            if (button) {
+                if (userData.completedTasks.includes(taskId)) {
+                    button.disabled = true;
+                    button.textContent = 'Completed';
+                } else if (userData.tasksDoneToday >= APP_CONFIG.DAILY_TASK_LIMIT) {
+                    button.disabled = true;
+                    button.textContent = 'Limit Reached';
+                } else {
+                    button.disabled = false;
+                    button.textContent = taskId === 'youtubeTaskBtn' ? 'Subscribe Now' : 'Join Now';
+                }
+            }
+        }
+
+        // Update social task buttons based on completion status
+        function updateSocialTaskButtons() {
+            updateSocialTaskButton('youtubeTaskBtn');
+            updateSocialTaskButton('telegramTaskBtn');
+        }
+
+        // ========================
+        // REFERRAL & UTILITY FUNCTIONS
+        // ========================
+        // Generate smart referral code
+        function generateReferralCode() {
+            if (!userData.referralCode) {
+                const timestamp = Date.now().toString(36);
+                const randomStr = Math.random().toString(36).substring(2, 6);
+                const userId = userData.id.toString().slice(-4);
+                userData.referralCode = `QC${userId}${timestamp}${randomStr}`.toUpperCase();
+                saveUserData();
+            }
+            return userData.referralCode;
+        }
+
+        // Check if user was referred
+        function checkReferral() {
+            // Check if user came from a referral link
+            if (tg.initDataUnsafe && tg.initDataUnsafe.start_param) {
+                const referralCode = tg.initDataUnsafe.start_param;
+                if (referralCode && !userData.referredBy) {
+                    userData.referredBy = referralCode;
+                    saveUserData();
+                    // Show welcome message for referred users
+                    setTimeout(() => {
+                        showNotification(`Welcome! You were referred by ${referralCode}`, 'info');
+                    }, 1000);
+                }
+            }
+        }
+
+        // Check if task limit needs to be reset
+        function checkTaskLimitReset() {
+            const today = new Date().toISOString().split('T')[0];
+            if (userData.lastTaskReset !== today) {
+                userData.tasksDoneToday = 0;
+                userData.featuredAdsWatchedToday = 0;
+                userData.linkAdsVisitedToday = 0;
+                userData.lastTaskReset = today;
+                saveUserData();
+                return true;
+            }
+            return false;
+        }
+
+        // ========================
+        // UI UPDATE FUNCTIONS
+        // ========================
+        // Update UI with user data
+        function updateUI() {
+            requestAnimationFrame(() => {
+                document.getElementById('userName').textContent = userData.name;
+                document.getElementById('userBalance').textContent = `৳${userData.balance.toFixed(2)}`;
+                document.getElementById('tasksDone').textContent = userData.tasksDoneToday;
+                document.getElementById('clicks').textContent = userData.clicks;
+                document.getElementById('totalEarning').textContent = userData.totalEarning.toFixed(2);
+                document.getElementById('totalRefers').textContent = userData.totalRefers;
+                document.getElementById('currentBalance').textContent = `৳${userData.balance.toFixed(2)}`;
+                document.getElementById('referralCount').textContent = userData.totalRefers;
+                document.getElementById('referralEarnings').textContent = userData.referralEarnings.toFixed(2);
+                // Update referral requirement
+                if (userData.hasWithdrawnBefore) {
+                    document.getElementById('referralRequirement').textContent = 'No referral requirement';
+                } else {
+                    document.getElementById('referralRequirement').textContent = `${userData.totalRefers}/${APP_CONFIG.FIRST_WITHDRAWAL_REFERRAL_REQUIREMENT} referrals needed`;
+                }
+                // Update withdraw button
+                updateWithdrawButton();
+            });
+        }
+
+        // Update task limit progress
+        function updateTaskLimit() {
+            const progressFill = document.getElementById('taskProgress');
+            const taskLimitText = document.getElementById('taskLimitText');
+            const countdownContainer = document.getElementById('countdownContainer');
+            // Update progress
+            const progress = (userData.tasksDoneToday / APP_CONFIG.DAILY_TASK_LIMIT) * 100;
+            progressFill.style.width = `${progress}%`;
+            taskLimitText.textContent = `${userData.tasksDoneToday} of ${APP_CONFIG.DAILY_TASK_LIMIT}`;
+            // Check if limit is reached
+            if (userData.tasksDoneToday >= APP_CONFIG.DAILY_TASK_LIMIT) {
+                countdownContainer.style.display = 'block';
+                updateCountdown();
+                disableLimitedTaskButtons();
+            } else {
+                countdownContainer.style.display = 'none';
+                enableTaskButtons();
+            }
+        }
+
+        // Update countdown timer
+        function updateCountdown() {
+            const countdown = document.getElementById('countdown');
+            const now = new Date();
+            const midnight = new Date();
+            midnight.setHours(24, 0, 0, 0);
+            const remaining = midnight - now;
+            if (remaining > 0) {
+                const hours = Math.floor(remaining / (1000 * 60 * 60));
+                const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+                countdown.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+        }
+
+        // Disable limited task buttons
+        function disableLimitedTaskButtons() {
+            const today = new Date().toISOString().split('T')[0];
+            if (userData.lastCheckIn !== today) {
+                const checkInBtn = document.getElementById('checkinBtn');
+                checkInBtn.disabled = true;
+                checkInBtn.textContent = 'Limit Reached';
+            }
+            updateFeaturedAdButton();
+            updateLinkAdButton();
+            updateSocialTaskButtons();
+        }
+
+        // Enable task buttons that aren't completed
+        function enableTaskButtons() {
+            const today = new Date().toISOString().split('T')[0];
+            if (userData.lastCheckIn !== today) {
+                const checkInBtn = document.getElementById('checkinBtn');
+                checkInBtn.disabled = false;
+                checkInBtn.textContent = 'Check In';
+            }
+            updateFeaturedAdButton();
+            updateLinkAdButton();
+            updateSocialTaskButtons();
+        }
+
+        // Update task buttons (placeholder for compatibility)
+        function updateTaskButtons() {
+            // Handled by individual functions
+        }
+
+        // Show notification
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            const icon = notification.querySelector('i');
+            notificationText.textContent = message;
+            notification.className = `notification ${type} show`;
+            if (type === 'success') {
+                icon.className = 'fas fa-check-circle';
+            } else if (type === 'error') {
+                icon.className = 'fas fa-exclamation-circle';
+            } else if (type === 'info') {
+                icon.className = 'fas fa-info-circle';
+            }
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Tab switching function
+        function openTab(tabName) {
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            const navItems = document.getElementsByClassName('nav-item');
+            for (let i = 0; i < navItems.length; i++) {
+                navItems[i].classList.remove('active');
+            }
+            document.getElementById(tabName + '-tab').classList.add('active');
+            const clickedNavItem = document.querySelector(`.nav-item[data-tab="${tabName}"]`);
+            if (clickedNavItem) {
+                clickedNavItem.classList.add('active');
+            }
+        }
+
+        // ========================
+        // WITHDRAWAL FUNCTIONS
+        // ========================
+        // Update withdraw button
+        function updateWithdrawButton() {
+            const withdrawBtn = document.getElementById('withdrawBtn');
+            const amount = parseFloat(document.getElementById('withdrawAmount').value) || 0;
+            if (userData.balance < APP_CONFIG.WITHDRAWAL_MIN_AMOUNT) {
+                withdrawBtn.disabled = true;
+                withdrawBtn.textContent = 'Insufficient Balance';
+            } else if (!userData.hasWithdrawnBefore && userData.totalRefers < APP_CONFIG.FIRST_WITHDRAWAL_REFERRAL_REQUIREMENT) {
+                withdrawBtn.disabled = true;
+                withdrawBtn.textContent = 'Referral Requirement Not Met';
+            } else if (amount < APP_CONFIG.WITHDRAWAL_MIN_AMOUNT || amount > userData.balance) {
+                withdrawBtn.disabled = true;
+                withdrawBtn.textContent = 'Invalid Amount';
+            } else {
+                withdrawBtn.disabled = false;
+                withdrawBtn.textContent = 'Withdraw Funds';
+            }
+        }
+
+        // Handle withdraw form submission
+        document.getElementById('withdrawForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const method = document.getElementById('withdrawMethod').value;
+            const accountNumber = document.getElementById('accountNumber').value;
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+
+            if (amount < APP_CONFIG.WITHDRAWAL_MIN_AMOUNT || amount > userData.balance) {
+                showNotification('Invalid withdrawal amount.', 'error');
+                return;
+            }
+            if (!userData.hasWithdrawnBefore && userData.totalRefers < APP_CONFIG.FIRST_WITHDRAWAL_REFERRAL_REQUIREMENT) {
+                showNotification('You need 30 referrals for your first withdrawal.', 'error');
+                return;
+            }
+
+            // Process withdrawal
+            userData.balance -= amount;
+            userData.hasWithdrawnBefore = true;
+            // Add to withdrawal history
+            const withdrawal = {
+                id: Date.now(),
+                amount: amount,
+                method: method,
+                accountNumber: accountNumber,
+                date: new Date().toISOString(),
+                status: 'pending'
+            };
+            userData.withdrawalHistory.push(withdrawal);
+            await saveUserData(); // Use await here since it's async
+            updateUI();
+            // Reset form
+            document.getElementById('withdrawForm').reset();
+            updateWithdrawButton();
+            showNotification(`Withdrawal request of ৳${amount.toFixed(2)} submitted! It will be processed within 48 hours.`);
+        });
+
+        // Update withdrawal button when amount changes
+        document.getElementById('withdrawAmount').addEventListener('input', updateWithdrawButton);
+
+        // BINANCE UID FUNCTIONALITY
+        document.getElementById('withdrawMethod').addEventListener('change', function() {
+            const accountLabel = document.getElementById('accountLabel');
+            const accountInput = document.getElementById('accountNumber');
+            if (this.value === 'binance') {
+                accountLabel.textContent = 'Binance UID or Email';
+                accountInput.placeholder = 'Enter your Binance UID or email';
+            } else {
+                accountLabel.textContent = 'Account Number';
+                accountInput.placeholder = 'Enter your account number';
+            }
+        });
+
+        // Copy referral link
+        document.getElementById('copyBtn').addEventListener('click', () => {
+            const referralLink = document.getElementById('referralLink').textContent;
+            navigator.clipboard.writeText(referralLink).then(() => {
+                showNotification('Referral link copied to clipboard!', 'success');
+            }).catch(err => {
+                showNotification('Failed to copy referral link.', 'error');
+            });
+        });
+
+        // Set up social task buttons with proper event listeners
+        function setupSocialTaskButtons() {
+            // YouTube button
+            const youtubeBtn = document.getElementById('youtubeTaskBtn');
+            if (youtubeBtn) {
+                youtubeBtn.replaceWith(youtubeBtn.cloneNode(true));
+                const freshYoutubeBtn = document.getElementById('youtubeTaskBtn');
+                freshYoutubeBtn.addEventListener('click', () => {
+                    openSocialTask('youtubeTaskBtn', socialTaskUrls['youtubeTaskBtn'], APP_CONFIG.REWARDS.YOUTUBE_SUBSCRIBE);
+                });
+            }
+            // Telegram button
+            const telegramBtn = document.getElementById('telegramTaskBtn');
+            if (telegramBtn) {
+                telegramBtn.replaceWith(telegramBtn.cloneNode(true));
+                const freshTelegramBtn = document.getElementById('telegramTaskBtn');
+                freshTelegramBtn.addEventListener('click', () => {
+                    openSocialTask('telegramTaskBtn', socialTaskUrls['telegramTaskBtn'], APP_CONFIG.REWARDS.TELEGRAM_JOIN);
+                });
+            }
+        }
+
+        // ========================
+        // APP INITIALIZATION
+        // ========================
+        window.onload = async function() {
+            await loadUserData(); // Wait for data to load from Firestore
+            setupSocialTaskButtons();
+            // Update countdown every second if limit is reached
+            setInterval(() => {
+                if (userData.tasksDoneToday >= APP_CONFIG.DAILY_TASK_LIMIT) {
+                    updateCountdown();
+                }
+            }, 1000);
+        };
+    </script>
+</body>
+</html>
