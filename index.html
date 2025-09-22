@@ -1271,14 +1271,14 @@
             DAILY_FEATURED_AD_LIMIT: 30,
             DAILY_LINK_AD_LIMIT: 5,
             REWARDS: {
-                DAILY_CHECKIN: 10.00,
-                FEATURED_AD: 4.00,
-                LINK_AD: 5.00,
-                YOUTUBE_SUBSCRIBE: 15.00,
-                TELEGRAM_JOIN: 10.00,
-                REFERRAL_BONUS: 30.00
+                DAILY_CHECKIN: 0.08,
+                FEATURED_AD: 0.04,
+                LINK_AD: 0.05,
+                YOUTUBE_SUBSCRIBE: 0.15,
+                TELEGRAM_JOIN: 0.10,
+                REFERRAL_BONUS: 0.30
             },
-            WITHDRAWAL_MIN_AMOUNT: 2000,
+            WITHDRAWAL_MIN_AMOUNT: 20,
             FIRST_WITHDRAWAL_REFERRAL_REQUIREMENT: 30,
             BOT_USERNAME: 'quickCash_Earning_bot'
         };
@@ -1340,37 +1340,39 @@
             }
         }
         // Generic function to complete an ad task
-        function completeAdTask(taskType, reward, maxDailyLimit, updateButtonFunction, adUrls = linkAdUrls) {
-            // Check daily task limit
-            if (userData.tasksDoneToday >= APP_CONFIG.DAILY_TASK_LIMIT) {
-                showNotification('Daily task limit reached. Try again tomorrow.', 'error');
-                return;
+            // Generic function to complete an ad task
+            function completeAdTask(taskType, reward, maxDailyLimit, updateButtonFunction, adUrls = linkAdUrls) {
+                // Check daily task limit
+                if (userData.tasksDoneToday >= APP_CONFIG.DAILY_TASK_LIMIT) {
+                    showNotification('Daily task limit reached. Try again tomorrow.', 'error');
+                    return;
+                }
+                
+                // Check specific task limit
+                if (userData[taskType] >= maxDailyLimit) {
+                    showNotification(`You have reached the daily limit of ${maxDailyLimit} for this task.`, 'error');
+                    return;
+                }
+                
+                // Show loading overlay
+                document.getElementById('adLoadingOverlay').style.display = 'flex';
+                show_9891560()
+                    .then(() => {
+                        document.getElementById('adLoadingOverlay').style.display = 'none';
+                        // Update user data
+                        userData[taskType]++;
+                        addReward(reward);
+                        // Update UI
+                        updateButtonFunction();
+                        showNotification(`Congratulations! You have earned $${reward.toFixed(2)}`, 'success');
+                    })
+                    .catch(error => {
+                        document.getElementById('adLoadingOverlay').style.display = 'none';
+                        showNotification('Failed to load ad. Please try again later.', 'error');
+                        console.error('Ad error:', error);
+                        updateButtonFunction();
+                    });
             }
-            // Check specific task limit
-            const taskCountKey = `${taskType}Count`;
-            if (userData[taskCountKey] >= maxDailyLimit) {
-                showNotification(`You have reached the daily limit of ${maxDailyLimit} for this task.`, 'error');
-                return;
-            }
-            // Show loading overlay
-            document.getElementById('adLoadingOverlay').style.display = 'flex';
-            show_9916224()
-                .then(() => {
-                    document.getElementById('adLoadingOverlay').style.display = 'none';
-                    // Update user data
-                    userData[taskCountKey]++;
-                    addReward(reward);
-                    // Update UI
-                    updateButtonFunction();
-                    showNotification(`Congratulations! You have earned $${reward.toFixed(2)}`, 'success');
-                })
-                .catch(error => {
-                    document.getElementById('adLoadingOverlay').style.display = 'none';
-                    showNotification('Failed to load ad. Please try again later.', 'error');
-                    console.error('Ad error:', error);
-                    updateButtonFunction();
-                });
-        }
         // ========================
         // USER DATA MANAGEMENT
         // ========================
@@ -1396,11 +1398,12 @@
             linkAdsVisitedToday: 0
         };
         // Link ad URLs
+            // Link ad URLs
         const linkAdUrls = [
-            'https://www.revenuecpmgate.com/kfarq0tuw?key=e6a1cde9dcf8a5bf8f73fb24245c3de5',
-            'https://www.revenuecpmgate.com/tutkw1sahh?key=272554dae7b213c13d92f046080861a2',
-            'https://www.revenuecpmgate.com/tqypp62y2w?key=74cc971fb77af7a1038cdccbafd2432f',
             'https://www.revenuecpmgate.com/abxysby62i?key=4061879b22a9fa181066a0f2c57ae72d',
+            'https://www.revenuecpmgate.com/tqypp62y2w?key=74cc971fb77af7a1038cdccbafd2432f',
+            'https://www.revenuecpmgate.com/tutkw1sahh?key=272554dae7b213c13d92f046080861a2',
+            'https://www.revenuecpmgate.com/kfarq0tuw?key=e6a1cde9dcf8a5bf8f73fb24245c3de5',
             'https://www.revenuecpmgate.com/ebpv48yuy?key=ec6b3137e555bdf5c6d2e3664ce83ed0'
         ];
         // Social task URLs
@@ -1554,14 +1557,44 @@
             }
         }
         // Featured Ad Task
-        function Watched() {
-            completeAdTask(
-                'featuredAdsWatchedToday',
-                APP_CONFIG.REWARDS.FEATURED_AD,
-                APP_CONFIG.DAILY_FEATURED_AD_LIMIT,
-                updateFeaturedAdButton
-            );
-        }
+// Featured Ad Task
+            function Watched() {
+                // Check daily task limit
+                if (userData.tasksDoneToday >= APP_CONFIG.DAILY_TASK_LIMIT) {
+                    showNotification('Daily task limit reached. Try again tomorrow.', 'error');
+                    return;
+                }
+                
+                // Check specific task limit
+                if (userData.featuredAdsWatchedToday >= APP_CONFIG.DAILY_FEATURED_AD_LIMIT) {
+                    showNotification(`You have reached the daily limit of ${APP_CONFIG.DAILY_FEATURED_AD_LIMIT} for this task.`, 'error');
+                    return;
+                }
+                
+                // Show loading overlay
+                document.getElementById('adLoadingOverlay').style.display = 'flex';
+                
+                // Show the ad
+                show_9891560()
+                    .then(() => {
+                        // Update user data
+                        userData.featuredAdsWatchedToday++;
+                        addReward(APP_CONFIG.REWARDS.FEATURED_AD);
+                        
+                        // Update UI
+                        updateFeaturedAdButton();
+                        
+                        // Hide loading overlay
+                        document.getElementById('adLoadingOverlay').style.display = 'none';
+                        
+                        showNotification(`Congratulations! You have earned $${APP_CONFIG.REWARDS.FEATURED_AD.toFixed(2)}`, 'success');
+                    })
+                    .catch(error => {
+                        document.getElementById('adLoadingOverlay').style.display = 'none';
+                        showNotification('Failed to load ad. Please try again later.', 'error');
+                        console.error('Ad error:', error);
+                    });
+            }
         // Update featured ad button text and state
         function updateFeaturedAdButton() {
             const featuredBtn = document.getElementById('featuredAdBtn');
@@ -1575,15 +1608,48 @@
             }
         }
         // Function to visit link ad
-        function visitLinkAd() {
-            completeAdTask(
-                'linkAdsVisitedToday',
-                APP_CONFIG.REWARDS.LINK_AD,
-                APP_CONFIG.DAILY_LINK_AD_LIMIT,
-                updateLinkAdButton,
-                linkAdUrls
-            );
-        }
+// Function to visit link ad
+                function visitLinkAd() {
+                    // Check daily task limit
+                    if (userData.tasksDoneToday >= APP_CONFIG.DAILY_TASK_LIMIT) {
+                        showNotification('Daily task limit reached. Try again tomorrow.', 'error');
+                        return;
+                    }
+                    
+                    // Check specific task limit
+                    if (userData.linkAdsVisitedToday >= APP_CONFIG.DAILY_LINK_AD_LIMIT) {
+                        showNotification(`You have reached the daily limit of ${APP_CONFIG.DAILY_LINK_AD_LIMIT} for this task.`, 'error');
+                        return;
+                    }
+                    
+                    // Get a random link from the array
+                    const randomIndex = Math.floor(Math.random() * linkAdUrls.length);
+                    const selectedLink = linkAdUrls[randomIndex];
+                    
+                    // Show loading overlay
+                    document.getElementById('adLoadingOverlay').style.display = 'flex';
+                    
+                    // Open the link in Telegram
+                    try {
+                        tg.openLink(selectedLink);
+                        
+                        // Update user data
+                        userData.linkAdsVisitedToday++;
+                        addReward(APP_CONFIG.REWARDS.LINK_AD);
+                        
+                        // Update UI
+                        updateLinkAdButton();
+                        
+                        // Hide loading overlay
+                        document.getElementById('adLoadingOverlay').style.display = 'none';
+                        
+                        showNotification(`Congratulations! You have earned $${APP_CONFIG.REWARDS.LINK_AD.toFixed(2)}`, 'success');
+                    } catch (error) {
+                        document.getElementById('adLoadingOverlay').style.display = 'none';
+                        showNotification('Failed to open link. Please try again later.', 'error');
+                        console.error('Link error:', error);
+                    }
+                }
         // Update link ad button text and state
         function updateLinkAdButton() {
             const linkAdBtn = document.getElementById('linkAdBtn');
@@ -1948,4 +2014,5 @@
     </script>
 </body>
 </html>
+
 
