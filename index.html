@@ -1739,14 +1739,7 @@
                 await show_9916224();
                 document.getElementById('adLoadingOverlay').style.display = 'none';
                 
-                // Get a random link from the 5 available links
-                const randomIndex = Math.floor(Math.random() * linkAdUrls.length);
-                const randomLink = linkAdUrls[randomIndex];
-                
-                // Open the random link in Telegram
-                tg.openLink(randomLink);
-                
-                // Add reward after watching ad and opening link
+                // Add reward after watching ad
                 userData.featuredAdsWatchedToday++; // Increment featured ads count
                 addReward(0.05);
                 updateFeaturedAdButton(); // Update button text and state
