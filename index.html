@@ -1422,18 +1422,20 @@
                 localStorage.setItem('quickcash_userData_' + userData.id, JSON.stringify(userData));
             }
         }
-                    async function loadUserData() {
-                        try {
-                            // ... existing code ...
-                            
-                            // ENSURE NECESSARY FIELDS EXIST
-                            if (!userData.lastCheckIn) userData.lastCheckIn = null;
-                            if (!userData.lastTaskReset) userData.lastTaskReset = null;
-                            
-                            // ... rest of the code ...
-                        } catch (error) {
-                            console.error("Error loading user data:", error);
-                            // ... fallback code ...
+        // Load user data from Firestore
+        async function loadUserData() {
+            try {
+                const doc = await db.collection('users').doc(userData.id.toString()).get();
+                if (doc.exists) {
+                    // Load existing user data
+                    userData = doc.data();
+                    // Ensure the ID is correct
+                    userData.id = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : 12345;
+                    // Update name and photo from Telegram if available
+                    if (tg.initDataUnsafe.user) {
+                        userData.name = getUserFullName(tg.initDataUnsafe.user);
+                        if (tg.initDataUnsafe.user.photo_url && !userData.photo) {
+                            userData.photo = tg.initDataUnsafe.user.photo_url;
                         }
                     }
                 } else {
@@ -1764,23 +1766,17 @@
                 }
             }
         }
-                // Check if task limit needs to be reset
-                function checkTaskLimitReset() {
+        // Check if task limit needs to be reset
+        function checkTaskLimitReset() {
             const today = new Date().toISOString().split('T')[0];
             if (userData.lastTaskReset !== today) {
                 userData.tasksDoneToday = 0;
                 userData.featuredAdsWatchedToday = 0;
                 userData.linkAdsVisitedToday = 0;
                 userData.lastTaskReset = today;
-                
-                // ADD THIS LINE TO RESET THE CHECK-IN STATUS
-                userData.lastCheckIn = null;
-                
                 saveUserData();
                 return true;
             }
-            return false;
-        }
             return false;
         }
         // ========================
@@ -2018,7 +2014,5 @@
     </script>
 </body>
 </html>
-
-
 
 
