@@ -1259,639 +1259,760 @@
             <p>Loading ad, please wait...</p>
         </div>
     </div>
-    <script>// Initialize Telegram Web App
-let tg = window.Telegram.WebApp;
-tg.expand();
-
-// ========================
-// APP CONFIGURATION
-// ========================
-const APP_CONFIG = {
-    DAILY_TASK_LIMIT: 35,
-    DAILY_FEATURED_AD_LIMIT: 30,
-    DAILY_LINK_AD_LIMIT: 5,
-    REWARDS: {
-        DAILY_CHECKIN: 0.08,  // Correct reward value
-        FEATURED_AD: 0.04,
-        LINK_AD: 0.05,
-        YOUTUBE_SUBSCRIBE: 0.15,
-        TELEGRAM_JOIN: 0.10,
-        REFERRAL_BONUS: 0.30
-    },
-    WITHDRAWAL_MIN_AMOUNT: 20,
-    FIRST_WITHDRAWAL_REFERRAL_REQUIREMENT: 30,
-    BOT_USERNAME: 'quickCash_Earning_bot'
-};
-
-// ========================
-// FIREBASE INITIALIZATION
-// ========================
-// ⚠️ REPLACE THIS WITH YOUR ACTUAL FIREBASE CONFIG ⚠️
-const firebaseConfig = {
-    apiKey: "AIzaSyDfMHu-jojs-moRp2QhQcsJhM1O9L7j_GY",
-    authDomain: "quickcashminiapp.firebaseapp.com",
-    projectId: "quickcashminiapp",
-    storageBucket: "quickcashminiapp.firebasestorage.app",
-    messagingSenderId: "772745138057",
-    appId: "1:772745138057:web:70a1f8763335bbf7645b58"
-};
-
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-// ========================
-// HELPER FUNCTIONS
-// ========================
-function getUserInitials(name) {
-    if (!name) return 'U';
-    const parts = name.trim().split(' ');
-    if (parts.length >= 2) {
-        return (parts[0][0] + parts[1][0]).toUpperCase();
-    } else if (parts.length === 1) {
-        return parts[0][0].toUpperCase();
-    }
-    return 'U';
-}
-
-function getUserFullName(user) {
-    if (!user) return 'User';
-    let fullName = user.first_name || '';
-    if (user.last_name) {
-        fullName += ' ' + user.last_name;
-    }
-    return fullName.trim() || 'User';
-}
-
-function loadUserProfilePicture(userId, photoUrl, avatarElement) {
-    if (photoUrl) {
-        avatarElement.innerHTML = `<img src="${photoUrl}" alt="User" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
-    } else {
-        const initials = getUserInitials(userData.name);
-        avatarElement.innerHTML = initials;
-        Object.assign(avatarElement.style, {
-            backgroundColor: 'rgba(255, 255, 255, 0.2)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '18px',
-            fontWeight: 'bold'
-        });
-    }
-}
-
-// ========================
-// USER DATA MANAGEMENT
-// ========================
-let userData = {
-    id: tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : 12345,
-    name: tg.initDataUnsafe.user ? getUserFullName(tg.initDataUnsafe.user) : 'User',
-    photo: tg.initDataUnsafe.user && tg.initDataUnsafe.user.photo_url ? tg.initDataUnsafe.user.photo_url : null,
-    balance: 0.00,
-    tasksDoneToday: 0,
-    clicks: 0,
-    totalEarning: 0.00,
-    totalRefers: 0,
-    hasWithdrawnBefore: false,
-    completedTasks: [],
-    referralCode: '',
-    referredBy: '',
-    referralEarnings: 0.00,
-    withdrawalHistory: [],
-    joinedAt: new Date().toISOString(),
-    lastCheckIn: null,  // Initialize as null
-    lastTaskReset: null,
-    featuredAdsWatchedToday: 0,
-    linkAdsVisitedToday: 0
-};
-
-// Link ad URLs
-const linkAdUrls = [
-    'https://www.revenuecpmgate.com/abxysby62i?key=4061879b22a9fa181066a0f2c57ae72d',
-    'https://www.revenuecpmgate.com/tqypp62y2w?key=74cc971fb77af7a1038cdccbafd2432f',
-    'https://www.revenuecpmgate.com/tutkw1sahh?key=272554dae7b213c13d92f046080861a2',
-    'https://www.revenuecpmgate.com/kfarq0tuw?key=e6a1cde9dcf8a5bf8f73fb24245c3de5',
-    'https://www.revenuecpmgate.com/ebpv48yuy?key=ec6b3137e555bdf5c6d2e3664ce83ed0'
-];
-
-// Social task URLs
-const socialTaskUrls = {
-    'youtubeTaskBtn': 'https://www.youtube.com/sufyanCircuit',
-    'telegramTaskBtn': 'https://t.me/EarnOnlineWithSufyan'
-};
-
-// Save user data to Firestore
-async function saveUserData() {
-    try {
-        await db.collection('users').doc(userData.id.toString()).set(userData);
-        console.log("User data saved to Firestore");
-    } catch (error) {
-        console.error("Error saving user data to Firestore: ", error);
-        localStorage.setItem('quickcash_userData_' + userData.id, JSON.stringify(userData));
-    }
-}
-
-// Load user data from Firestore
-async function loadUserData() {
-    try {
-        const doc = await db.collection('users').doc(userData.id.toString()).get();
-        if (doc.exists) {
-            userData = doc.data();
-            userData.id = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : 12345;
-            
-            if (tg.initDataUnsafe.user) {
-                userData.name = getUserFullName(tg.initDataUnsafe.user);
-                if (tg.initDataUnsafe.user.photo_url && !userData.photo) {
-                    userData.photo = tg.initDataUnsafe.user.photo_url;
+    <script>
+        // Initialize Telegram Web App
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+        // ========================
+        // APP CONFIGURATION
+        // ========================
+        const APP_CONFIG = {
+            DAILY_TASK_LIMIT: 35,
+            DAILY_FEATURED_AD_LIMIT: 30,
+            DAILY_LINK_AD_LIMIT: 5,
+            REWARDS: {
+                DAILY_CHECKIN: 0.08,
+                FEATURED_AD: 0.04,
+                LINK_AD: 0.05,
+                YOUTUBE_SUBSCRIBE: 0.15,
+                TELEGRAM_JOIN: 0.10,
+                REFERRAL_BONUS: 0.30
+            },
+            WITHDRAWAL_MIN_AMOUNT: 20,
+            FIRST_WITHDRAWAL_REFERRAL_REQUIREMENT: 30,
+            BOT_USERNAME: 'quickCash_Earning_bot'
+        };
+        // ========================
+        // FIREBASE INITIALIZATION
+        // ========================
+        // ⚠️ REPLACE THIS WITH YOUR ACTUAL FIREBASE CONFIG ⚠️
+        const firebaseConfig = {
+            apiKey: "AIzaSyDfMHu-jojs-moRp2QhQcsJhM1O9L7j_GY",
+            authDomain: "quickcashminiapp.firebaseapp.com",
+            projectId: "quickcashminiapp",
+            storageBucket: "quickcashminiapp.firebasestorage.app",
+            messagingSenderId: "772745138057",
+            appId: "1:772745138057:web:70a1f8763335bbf7645b58"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        // ========================
+        // HELPER FUNCTIONS
+        // ========================
+        // Function to get user initials from name
+        function getUserInitials(name) {
+            if (!name) return 'U';
+            const parts = name.trim().split(' ');
+            if (parts.length >= 2) {
+                return (parts[0][0] + parts[1][0]).toUpperCase();
+            } else if (parts.length === 1) {
+                return parts[0][0].toUpperCase();
+            }
+            return 'U';
+        }
+        // Function to get user full name
+        function getUserFullName(user) {
+            if (!user) return 'User';
+            let fullName = user.first_name || '';
+            if (user.last_name) {
+                fullName += ' ' + user.last_name;
+            }
+            return fullName.trim() || 'User';
+        }
+        // Function to load user profile picture
+        function loadUserProfilePicture(userId, photoUrl, avatarElement) {
+            if (photoUrl) {
+                avatarElement.innerHTML = `<img src="${photoUrl}" alt="User" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+            } else {
+                // Fallback to initials
+                const initials = getUserInitials(userData.name);
+                avatarElement.innerHTML = initials;
+                // Apply styles for initials fallback
+                Object.assign(avatarElement.style, {
+                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '18px',
+                    fontWeight: 'bold'
+                });
+            }
+        }
+        // Generic function to complete an ad task
+            // Generic function to complete an ad task
+            function completeAdTask(taskType, reward, maxDailyLimit, updateButtonFunction, adUrls = linkAdUrls) {
+                // Check daily task limit
+                if (userData.tasksDoneToday >= APP_CONFIG.DAILY_TASK_LIMIT) {
+                    showNotification('Daily task limit reached. Try again tomorrow.', 'error');
+                    return;
+                }
+                
+                // Check specific task limit
+                if (userData[taskType] >= maxDailyLimit) {
+                    showNotification(`You have reached the daily limit of ${maxDailyLimit} for this task.`, 'error');
+                    return;
+                }
+                
+                // Show loading overlay
+                document.getElementById('adLoadingOverlay').style.display = 'flex';
+                show_9916224()
+                    .then(() => {
+                        document.getElementById('adLoadingOverlay').style.display = 'none';
+                        // Update user data
+                        userData[taskType]++;
+                        addReward(reward);
+                        // Update UI
+                        updateButtonFunction();
+                        showNotification(`Congratulations! You have earned $${reward.toFixed(2)}`, 'success');
+                    })
+                    .catch(error => {
+                        document.getElementById('adLoadingOverlay').style.display = 'none';
+                        showNotification('Failed to load ad. Please try again later.', 'error');
+                        console.error('Ad error:', error);
+                        updateButtonFunction();
+                    });
+            }
+        // ========================
+        // USER DATA MANAGEMENT
+        // ========================
+        let userData = {
+            id: tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : 12345,
+            name: tg.initDataUnsafe.user ? getUserFullName(tg.initDataUnsafe.user) : 'User',
+            photo: tg.initDataUnsafe.user && tg.initDataUnsafe.user.photo_url ? tg.initDataUnsafe.user.photo_url : null,
+            balance: 0.00,
+            tasksDoneToday: 0,
+            clicks: 0,
+            totalEarning: 0.00,
+            totalRefers: 0,
+            hasWithdrawnBefore: false,
+            completedTasks: [],
+            referralCode: '',
+            referredBy: '',
+            referralEarnings: 0.00,
+            withdrawalHistory: [],
+            joinedAt: new Date().toISOString(),
+            lastCheckIn: null,
+            lastTaskReset: null,
+            featuredAdsWatchedToday: 0,
+            linkAdsVisitedToday: 0
+        };
+        // Link ad URLs
+            // Link ad URLs
+        const linkAdUrls = [
+            'https://www.revenuecpmgate.com/abxysby62i?key=4061879b22a9fa181066a0f2c57ae72d',
+            'https://www.revenuecpmgate.com/tqypp62y2w?key=74cc971fb77af7a1038cdccbafd2432f',
+            'https://www.revenuecpmgate.com/tutkw1sahh?key=272554dae7b213c13d92f046080861a2',
+            'https://www.revenuecpmgate.com/kfarq0tuw?key=e6a1cde9dcf8a5bf8f73fb24245c3de5',
+            'https://www.revenuecpmgate.com/ebpv48yuy?key=ec6b3137e555bdf5c6d2e3664ce83ed0'
+        ];
+        // Social task URLs
+        const socialTaskUrls = {
+            'youtubeTaskBtn': 'https://www.youtube.com/sufyanCircuit',
+            'telegramTaskBtn': 'https://t.me/EarnOnlineWithSufyan'
+        };
+        // Save user data to Firestore
+        async function saveUserData() {
+            try {
+                await db.collection('users').doc(userData.id.toString()).set(userData);
+                console.log("User data saved to Firestore");
+            } catch (error) {
+                console.error("Error saving user data to Firestore: ", error);
+                // Fallback to localStorage if Firestore fails
+                localStorage.setItem('quickcash_userData_' + userData.id, JSON.stringify(userData));
+            }
+        }
+        // Load user data from Firestore
+        async function loadUserData() {
+            try {
+                const doc = await db.collection('users').doc(userData.id.toString()).get();
+                if (doc.exists) {
+                    // Load existing user data
+                    userData = doc.data();
+                    // Ensure the ID is correct
+                    userData.id = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : 12345;
+                    // Update name and photo from Telegram if available
+                    if (tg.initDataUnsafe.user) {
+                        userData.name = getUserFullName(tg.initDataUnsafe.user);
+                        if (tg.initDataUnsafe.user.photo_url && !userData.photo) {
+                            userData.photo = tg.initDataUnsafe.user.photo_url;
+                        }
+                    }
+                } else {
+                    // Initialize default user data for new user
+                    initializeDefaultUserData();
+                    // Save the new user immediately
+                    await saveUserData();
+                }
+                // Check for referral
+                checkReferral();
+                // Check if task limit needs to be reset
+                checkTaskLimitReset();
+                // Generate referral code if not exists
+                generateReferralCode();
+                // Update referral link
+                document.getElementById('referralLink').textContent = `https://t.me/${APP_CONFIG.BOT_USERNAME}?start=${userData.referralCode}`;
+                // Update last updated date
+                const now = new Date();
+                document.getElementById('lastUpdated').textContent = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
+                // Update UI elements
+                updateTaskButtons();
+                updateCheckInButton();
+                updateFeaturedAdButton();
+                updateLinkAdButton();
+                updateSocialTaskButtons();
+                updateUI();
+                updateTaskLimit();
+                // Load user profile picture
+                loadUserProfilePicture(userData.id, userData.photo, document.getElementById('userAvatar'));
+            } catch (error) {
+                console.error("Error loading user data from Firestore: ", error);
+                // Fallback to localStorage
+                const localData = localStorage.getItem('quickcash_userData_' + userData.id);
+                if (localData) {
+                    userData = JSON.parse(localData);
+                } else {
+                    initializeDefaultUserData();
+                }
+                // Proceed with initialization using local data
+                checkReferral();
+                checkTaskLimitReset();
+                generateReferralCode();
+                document.getElementById('referralLink').textContent = `https://t.me/${APP_CONFIG.BOT_USERNAME}?start=${userData.referralCode}`;
+                const now = new Date();
+                document.getElementById('lastUpdated').textContent = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
+                updateTaskButtons();
+                updateCheckInButton();
+                updateFeaturedAdButton();
+                updateLinkAdButton();
+                updateSocialTaskButtons();
+                updateUI();
+                updateTaskLimit();
+                loadUserProfilePicture(userData.id, userData.photo, document.getElementById('userAvatar'));
+            }
+        }
+        // Helper function to initialize default user data
+        function initializeDefaultUserData() {
+            userData = {
+                id: tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : 12345,
+                name: tg.initDataUnsafe.user ? getUserFullName(tg.initDataUnsafe.user) : 'User',
+                photo: tg.initDataUnsafe.user && tg.initDataUnsafe.user.photo_url ? tg.initDataUnsafe.user.photo_url : null,
+                balance: 0.00,
+                tasksDoneToday: 0,
+                clicks: 0,
+                totalEarning: 0.00,
+                totalRefers: 0,
+                hasWithdrawnBefore: false,
+                completedTasks: [],
+                referralCode: '',
+                referredBy: '',
+                referralEarnings: 0.00,
+                withdrawalHistory: [],
+                joinedAt: new Date().toISOString(),
+                lastCheckIn: null,
+                lastTaskReset: null,
+                featuredAdsWatchedToday: 0,
+                linkAdsVisitedToday: 0
+            };
+        }
+        // ========================
+        // TASK FUNCTIONS
+        // ========================
+        // Daily Check In function
+        function dailyCheckIn() {
+            const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+            // Check if already checked in today
+            if (userData.lastCheckIn === today) {
+                showNotification('You have already checked in today. Come back tomorrow!', 'error');
+                return;
+            }
+            // Check daily task limit
+            if (userData.tasksDoneToday >= APP_CONFIG.DAILY_TASK_LIMIT) {
+                showNotification('Daily task limit reached. Try again tomorrow.', 'error');
+                return;
+            }
+            // Add reward for daily check-in
+            const reward = APP_CONFIG.REWARDS.DAILY_CHECKIN;
+            userData.balance += reward;
+            userData.totalEarning += reward;
+            userData.clicks++;
+            userData.tasksDoneToday++;
+            userData.lastCheckIn = today; // Set last check-in to today
+            saveUserData();
+            updateUI();
+            updateCheckInButton();
+            updateTaskLimit();
+            showNotification(`Daily check-in successful! $${reward.toFixed(2)} added to your balance.`);
+        }
+        // Update check-in button based on whether user has checked in today
+        function updateCheckInButton() {
+            const checkInBtn = document.getElementById('checkinBtn');
+            const today = new Date().toISOString().split('T')[0];
+            if (userData.lastCheckIn === today) {
+                checkInBtn.disabled = true;
+                checkInBtn.textContent = 'Checked In';
+            } else {
+                checkInBtn.disabled = false;
+                checkInBtn.textContent = 'Check In';
+            }
+        }
+        // Featured Ad Task
+// Featured Ad Task
+            function Watched() {
+                // Check daily task limit
+                if (userData.tasksDoneToday >= APP_CONFIG.DAILY_TASK_LIMIT) {
+                    showNotification('Daily task limit reached. Try again tomorrow.', 'error');
+                    return;
+                }
+                
+                // Check specific task limit
+                if (userData.featuredAdsWatchedToday >= APP_CONFIG.DAILY_FEATURED_AD_LIMIT) {
+                    showNotification(`You have reached the daily limit of ${APP_CONFIG.DAILY_FEATURED_AD_LIMIT} for this task.`, 'error');
+                    return;
+                }
+                
+                // Show loading overlay
+                document.getElementById('adLoadingOverlay').style.display = 'flex';
+                
+                // Show the ad
+                show_9916224()
+                    .then(() => {
+                        // Update user data
+                        userData.featuredAdsWatchedToday++;
+                        addReward(APP_CONFIG.REWARDS.FEATURED_AD);
+                        
+                        // Update UI
+                        updateFeaturedAdButton();
+                        
+                        // Hide loading overlay
+                        document.getElementById('adLoadingOverlay').style.display = 'none';
+                        
+                        showNotification(`Congratulations! You have earned $${APP_CONFIG.REWARDS.FEATURED_AD.toFixed(2)}`, 'success');
+                    })
+                    .catch(error => {
+                        document.getElementById('adLoadingOverlay').style.display = 'none';
+                        showNotification('Failed to load ad. Please try again later.', 'error');
+                        console.error('Ad error:', error);
+                    });
+            }
+        // Update featured ad button text and state
+        function updateFeaturedAdButton() {
+            const featuredBtn = document.getElementById('featuredAdBtn');
+            const watchedCount = userData.featuredAdsWatchedToday || 0;
+            if (watchedCount >= APP_CONFIG.DAILY_FEATURED_AD_LIMIT) {
+                featuredBtn.disabled = true;
+                featuredBtn.textContent = `Limit Reached (${watchedCount}/${APP_CONFIG.DAILY_FEATURED_AD_LIMIT})`;
+            } else {
+                featuredBtn.disabled = false;
+                featuredBtn.textContent = `Watch Now (${watchedCount}/${APP_CONFIG.DAILY_FEATURED_AD_LIMIT})`;
+            }
+        }
+        // Function to visit link ad
+// Function to visit link ad
+                function visitLinkAd() {
+                    // Check daily task limit
+                    if (userData.tasksDoneToday >= APP_CONFIG.DAILY_TASK_LIMIT) {
+                        showNotification('Daily task limit reached. Try again tomorrow.', 'error');
+                        return;
+                    }
+                    
+                    // Check specific task limit
+                    if (userData.linkAdsVisitedToday >= APP_CONFIG.DAILY_LINK_AD_LIMIT) {
+                        showNotification(`You have reached the daily limit of ${APP_CONFIG.DAILY_LINK_AD_LIMIT} for this task.`, 'error');
+                        return;
+                    }
+                    
+                    // Get a random link from the array
+                    const randomIndex = Math.floor(Math.random() * linkAdUrls.length);
+                    const selectedLink = linkAdUrls[randomIndex];
+                    
+                    // Show loading overlay
+                    document.getElementById('adLoadingOverlay').style.display = 'flex';
+                    
+                    // Open the link in Telegram
+                    try {
+                        tg.openLink(selectedLink);
+                        
+                        // Update user data
+                        userData.linkAdsVisitedToday++;
+                        addReward(APP_CONFIG.REWARDS.LINK_AD);
+                        
+                        // Update UI
+                        updateLinkAdButton();
+                        
+                        // Hide loading overlay
+                        document.getElementById('adLoadingOverlay').style.display = 'none';
+                        
+                        showNotification(`Congratulations! You have earned $${APP_CONFIG.REWARDS.LINK_AD.toFixed(2)}`, 'success');
+                    } catch (error) {
+                        document.getElementById('adLoadingOverlay').style.display = 'none';
+                        showNotification('Failed to open link. Please try again later.', 'error');
+                        console.error('Link error:', error);
+                    }
+                }
+        // Update link ad button text and state
+        function updateLinkAdButton() {
+            const linkAdBtn = document.getElementById('linkAdBtn');
+            const visitedCount = userData.linkAdsVisitedToday || 0;
+            if (visitedCount >= APP_CONFIG.DAILY_LINK_AD_LIMIT) {
+                linkAdBtn.disabled = true;
+                linkAdBtn.textContent = `Limit Reached (${visitedCount}/${APP_CONFIG.DAILY_LINK_AD_LIMIT})`;
+            } else {
+                linkAdBtn.disabled = false;
+                linkAdBtn.textContent = `Visit Link (${visitedCount}/${APP_CONFIG.DAILY_LINK_AD_LIMIT})`;
+            }
+        }
+        // Function to add reward and update UI
+        function addReward(amount) {
+            userData.balance += amount;
+            userData.totalEarning += amount;
+            userData.tasksDoneToday++;
+            userData.clicks++;
+            saveUserData();
+            updateUI();
+            updateTaskLimit();
+        }
+        // Function to open social task (YouTube/Telegram)
+        function openSocialTask(taskId, link, reward) {
+            // Check if task is already completed
+            if (userData.completedTasks.includes(taskId)) {
+                showNotification('You have already completed this task.', 'error');
+                return;
+            }
+            // Check daily task limit
+            if (userData.tasksDoneToday >= APP_CONFIG.DAILY_TASK_LIMIT) {
+                showNotification('Daily task limit reached. Try again tomorrow.', 'error');
+                return;
+            }
+            // Get the button element
+            const button = document.getElementById(taskId);
+            // Show loading state
+            button.disabled = true;
+            button.textContent = 'Opening...';
+            // Open the link in Telegram
+            try {
+                tg.openLink(link);
+                // Add reward and mark task as completed
+                userData.balance += reward;
+                userData.totalEarning += reward;
+                userData.tasksDoneToday++;
+                userData.clicks++;
+                userData.completedTasks.push(taskId);
+                saveUserData();
+                updateUI();
+                updateSocialTaskButton(taskId);
+                updateTaskLimit();
+                showNotification(`Task completed! $${reward.toFixed(2)} added to your balance.`);
+                // Check if user completed 5 tasks and was referred
+                if (userData.tasksDoneToday === 5 && userData.referredBy) {
+                    setTimeout(() => {
+                        showNotification(`Congratulations! You've completed 5 tasks. Your referrer (${userData.referredBy}) will receive $50.00!`, 'success');
+                    }, 1000);
+                }
+            } catch (error) {
+                console.error('Error opening link:', error);
+                showNotification('Failed to open link. Please try again.', 'error');
+                button.disabled = false;
+                button.textContent = taskId === 'youtubeTaskBtn' ? 'Subscribe Now' : 'Join Now';
+            }
+        }
+        // Function to update a specific social task button
+        function updateSocialTaskButton(taskId) {
+            const button = document.getElementById(taskId);
+            if (button) {
+                if (userData.completedTasks.includes(taskId)) {
+                    button.disabled = true;
+                    button.textContent = 'Completed';
+                } else if (userData.tasksDoneToday >= APP_CONFIG.DAILY_TASK_LIMIT) {
+                    button.disabled = true;
+                    button.textContent = 'Limit Reached';
+                } else {
+                    button.disabled = false;
+                    button.textContent = taskId === 'youtubeTaskBtn' ? 'Subscribe Now' : 'Join Now';
                 }
             }
-        } else {
-            initializeDefaultUserData();
-            await saveUserData();
         }
-        
-        checkReferral();
-        checkTaskLimitReset();
-        generateReferralCode();
-        document.getElementById('referralLink').textContent = `https://t.me/${APP_CONFIG.BOT_USERNAME}?start=${userData.referralCode}`;
-        
-        const now = new Date();
-        document.getElementById('lastUpdated').textContent = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
-        
-        updateTaskButtons();
-        updateCheckInButton();
-        updateFeaturedAdButton();
-        updateLinkAdButton();
-        updateSocialTaskButtons();
-        updateUI();
-        updateTaskLimit();
-        
-        loadUserProfilePicture(userData.id, userData.photo, document.getElementById('userAvatar'));
-    } catch (error) {
-        console.error("Error loading user data from Firestore: ", error);
-        const localData = localStorage.getItem('quickcash_userData_' + userData.id);
-        if (localData) {
-            userData = JSON.parse(localData);
-        } else {
-            initializeDefaultUserData();
+        // Update social task buttons based on completion status
+        function updateSocialTaskButtons() {
+            updateSocialTaskButton('youtubeTaskBtn');
+            updateSocialTaskButton('telegramTaskBtn');
         }
-        
-        checkReferral();
-        checkTaskLimitReset();
-        generateReferralCode();
-        document.getElementById('referralLink').textContent = `https://t.me/${APP_CONFIG.BOT_USERNAME}?start=${userData.referralCode}`;
-        
-        const now = new Date();
-        document.getElementById('lastUpdated').textContent = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
-        
-        updateTaskButtons();
-        updateCheckInButton();
-        updateFeaturedAdButton();
-        updateLinkAdButton();
-        updateSocialTaskButtons();
-        updateUI();
-        updateTaskLimit();
-        
-        loadUserProfilePicture(userData.id, userData.photo, document.getElementById('userAvatar'));
-    }
-}
-
-function initializeDefaultUserData() {
-    userData = {
-        id: tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : 12345,
-        name: tg.initDataUnsafe.user ? getUserFullName(tg.initDataUnsafe.user) : 'User',
-        photo: tg.initDataUnsafe.user && tg.initDataUnsafe.user.photo_url ? tg.initDataUnsafe.user.photo_url : null,
-        balance: 0.00,
-        tasksDoneToday: 0,
-        clicks: 0,
-        totalEarning: 0.00,
-        totalRefers: 0,
-        hasWithdrawnBefore: false,
-        completedTasks: [],
-        referralCode: '',
-        referredBy: '',
-        referralEarnings: 0.00,
-        withdrawalHistory: [],
-        joinedAt: new Date().toISOString(),
-        lastCheckIn: null,
-        lastTaskReset: null,
-        featuredAdsWatchedToday: 0,
-        linkAdsVisitedToday: 0
-    };
-}
-
-// Daily Check In function - FIXED VERSION
-function dailyCheckIn() {
-    const today = new Date().toISOString().split('T')[0];
-    
-    // Debug: Log current state
-    console.log('Checking in...', userData.lastCheckIn, today);
-    
-    if (userData.lastCheckIn === today) {
-        showNotification('You have already checked in today. Come back tomorrow!', 'error');
-        return;
-    }
-    
-    // Check daily task limit
-    if (userData.tasksDoneToday >= APP_CONFIG.DAILY_TASK_LIMIT) {
-        showNotification('Daily task limit reached. Try again tomorrow.', 'error');
-        return;
-    }
-    
-    // Add reward for daily check-in
-    const reward = APP_CONFIG.REWARDS.DAILY_CHECKIN;
-    userData.balance += reward;
-    userData.totalEarning += reward;
-    userData.clicks++;
-    userData.tasksDoneToday++;
-    
-    // Set lastCheckIn to today
-    userData.lastCheckIn = today;
-    
-    // Debug: Confirm assignment
-    console.log('After setting lastCheckIn:', userData.lastCheckIn);
-    
-    saveUserData();
-    updateUI();
-    updateCheckInButton();
-    updateTaskLimit();
-    
-    showNotification(`Daily check-in successful! $${reward.toFixed(2)} added to your balance.`);
-}
-
-// Update check-in button based on whether user has checked in today - FIXED VERSION
-function updateCheckInButton() {
-    const checkInBtn = document.getElementById('checkinBtn');
-    const today = new Date().toISOString().split('T')[0];
-    
-    // Debug: Log values
-    console.log('Updating check-in button:', userData.lastCheckIn, today);
-    
-    if (userData.lastCheckIn === today) {
-        checkInBtn.disabled = true;
-        checkInBtn.textContent = 'Checked In';
-    } else {
-        checkInBtn.disabled = false;
-        checkInBtn.textContent = 'Check In';
-    }
-}
-
-// Featured Ad Task
-function Watched() {
-    if (userData.tasksDoneToday >= APP_CONFIG.DAILY_TASK_LIMIT) {
-        showNotification('Daily task limit reached. Try again tomorrow.', 'error');
-        return;
-    }
-    
-    if (userData.featuredAdsWatchedToday >= APP_CONFIG.DAILY_FEATURED_AD_LIMIT) {
-        showNotification(`You have reached the daily limit of ${APP_CONFIG.DAILY_FEATURED_AD_LIMIT} for this task.`, 'error');
-        return;
-    }
-    
-    document.getElementById('adLoadingOverlay').style.display = 'flex';
-    
-    show_9916224()
-        .then(() => {
-            document.getElementById('adLoadingOverlay').style.display = 'none';
-            userData.featuredAdsWatchedToday++;
-            addReward(APP_CONFIG.REWARDS.FEATURED_AD);
+        // ========================
+        // REFERRAL & UTILITY FUNCTIONS
+        // ========================
+        // Generate smart referral code
+        function generateReferralCode() {
+            if (!userData.referralCode) {
+                const timestamp = Date.now().toString(36);
+                const randomStr = Math.random().toString(36).substring(2, 6);
+                const userId = userData.id.toString().slice(-4);
+                userData.referralCode = `QC${userId}${timestamp}${randomStr}`.toUpperCase();
+                saveUserData();
+            }
+            return userData.referralCode;
+        }
+        // Check if user was referred
+        function checkReferral() {
+            // Check if user came from a referral link
+            if (tg.initDataUnsafe && tg.initDataUnsafe.start_param) {
+                const referralCode = tg.initDataUnsafe.start_param;
+                if (referralCode && !userData.referredBy) {
+                    userData.referredBy = referralCode;
+                    saveUserData();
+                    // Show welcome message for referred users
+                    setTimeout(() => {
+                        showNotification(`Welcome! You were referred by ${referralCode}`, 'info');
+                    }, 1000);
+                }
+            }
+        }
+        // Check if task limit needs to be reset
+        function checkTaskLimitReset() {
+            const today = new Date().toISOString().split('T')[0];
+            if (userData.lastTaskReset !== today) {
+                userData.tasksDoneToday = 0;
+                userData.featuredAdsWatchedToday = 0;
+                userData.linkAdsVisitedToday = 0;
+                userData.lastTaskReset = today;
+                saveUserData();
+                return true;
+            }
+            return false;
+        }
+        // ========================
+        // UI UPDATE FUNCTIONS
+        // ========================
+        // Update UI with user data
+        function updateUI() {
+            requestAnimationFrame(() => {
+                document.getElementById('userName').textContent = userData.name;
+                document.getElementById('userBalance').textContent = `$${userData.balance.toFixed(2)}`;
+                document.getElementById('tasksDone').textContent = userData.tasksDoneToday;
+                document.getElementById('clicks').textContent = userData.clicks;
+                document.getElementById('totalEarning').textContent = userData.totalEarning.toFixed(2);
+                document.getElementById('totalRefers').textContent = userData.totalRefers;
+                document.getElementById('currentBalance').textContent = `$${userData.balance.toFixed(2)}`;
+                document.getElementById('referralCount').textContent = userData.totalRefers;
+                document.getElementById('referralEarnings').textContent = userData.referralEarnings.toFixed(2);
+                // Update referral requirement
+                if (userData.hasWithdrawnBefore) {
+                    document.getElementById('referralRequirement').textContent = 'No referral requirement';
+                } else {
+                    document.getElementById('referralRequirement').textContent = `${userData.totalRefers}/${APP_CONFIG.FIRST_WITHDRAWAL_REFERRAL_REQUIREMENT} referrals needed`;
+                }
+                // Update withdraw button
+                updateWithdrawButton();
+            });
+        }
+        // Update task limit progress
+        function updateTaskLimit() {
+            const progressFill = document.getElementById('taskProgress');
+            const taskLimitText = document.getElementById('taskLimitText');
+            const countdownContainer = document.getElementById('countdownContainer');
+            // Update progress
+            const progress = (userData.tasksDoneToday / APP_CONFIG.DAILY_TASK_LIMIT) * 100;
+            progressFill.style.width = `${progress}%`;
+            taskLimitText.textContent = `${userData.tasksDoneToday} of ${APP_CONFIG.DAILY_TASK_LIMIT}`;
+            // Check if limit is reached
+            if (userData.tasksDoneToday >= APP_CONFIG.DAILY_TASK_LIMIT) {
+                countdownContainer.style.display = 'block';
+                updateCountdown();
+                disableLimitedTaskButtons();
+            } else {
+                countdownContainer.style.display = 'none';
+                enableTaskButtons();
+            }
+        }
+        // Update countdown timer
+        function updateCountdown() {
+            const countdown = document.getElementById('countdown');
+            const now = new Date();
+            const midnight = new Date();
+            midnight.setHours(24, 0, 0, 0);
+            const remaining = midnight - now;
+            if (remaining > 0) {
+                const hours = Math.floor(remaining / (1000 * 60 * 60));
+                const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+                countdown.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+        }
+        // Disable limited task buttons
+        function disableLimitedTaskButtons() {
+            const today = new Date().toISOString().split('T')[0];
+            if (userData.lastCheckIn !== today) {
+                const checkInBtn = document.getElementById('checkinBtn');
+                checkInBtn.disabled = true;
+                checkInBtn.textContent = 'Limit Reached';
+            }
             updateFeaturedAdButton();
-            showNotification(`Congratulations! You have earned $${APP_CONFIG.REWARDS.FEATURED_AD.toFixed(2)}`, 'success');
-        })
-        .catch(error => {
-            document.getElementById('adLoadingOverlay').style.display = 'none';
-            showNotification('Failed to load ad. Please try again later.', 'error');
-            console.error('Ad error:', error);
-        });
-}
-
-function updateFeaturedAdButton() {
-    const featuredBtn = document.getElementById('featuredAdBtn');
-    const watchedCount = userData.featuredAdsWatchedToday || 0;
-    if (watchedCount >= APP_CONFIG.DAILY_FEATURED_AD_LIMIT) {
-        featuredBtn.disabled = true;
-        featuredBtn.textContent = `Limit Reached (${watchedCount}/${APP_CONFIG.DAILY_FEATURED_AD_LIMIT})`;
-    } else {
-        featuredBtn.disabled = false;
-        featuredBtn.textContent = `Watch Now (${watchedCount}/${APP_CONFIG.DAILY_FEATURED_AD_LIMIT})`;
-    }
-}
-
-// Function to visit link ad
-function visitLinkAd() {
-    if (userData.tasksDoneToday >= APP_CONFIG.DAILY_TASK_LIMIT) {
-        showNotification('Daily task limit reached. Try again tomorrow.', 'error');
-        return;
-    }
-    
-    if (userData.linkAdsVisitedToday >= APP_CONFIG.DAILY_LINK_AD_LIMIT) {
-        showNotification(`You have reached the daily limit of ${APP_CONFIG.DAILY_LINK_AD_LIMIT} for this task.`, 'error');
-        return;
-    }
-    
-    const randomIndex = Math.floor(Math.random() * linkAdUrls.length);
-    const selectedLink = linkAdUrls[randomIndex];
-    
-    document.getElementById('adLoadingOverlay').style.display = 'flex';
-    
-    try {
-        tg.openLink(selectedLink);
-        
-        userData.linkAdsVisitedToday++;
-        addReward(APP_CONFIG.REWARDS.LINK_AD);
-        
-        updateLinkAdButton();
-        
-        document.getElementById('adLoadingOverlay').style.display = 'none';
-        
-        showNotification(`Congratulations! You have earned $${APP_CONFIG.REWARDS.LINK_AD.toFixed(2)}`, 'success');
-    } catch (error) {
-        document.getElementById('adLoadingOverlay').style.display = 'none';
-        showNotification('Failed to open link. Please try again later.', 'error');
-        console.error('Link error:', error);
-    }
-}
-
-function updateLinkAdButton() {
-    const linkAdBtn = document.getElementById('linkAdBtn');
-    const visitedCount = userData.linkAdsVisitedToday || 0;
-    if (visitedCount >= APP_CONFIG.DAILY_LINK_AD_LIMIT) {
-        linkAdBtn.disabled = true;
-        linkAdBtn.textContent = `Limit Reached (${visitedCount}/${APP_CONFIG.DAILY_LINK_AD_LIMIT})`;
-    } else {
-        linkAdBtn.disabled = false;
-        linkAdBtn.textContent = `Visit Link (${visitedCount}/${APP_CONFIG.DAILY_LINK_AD_LIMIT})`;
-    }
-}
-
-function addReward(amount) {
-    userData.balance += amount;
-    userData.totalEarning += amount;
-    userData.tasksDoneToday++;
-    userData.clicks++;
-    saveUserData();
-}
-
-function openSocialTask(taskId, link, reward) {
-    if (userData.completedTasks.includes(taskId)) {
-        showNotification('You have already completed this task.', 'error');
-        return;
-    }
-    
-    if (userData.tasksDoneToday >= APP_CONFIG.DAILY_TASK_LIMIT) {
-        showNotification('Daily task limit reached. Try again tomorrow.', 'error');
-        return;
-    }
-    
-    const button = document.getElementById(taskId);
-    button.disabled = true;
-    button.textContent = 'Opening...';
-    
-    try {
-        tg.openLink(link);
-        
-        userData.balance += reward;
-        userData.totalEarning += reward;
-        userData.tasksDoneToday++;
-        userData.clicks++;
-        userData.completedTasks.push(taskId);
-        saveUserData();
-        updateUI();
-        updateSocialTaskButton(taskId);
-        updateTaskLimit();
-        
-        showNotification(`Task completed! $${reward.toFixed(2)} added to your balance.`);
-    } catch (error) {
-        console.error('Error opening link:', error);
-        showNotification('Failed to open link. Please try again.', 'error');
-        button.disabled = false;
-        button.textContent = taskId === 'youtubeTaskBtn' ? 'Subscribe Now' : 'Join Now';
-    }
-}
-
-function updateSocialTaskButton(taskId) {
-    const button = document.getElementById(taskId);
-    if (button) {
-        if (userData.completedTasks.includes(taskId)) {
-            button.disabled = true;
-            button.textContent = 'Completed';
-        } else if (userData.tasksDoneToday >= APP_CONFIG.DAILY_TASK_LIMIT) {
-            button.disabled = true;
-            button.textContent = 'Limit Reached';
-        } else {
-            button.disabled = false;
-            button.textContent = taskId === 'youtubeTaskBtn' ? 'Subscribe Now' : 'Join Now';
+            updateLinkAdButton();
+            updateSocialTaskButtons();
         }
-    }
-}
-
-function updateSocialTaskButtons() {
-    updateSocialTaskButton('youtubeTaskBtn');
-    updateSocialTaskButton('telegramTaskBtn');
-}
-
-function checkReferral() {
-    if (tg.initDataUnsafe && tg.initDataUnsafe.start_param) {
-        const referralCode = tg.initDataUnsafe.start_param;
-        if (referralCode && !userData.referredBy) {
-            userData.referredBy = referralCode;
-            saveUserData();
+        // Enable task buttons that aren't completed
+        function enableTaskButtons() {
+            const today = new Date().toISOString().split('T')[0];
+            if (userData.lastCheckIn !== today) {
+                const checkInBtn = document.getElementById('checkinBtn');
+                checkInBtn.disabled = false;
+                checkInBtn.textContent = 'Check In';
+            }
+            updateFeaturedAdButton();
+            updateLinkAdButton();
+            updateSocialTaskButtons();
+        }
+        // Update task buttons (placeholder for compatibility)
+        function updateTaskButtons() {
+            // Handled by individual functions
+        }
+        // Show notification
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            const icon = notification.querySelector('i');
+            notificationText.textContent = message;
+            notification.className = `notification ${type} show`;
+            if (type === 'success') {
+                icon.className = 'fas fa-check-circle';
+            } else if (type === 'error') {
+                icon.className = 'fas fa-exclamation-circle';
+            } else if (type === 'info') {
+                icon.className = 'fas fa-info-circle';
+            }
             setTimeout(() => {
-                showNotification(`Welcome! You were referred by ${referralCode}`, 'info');
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        // Tab switching function
+        function openTab(tabName) {
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            const navItems = document.getElementsByClassName('nav-item');
+            for (let i = 0; i < navItems.length; i++) {
+                navItems[i].classList.remove('active');
+            }
+            document.getElementById(tabName + '-tab').classList.add('active');
+            const clickedNavItem = document.querySelector(`.nav-item[data-tab="${tabName}"]`);
+            if (clickedNavItem) {
+                clickedNavItem.classList.add('active');
+            }
+        }
+        // ========================
+        // WITHDRAWAL FUNCTIONS
+        // ========================
+        // Update withdraw button
+        function updateWithdrawButton() {
+            const withdrawBtn = document.getElementById('withdrawBtn');
+            const amount = parseFloat(document.getElementById('withdrawAmount').value) || 0;
+            if (userData.balance < APP_CONFIG.WITHDRAWAL_MIN_AMOUNT) {
+                withdrawBtn.disabled = true;
+                withdrawBtn.textContent = 'Insufficient Balance';
+            } else if (!userData.hasWithdrawnBefore && userData.totalRefers < APP_CONFIG.FIRST_WITHDRAWAL_REFERRAL_REQUIREMENT) {
+                withdrawBtn.disabled = true;
+                withdrawBtn.textContent = 'Referral Requirement Not Met';
+            } else if (amount < APP_CONFIG.WITHDRAWAL_MIN_AMOUNT || amount > userData.balance) {
+                withdrawBtn.disabled = true;
+                withdrawBtn.textContent = 'Invalid Amount';
+            } else {
+                withdrawBtn.disabled = false;
+                withdrawBtn.textContent = 'Withdraw Funds';
+            }
+        }
+        // Handle withdraw form submission
+        document.getElementById('withdrawForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const method = document.getElementById('withdrawMethod').value;
+            const accountNumber = document.getElementById('accountNumber').value;
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            if (amount < APP_CONFIG.WITHDRAWAL_MIN_AMOUNT || amount > userData.balance) {
+                showNotification('Invalid withdrawal amount.', 'error');
+                return;
+            }
+            if (!userData.hasWithdrawnBefore && userData.totalRefers < APP_CONFIG.FIRST_WITHDRAWAL_REFERRAL_REQUIREMENT) {
+                showNotification('You need 30 referrals for your first withdrawal.', 'error');
+                return;
+            }
+            // Process withdrawal
+            userData.balance -= amount;
+            userData.hasWithdrawnBefore = true;
+            // Add to withdrawal history
+            const withdrawal = {
+                id: Date.now(),
+                amount: amount,
+                method: method,
+                accountNumber: accountNumber,
+                date: new Date().toISOString(),
+                status: 'pending'
+            };
+            userData.withdrawalHistory.push(withdrawal);
+            await saveUserData(); // Use await here since it's async
+            updateUI();
+            // Reset form
+            document.getElementById('withdrawForm').reset();
+            updateWithdrawButton();
+            showNotification(`Withdrawal request of $${amount.toFixed(2)} submitted! It will be processed within 48 hours.`);
+        });
+        // Update withdrawal button when amount changes
+        document.getElementById('withdrawAmount').addEventListener('input', updateWithdrawButton);
+        // BINANCE UID FUNCTIONALITY
+        document.getElementById('withdrawMethod').addEventListener('change', function() {
+            const accountLabel = document.getElementById('accountLabel');
+            const accountInput = document.getElementById('accountNumber');
+            if (this.value === 'binance') {
+                accountLabel.textContent = 'Binance UID or Email';
+                accountInput.placeholder = 'Enter your Binance UID or email';
+            } else {
+                accountLabel.textContent = 'Account Number';
+                accountInput.placeholder = 'Enter your account number';
+            }
+        });
+        // Copy referral link
+        document.getElementById('copyBtn').addEventListener('click', () => {
+            const referralLink = document.getElementById('referralLink').textContent;
+            navigator.clipboard.writeText(referralLink).then(() => {
+                showNotification('Referral link copied to clipboard!', 'success');
+            }).catch(err => {
+                showNotification('Failed to copy referral link.', 'error');
+            });
+        });
+        // Set up social task buttons with proper event listeners
+        function setupSocialTaskButtons() {
+            // YouTube button
+            const youtubeBtn = document.getElementById('youtubeTaskBtn');
+            if (youtubeBtn) {
+                youtubeBtn.replaceWith(youtubeBtn.cloneNode(true));
+                const freshYoutubeBtn = document.getElementById('youtubeTaskBtn');
+                freshYoutubeBtn.addEventListener('click', () => {
+                    openSocialTask('youtubeTaskBtn', socialTaskUrls['youtubeTaskBtn'], APP_CONFIG.REWARDS.YOUTUBE_SUBSCRIBE);
+                });
+            }
+            // Telegram button
+            const telegramBtn = document.getElementById('telegramTaskBtn');
+            if (telegramBtn) {
+                telegramBtn.replaceWith(telegramBtn.cloneNode(true));
+                const freshTelegramBtn = document.getElementById('telegramTaskBtn');
+                freshTelegramBtn.addEventListener('click', () => {
+                    openSocialTask('telegramTaskBtn', socialTaskUrls['telegramTaskBtn'], APP_CONFIG.REWARDS.TELEGRAM_JOIN);
+                });
+            }
+        }
+        // ========================
+        // APP INITIALIZATION
+        // ========================
+        window.onload = async function() {
+            await loadUserData(); // Wait for data to load from Firestore
+            setupSocialTaskButtons();
+            // Update countdown every second if limit is reached
+            setInterval(() => {
+                if (userData.tasksDoneToday >= APP_CONFIG.DAILY_TASK_LIMIT) {
+                    updateCountdown();
+                }
             }, 1000);
-        }
-    }
-}
-
-function checkTaskLimitReset() {
-    const today = new Date().toISOString().split('T')[0];
-    if (userData.lastTaskReset !== today) {
-        userData.tasksDoneToday = 0;
-        userData.featuredAdsWatchedToday = 0;
-        userData.linkAdsVisitedToday = 0;
-        userData.lastTaskReset = today;
-        
-        // Reset lastCheckIn to allow checking in again
-        userData.lastCheckIn = null;
-        
-        saveUserData();
-        return true;
-    }
-    return false;
-}
-
-function generateReferralCode() {
-    if (!userData.referralCode) {
-        const timestamp = Date.now().toString(36);
-        const randomStr = Math.random().toString(36).substring(2, 6);
-        const userId = userData.id.toString().slice(-4);
-        userData.referralCode = `QC${userId}${timestamp}${randomStr}`.toUpperCase();
-        saveUserData();
-    }
-    return userData.referralCode;
-}
-
-function updateUI() {
-    requestAnimationFrame(() => {
-        document.getElementById('userName').textContent = userData.name;
-        document.getElementById('userBalance').textContent = `$${userData.balance.toFixed(2)}`;
-        document.getElementById('tasksDone').textContent = userData.tasksDoneToday;
-        document.getElementById('clicks').textContent = userData.clicks;
-        document.getElementById('totalEarning').textContent = userData.totalEarning.toFixed(2);
-        document.getElementById('totalRefers').textContent = userData.totalRefers;
-        document.getElementById('currentBalance').textContent = `$${userData.balance.toFixed(2)}`;
-        document.getElementById('referralCount').textContent = userData.totalRefers;
-        document.getElementById('referralEarnings').textContent = userData.referralEarnings.toFixed(2);
-        
-        if (userData.hasWithdrawnBefore) {
-            document.getElementById('referralRequirement').textContent = 'No referral requirement';
-        } else {
-            document.getElementById('referralRequirement').textContent = `${userData.totalRefers}/${APP_CONFIG.FIRST_WITHDRAWAL_REFERRAL_REQUIREMENT} referrals needed`;
-        }
-        
-        updateWithdrawButton();
-    });
-}
-
-function updateTaskLimit() {
-    const progressFill = document.getElementById('taskProgress');
-    const taskLimitText = document.getElementById('taskLimitText');
-    const countdownContainer = document.getElementById('countdownContainer');
-    const progress = (userData.tasksDoneToday / APP_CONFIG.DAILY_TASK_LIMIT) * 100;
-    progressFill.style.width = `${progress}%`;
-    taskLimitText.textContent = `${userData.tasksDoneToday} of ${APP_CONFIG.DAILY_TASK_LIMIT}`;
-    
-    if (userData.tasksDoneToday >= APP_CONFIG.DAILY_TASK_LIMIT) {
-        countdownContainer.style.display = 'block';
-        updateCountdown();
-        disableLimitedTaskButtons();
-    } else {
-        countdownContainer.style.display = 'none';
-        enableTaskButtons();
-    }
-}
-
-function updateCountdown() {
-    const countdown = document.getElementById('countdown');
-    const now = new Date();
-    const midnight = new Date();
-    midnight.setHours(24, 0, 0, 0);
-    const remaining = midnight - now;
-    if (remaining > 0) {
-        const hours = Math.floor(remaining / (1000 * 60 * 60));
-        const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
-        countdown.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    }
-}
-
-function disableLimitedTaskButtons() {
-    const today = new Date().toISOString().split('T')[0];
-    if (userData.lastCheckIn !== today) {
-        const checkInBtn = document.getElementById('checkinBtn');
-        checkInBtn.disabled = true;
-        checkInBtn.textContent = 'Limit Reached';
-    }
-    updateFeaturedAdButton();
-    updateLinkAdButton();
-    updateSocialTaskButtons();
-}
-
-function enableTaskButtons() {
-    const today = new Date().toISOString().split('T')[0];
-    if (userData.lastCheckIn !== today) {
-        const checkInBtn = document.getElementById('checkinBtn');
-        checkInBtn.disabled = false;
-        checkInBtn.textContent = 'Check In';
-    }
-    updateFeaturedAdButton();
-    updateLinkAdButton();
-    updateSocialTaskButtons();
-}
-
-function updateWithdrawButton() {
-    const withdrawBtn = document.getElementById('withdrawBtn');
-    const amount = parseFloat(document.getElementById('withdrawAmount').value) || 0;
-    if (userData.balance < APP_CONFIG.WITHDRAWAL_MIN_AMOUNT) {
-        withdrawBtn.disabled = true;
-        withdrawBtn.textContent = 'Insufficient Balance';
-    } else if (!userData.hasWithdrawnBefore && userData.totalRefers < APP_CONFIG.FIRST_WITHDRAWAL_REFERRAL_REQUIREMENT) {
-        withdrawBtn.disabled = true;
-        withdrawBtn.textContent = 'Referral Requirement Not Met';
-    } else if (amount < APP_CONFIG.WITHDRAWAL_MIN_AMOUNT || amount > userData.balance) {
-        withdrawBtn.disabled = true;
-        withdrawBtn.textContent = 'Invalid Amount';
-    } else {
-        withdrawBtn.disabled = false;
-        withdrawBtn.textContent = 'Withdraw Funds';
-    }
-}
-
-document.getElementById('withdrawForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const method = document.getElementById('withdrawMethod').value;
-    const accountNumber = document.getElementById('accountNumber').value;
-    const amount = parseFloat(document.getElementById('withdrawAmount').value);
-    if (amount < APP_CONFIG.WITHDRAWAL_MIN_AMOUNT || amount > userData.balance) {
-        showNotification('Invalid withdrawal amount.', 'error');
-        return;
-    }
-    if (!userData.hasWithdrawnBefore && userData.totalRefers < APP_CONFIG.FIRST_WITHDRAWAL_REFERRAL_REQUIREMENT) {
-        showNotification('You need 30 referrals for your first withdrawal.', 'error');
-        return;
-    }
-    userData.balance -= amount;
-    userData.hasWithdrawnBefore = true;
-    const withdrawal = {
-        id: Date.now(),
-        amount: amount,
-        method: method,
-        accountNumber: accountNumber,
-        date: new Date().toISOString(),
-        status: 'pending'
-    };
-    userData.withdrawalHistory.push(withdrawal);
-    await saveUserData();
-    updateUI();
-    document.getElementById('withdrawForm').reset();
-    updateWithdrawButton();
-    showNotification(`Withdrawal request of $${amount.toFixed(2)} submitted! It will be processed within 48 hours.`);
-});
-
-document.getElementById('withdrawAmount').addEventListener('input', updateWithdrawButton);
-
-document.getElementById('withdrawMethod').addEventListener('change', function() {
-    const accountLabel = document.getElementById('accountLabel');
-    const accountInput = document.getElementById('accountNumber');
-    if (this.value === 'binance') {
-        accountLabel.textContent = 'Binance UID or Email';
-        accountInput.placeholder = 'Enter your Binance UID or email';
-    } else {
-        accountLabel.textContent = 'Account Number';
-        accountInput.placeholder = 'Enter your account number';
-    }
-});
-
-document.getElementById('copyBtn').addEventListener('click', () => {
-    const referralLink = document.getElementById('referralLink').textContent;
-    navigator.clipboard.writeText(referralLink).then(() => {
-        showNotification('Referral link copied to clipboard!', 'success');
-    }).catch(err => {
-        showNotification('Failed to copy referral link.', 'error');
-    });
-});
-
-window.onload = async function() {
-    await loadUserData();
-    setupSocialTaskButtons();
-    setInterval(() => {
-        if (userData.tasksDoneToday >= APP_CONFIG.DAILY_TASK_LIMIT) {
-            updateCountdown();
-        }
-    }, 1000);
-};
+        };
     </script>
 </body>
 </html>
-
 
 
