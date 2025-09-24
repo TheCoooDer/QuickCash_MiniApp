@@ -1200,12 +1200,12 @@
                             </div>
                             <div class="link-ad-info">
                                 <div class="link-ad-title">Link Ads</div>
-                                <div class="link-ad-description">Wait Until Ad Load</div>
+                                <div class="link-ad-description">Visit External Link</div>
                                 <div class="link-ad-reward">Reward: $0.06</div>
                             </div>
                         </div>
                         <button onclick="visitLinkAd()" class="link-ad-btn" id="linkAdBtn">
-                            Visit Link (0/5)
+                            Visit Link (0/10)
                         </button>
                     </div>
                     
@@ -1537,13 +1537,18 @@
             linkAdsVisitedToday: 0
         };
 
-        // Link ad URLs
+        // Link ad URLs - Updated with 10 new links
         const linkAdUrls = [
+            'https://www.revenuecpmgate.com/ebpv48yuy?key=ec6b3137e555bdf5c6d2e3664ce83ed0',
             'https://www.revenuecpmgate.com/kfarq0tuw?key=e6a1cde9dcf8a5bf8f73fb24245c3de5',
             'https://www.revenuecpmgate.com/tutkw1sahh?key=272554dae7b213c13d92f046080861a2',
             'https://www.revenuecpmgate.com/tqypp62y2w?key=74cc971fb77af7a1038cdccbafd2432f',
             'https://www.revenuecpmgate.com/abxysby62i?key=4061879b22a9fa181066a0f2c57ae72d',
-            'https://www.revenuecpmgate.com/ebpv48yuy?key=ec6b3137e555bdf5c6d2e3664ce83ed0'
+            'https://otieu.com/4/9923541',
+            'https://otieu.com/4/9923540',
+            'https://otieu.com/4/9923538',
+            'https://otieu.com/4/9923537',
+            'https://otieu.com/4/9904808'
         ];
 
         // Social task URLs
@@ -1766,11 +1771,11 @@
             }
         }
 
-        // Function to visit link ad
+        // Function to visit link ad - Updated for 10 links
         async function visitLinkAd() {
-            // Check if user has reached the 5 ads limit for link ads
-            if (userData.linkAdsVisitedToday >= 5) {
-                showNotification('You have reached the daily limit of 5 link ads. Try again tomorrow.', 'error');
+            // Check if user has reached the 10 ads limit for link ads
+            if (userData.linkAdsVisitedToday >= 10) {
+                showNotification('You have reached the daily limit of 10 link ads. Try again tomorrow.', 'error');
                 return;
             }
             
@@ -1786,15 +1791,15 @@
             document.getElementById('adLoadingOverlay').style.display = 'flex';
             
             try {
-                await show_9916224();
-                document.getElementById('adLoadingOverlay').style.display = 'none';
-                
                 // Get the next link in rotation
                 const linkIndex = userData.linkAdsVisitedToday % linkAdUrls.length;
                 const linkUrl = linkAdUrls[linkIndex];
                 
                 // Open the link in Telegram
                 tg.openLink(linkUrl);
+                
+                // Hide loading overlay
+                document.getElementById('adLoadingOverlay').style.display = 'none';
                 
                 // Add reward after visiting link
                 userData.linkAdsVisitedToday++; // Increment link ads count
@@ -1803,23 +1808,23 @@
                 showNotification('Congratulations! You have earned $0.06', 'success');
             } catch (error) {
                 document.getElementById('adLoadingOverlay').style.display = 'none';
-                showNotification('Failed to load ad. Please try again later.', 'error');
-                console.error('Ad error:', error);
+                showNotification('Failed to open link. Please try again later.', 'error');
+                console.error('Link error:', error);
                 updateLinkAdButton(); // Restore button state
             }
         }
 
-        // Update link ad button text and state
+        // Update link ad button text and state - Updated for 10 links
         function updateLinkAdButton() {
             const linkAdBtn = document.getElementById('linkAdBtn');
             const visitedCount = userData.linkAdsVisitedToday || 0;
             
-            if (visitedCount >= 5) {
+            if (visitedCount >= 10) {
                 linkAdBtn.disabled = true;
-                linkAdBtn.textContent = 'Limit Reached (5/5)';
+                linkAdBtn.textContent = 'Limit Reached (10/10)';
             } else {
                 linkAdBtn.disabled = false;
-                linkAdBtn.textContent = `Visit Link (${visitedCount}/5)`;
+                linkAdBtn.textContent = `Visit Link (${visitedCount}/10)`;
             }
         }
 
@@ -2249,5 +2254,3 @@
     </script>
 </body>
 </html>
-
-
