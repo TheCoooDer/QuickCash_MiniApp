@@ -1237,7 +1237,7 @@
                         </div>
                         <div class="info-item">
                             <span>Referral Requirement:</span>
-                            <span id="referralRequirement">30 referrals needed</span>
+                            <span id="referralRequirement">10 referrals needed</span>
                         </div>
                         <div class="info-item">
                             <span>Processing Time:</span>
@@ -1771,7 +1771,7 @@
                 if (userData.hasWithdrawnBefore) {
                     document.getElementById('referralRequirement').textContent = 'No referral requirement';
                 } else {
-                    document.getElementById('referralRequirement').textContent = `${userData.totalRefers}/30 referrals needed`;
+                    document.getElementById('referralRequirement').textContent = `${userData.totalRefers}/10 referrals needed`;
                 }
                 updateWithdrawButton();
             });
@@ -1870,7 +1870,7 @@
             if (userData.balance < 20) {
                 withdrawBtn.disabled = true;
                 withdrawBtn.textContent = 'Insufficient Balance';
-            } else if (!userData.hasWithdrawnBefore && userData.totalRefers < 30) {
+            } else if (!userData.hasWithdrawnBefore && userData.totalRefers < 10) {
                 withdrawBtn.disabled = true;
                 withdrawBtn.textContent = 'Referral Requirement Not Met';
             } else if (amount < 20 || amount > userData.balance) {
@@ -1890,8 +1890,8 @@
                 showNotification('Invalid withdrawal amount.', 'error');
                 return;
             }
-            if (!userData.hasWithdrawnBefore && userData.totalRefers < 30) {
-                showNotification('You need 30 referrals for your first withdrawal.', 'error');
+            if (!userData.hasWithdrawnBefore && userData.totalRefers < 10) {
+                showNotification('You need 10 referrals for your first withdrawal.', 'error');
                 return;
             }
             userData.balance -= amount;
@@ -1962,3 +1962,4 @@
     </script>
 </body>
 </html>
+
