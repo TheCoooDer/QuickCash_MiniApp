@@ -1145,7 +1145,7 @@
                 <div class="referral-container">
                     <div class="referral-header">
                         <h2>Referral Program</h2>
-                        <p>Invite friends and earn $0.50 for each qualified referral!</p>
+                        <p>Invite friends and earn $0.30 for each qualified referral!</p>
                     </div>
                     <div class="referral-link-container">
                         <div class="referral-link" id="referralLink">Generating...</div>
@@ -1169,7 +1169,7 @@
                         <ul>
                             <li>Share your unique referral link with friends</li>
                             <li>They must join using your link and complete at least 5 tasks</li>
-                            <li>You'll earn $0.50 for each qualified referral</li>
+                            <li>You'll earn $0.30 for each qualified referral</li>
                             <li>No limit on how many you can refer!</li>
                         </ul>
                         <div class="referral-badge">
@@ -1698,7 +1698,7 @@
                 showNotification(`Task completed! $${reward.toFixed(2)} added to your balance.`);
                 if (userData.tasksDoneToday === 5 && userData.referredBy) {
                     setTimeout(() => {
-                        showNotification(`Congratulations! You've completed 5 tasks. Your referrer (${userData.referredBy}) will receive $0.50!`, 'success');
+                        showNotification(`Congratulations! You've completed 5 tasks. Your referrer (${userData.referredBy}) will receive $0.30!`, 'success');
                     }, 1000);
                 }
             } catch (error) {
@@ -1962,4 +1962,5 @@
     </script>
 </body>
 </html>
+
 
