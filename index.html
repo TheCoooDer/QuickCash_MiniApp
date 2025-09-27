@@ -26,14 +26,12 @@
             --checkin: #00897B;
             --link: #2962FF;
         }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
         body {
             background-color: #ECEFF1;
             color: var(--dark);
@@ -41,7 +39,6 @@
             overflow-x: hidden;
             height: 100vh;
         }
-
         .app-container {
             max-width: 500px;
             margin: 0 auto;
@@ -53,7 +50,6 @@
             flex-direction: column;
             overflow: hidden;
         }
-
         /* Top Bar */
         .top-bar {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
@@ -68,13 +64,11 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             flex-shrink: 0;
         }
-
         .user-info {
             display: flex;
             align-items: center;
             gap: 12px;
         }
-
         .user-avatar {
             width: 40px;
             height: 40px;
@@ -88,12 +82,10 @@
             font-size: 18px;
             font-weight: bold;
         }
-
         .user-name {
             font-weight: 600;
             font-size: 16px;
         }
-
         .balance {
             background: rgba(255, 255, 255, 0.2);
             padding: 6px 12px;
@@ -103,7 +95,6 @@
             align-items: center;
             gap: 5px;
         }
-
         /* Main Content */
         .main-content {
             flex: 1;
@@ -113,7 +104,6 @@
             position: relative;
             height: calc(100vh - 140px);
         }
-
         .tab-content {
             display: none;
             position: absolute;
@@ -127,12 +117,10 @@
             opacity: 0;
             transition: opacity 0.2s ease-in-out;
         }
-
         .tab-content.active {
             display: block;
             opacity: 1;
         }
-
         /* Dashboard */
         .dashboard-title {
             font-size: 24px;
@@ -142,7 +130,6 @@
             text-align: center;
             position: relative;
         }
-
         .dashboard-title::after {
             content: '';
             position: absolute;
@@ -154,14 +141,12 @@
             background: linear-gradient(90deg, var(--primary), var(--secondary));
             border-radius: 2px;
         }
-
         .dashboard {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
             margin-bottom: 25px;
         }
-
         .stat-card {
             background: white;
             border-radius: 16px;
@@ -173,12 +158,10 @@
             display: flex;
             flex-direction: column;
         }
-
         .stat-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
         }
-
         .stat-card::before {
             content: '';
             position: absolute;
@@ -189,14 +172,12 @@
             background: linear-gradient(to bottom, var(--primary), var(--secondary));
             border-radius: 3px 0 0 3px;
         }
-
         .stat-card h3 {
             font-size: 14px;
             color: var(--gray);
             margin-bottom: 12px;
             font-weight: 500;
         }
-
         .stat-value {
             font-size: 28px;
             font-weight: 700;
@@ -206,7 +187,6 @@
             gap: 5px;
             margin-top: auto;
         }
-
         .stat-icon {
             position: absolute;
             bottom: 15px;
@@ -215,7 +195,6 @@
             opacity: 0.1;
             color: var(--primary);
         }
-
         /* Progress Container */
         .progress-container {
             background: white;
@@ -224,20 +203,17 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
             margin-bottom: 25px;
         }
-
         .progress-title {
             font-size: 18px;
             font-weight: 600;
             margin-bottom: 15px;
             color: var(--dark);
         }
-
         .progress-header {
             display: flex;
             justify-content: space-between;
             margin-bottom: 8px;
         }
-
         .progress-bar {
             height: 12px;
             background-color: #e9ecef;
@@ -245,14 +221,12 @@
             overflow: hidden;
             margin-bottom: 15px;
         }
-
         .progress-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
             border-radius: 10px;
             transition: width 0.5s ease;
         }
-
         .countdown-container {
             text-align: center;
             padding: 15px;
@@ -263,35 +237,30 @@
             box-shadow: 0 4px 12px rgba(255, 214, 0, 0.2);
             display: none;
         }
-
         .countdown-label {
             font-size: 14px;
             font-weight: 600;
             color: var(--dark);
             margin-bottom: 8px;
         }
-
         .countdown {
             font-size: 24px;
             font-weight: 700;
             color: var(--warning);
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
-
         .countdown-icon {
             font-size: 20px;
             color: var(--warning);
             margin-right: 8px;
             vertical-align: middle;
         }
-
         /* Tasks - NEW DESIGN */
         .task-list {
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
-
         /* Daily Check In Card */
         .checkin-task {
             background: linear-gradient(135deg, var(--checkin), #4DB6AC);
@@ -305,7 +274,6 @@
             align-items: center;
             justify-content: space-between;
         }
-
         .checkin-task::before {
             content: '';
             position: absolute;
@@ -316,40 +284,33 @@
             background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
             transform: rotate(45deg);
         }
-
         .checkin-left {
             display: flex;
             align-items: center;
             gap: 15px;
         }
-
         .checkin-icon {
             font-size: 36px;
             color: rgba(255, 255, 255, 0.9);
         }
-
         .checkin-info {
             text-align: left;
         }
-
         .checkin-title {
             font-size: 20px;
             font-weight: 700;
             margin-bottom: 5px;
         }
-
         .checkin-description {
             font-size: 14px;
             opacity: 0.9;
             margin-bottom: 8px;
         }
-
         .checkin-reward {
             font-size: 16px;
             font-weight: 700;
             color: #FFFFFF;
         }
-        
         .checkin-btn {
             background: white;
             color: var(--checkin);
@@ -364,18 +325,15 @@
             white-space: nowrap;
             z-index: 0;
         }
-        
         .checkin-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
-
         .checkin-btn:disabled {
             background: rgba(255, 255, 255, 0.5);
             cursor: not-allowed;
             transform: none;
         }
-
         /* Featured Ad Task */
         .featured-task {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
@@ -389,7 +347,6 @@
             align-items: center;
             justify-content: space-between;
         }
-
         .featured-task::before {
             content: '';
             position: absolute;
@@ -400,41 +357,34 @@
             background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
             transform: rotate(45deg);
         }
-
         .featured-left {
             display: flex;
             align-items: center;
             gap: 15px;
         }
-
         .featured-icon {
             font-size: 36px;
             color: rgba(255, 255, 255, 0.9);
         }
-
         .featured-info {
             text-align: left;
         }
-
         .featured-title {
             font-size: 20px;
             font-weight: 700;
             margin-bottom: 5px;
         }
-
         .featured-description {
             font-size: 14px;
             opacity: 0.9;
             margin-bottom: 8px;
         }
-
         .featured-reward {
             color: white;
             font-size: 16px;
             font-weight: 700;
             color: var(--warning);
         }
-
         .featured-btn {
             background: white;
             color: var(--primary);
@@ -450,18 +400,15 @@
             z-index: 0;
             position: relative;
         }
-
         .featured-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
-
         .featured-btn:disabled {
             background: rgba(255, 255, 255, 0.5);
             cursor: not-allowed;
             transform: none;
         }
-
         /* Link Ad Task */
         .link-ad-task {
             background: linear-gradient(135deg, var(--link), #1565C0);
@@ -475,7 +422,6 @@
             align-items: center;
             justify-content: space-between;
         }
-
         .link-ad-task::before {
             content: '';
             position: absolute;
@@ -486,41 +432,34 @@
             background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
             transform: rotate(45deg);
         }
-
         .link-ad-left {
             display: flex;
             align-items: center;
             gap: 15px;
         }
-
         .link-ad-icon {
             font-size: 36px;
             color: rgba(255, 255, 255, 0.9);
         }
-
         .link-ad-info {
             text-align: left;
         }
-
         .link-ad-title {
             font-size: 20px;
             font-weight: 700;
             margin-bottom: 5px;
         }
-
         .link-ad-description {
             font-size: 14px;
             opacity: 0.9;
             margin-bottom: 8px;
         }
-
         .link-ad-reward {
             color: white;
             font-size: 16px;
             font-weight: 700;
             color: var(--warning);
         }
-
         .link-ad-btn {
             background: white;
             color: var(--link);
@@ -536,18 +475,15 @@
             z-index: 0;
             position: relative;
         }
-
         .link-ad-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
-
         .link-ad-btn:disabled {
             background: rgba(255, 255, 255, 0.5);
             cursor: not-allowed;
             transform: none;
         }
-
         /* Ad loading overlay */
         .ad-loading-overlay {
             position: fixed;
@@ -563,7 +499,6 @@
             z-index: 1000;
             color: white;
         }
-
         .ad-loading-spinner {
             width: 50px;
             height: 50px;
@@ -573,11 +508,9 @@
             animation: spin 1s ease-in-out infinite;
             margin-bottom: 20px;
         }
-
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-
         /* YouTube and Telegram Tasks */
         .youtube-task {
             background: linear-gradient(135deg, var(--youtube), #D50000);
@@ -591,7 +524,6 @@
             align-items: center;
             justify-content: space-between;
         }
-
         .youtube-task::before {
             content: '';
             position: absolute;
@@ -602,7 +534,6 @@
             background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
             transform: rotate(45deg);
         }
-
         .telegram-task {
             background: linear-gradient(135deg, var(--telegram), #006699);
             border-radius: 16px;
@@ -615,7 +546,6 @@
             align-items: center;
             justify-content: space-between;
         }
-
         .telegram-task::before {
             content: '';
             position: absolute;
@@ -626,40 +556,33 @@
             background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
             transform: rotate(45deg);
         }
-
         .task-left {
             display: flex;
             align-items: center;
             gap: 15px;
         }
-
         .task-icon {
             font-size: 36px;
             color: rgba(255, 255, 255, 0.9);
         }
-
         .task-info {
             text-align: left;
         }
-
         .task-title {
             font-size: 20px;
             font-weight: 700;
             margin-bottom: 5px;
         }
-
         .task-description {
             font-size: 14px;
             opacity: 0.9;
             margin-bottom: 8px;
         }
-
         .task-reward {
             font-size: 16px;
             font-weight: 700;
             color: var(--warning);
         }
-
         .task-btn {
             background: white;
             border: none;
@@ -674,26 +597,21 @@
             position: relative;
             z-index: 1;
         }
-
         .youtube-task .task-btn {
             color: var(--youtube);
         }
-
         .telegram-task .task-btn {
             color: var(--telegram);
         }
-
         .task-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
-
         .task-btn:disabled {
             background: rgba(255, 255, 255, 0.5);
             cursor: not-allowed;
             transform: none;
         }
-
         /* Referral */
         .referral-container {
             background: white;
@@ -702,23 +620,19 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
             margin-bottom: 20px;
         }
-
         .referral-header {
             text-align: center;
             margin-bottom: 20px;
         }
-
         .referral-header h2 {
             font-size: 22px;
             color: var(--dark);
             margin-bottom: 10px;
         }
-
         .referral-header p {
             color: var(--gray);
             font-size: 14px;
         }
-
         .referral-link-container {
             background: #F5F5F5;
             border-radius: 12px;
@@ -728,7 +642,6 @@
             align-items: center;
             justify-content: space-between;
         }
-
         .referral-link {
             flex: 1;
             margin-right: 10px;
@@ -739,7 +652,6 @@
             color: var(--gray);
             word-break: break-all;
         }
-
         .copy-btn {
             background: var(--primary);
             color: white;
@@ -752,25 +664,21 @@
             align-items: center;
             gap: 5px;
         }
-
         .copy-btn:hover {
             background: var(--secondary);
         }
-
         .referral-stats {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
             margin-top: 20px;
         }
-
         .referral-stat {
             background: #F5F5F5;
             border-radius: 12px;
             padding: 15px;
             text-align: center;
         }
-
         .referral-stat-value {
             font-size: 24px;
             font-weight: 700;
@@ -782,35 +690,29 @@
             justify-content: center;
             transition: all 0.3s ease;
         }
-
         .referral-stat-label {
             font-size: 14px;
             color: var(--gray);
         }
-
         .referral-info {
             background: #F5F5F5;
             border-radius: 12px;
             padding: 15px;
             margin-top: 20px;
         }
-
         .referral-info h3 {
             font-size: 16px;
             color: var(--dark);
             margin-bottom: 10px;
         }
-
         .referral-info ul {
             padding-left: 20px;
             color: var(--gray);
             font-size: 14px;
         }
-
         .referral-info li {
             margin-bottom: 5px;
         }
-
         .referral-badge {
             display: inline-block;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
@@ -821,7 +723,6 @@
             font-weight: 600;
             margin-top: 10px;
         }
-
         /* Support */
         .support-card {
             background: white;
@@ -830,20 +731,17 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
             margin-bottom: 20px;
         }
-
         .support-card h3 {
             margin-bottom: 20px;
             color: var(--dark);
             font-size: 22px;
             text-align: center;
         }
-
         .support-card p {
             margin-bottom: 20px;
             text-align: center;
             color: var(--gray);
         }
-
         .support-link {
             display: flex;
             align-items: center;
@@ -856,33 +754,26 @@
             color: var(--dark);
             transition: all 0.2s;
         }
-
         .support-link:hover {
             background: #E0E0E0;
             transform: translateX(5px);
         }
-
         .support-link i {
             font-size: 24px;
         }
-
         .support-link-details {
             flex: 1;
         }
-
         .support-link-title {
             font-weight: 600;
             margin-bottom: 2px;
         }
-
         .support-link-subtitle {
             font-size: 12px;
             color: var(--gray);
         }
-
         .telegram { color: var(--telegram); }
         .facebook { color: #1877f2; }
-
         /* Withdraw */
         .withdraw-container {
             background: white;
@@ -890,26 +781,22 @@
             padding: 25px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
         }
-
         .withdraw-container h2 {
             margin-bottom: 25px;
             text-align: center;
             color: var(--dark);
         }
-
         .withdraw-info {
             background: #F5F5F5;
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 25px;
         }
-
         .withdraw-info h3 {
             margin-bottom: 15px;
             color: var(--dark);
             font-size: 18px;
         }
-
         .info-item {
             display: flex;
             justify-content: space-between;
@@ -917,30 +804,25 @@
             padding-bottom: 12px;
             border-bottom: 1px solid #E0E0E0;
         }
-
         .info-item:last-child {
             margin-bottom: 0;
             padding-bottom: 0;
             border-bottom: none;
         }
-
         .withdraw-form {
             display: flex;
             flex-direction: column;
             gap: 20px;
         }
-
         .form-group {
             display: flex;
             flex-direction: column;
             gap: 8px;
         }
-
         .form-group label {
             font-weight: 600;
             color: var(--dark);
         }
-
         .form-group select,
         .form-group input {
             padding: 15px;
@@ -949,13 +831,11 @@
             font-size: 16px;
             transition: border-color 0.3s;
         }
-
         .form-group select:focus,
         .form-group input:focus {
             border-color: var(--primary);
             outline: none;
         }
-
         .withdraw-btn {
             background: linear-gradient(135deg, var(--success), #00A152);
             color: white;
@@ -967,16 +847,55 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-
         .withdraw-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(0, 200, 83, 0.3);
         }
-
         .withdraw-btn:disabled {
             background: var(--gray);
             cursor: not-allowed;
             transform: none;
+        }
+
+        /* === NEW: Top 5 Withdrawals Section === */
+        .top-withdrawals-section {
+            margin-top: 30px;
+        }
+        .top-withdrawals-section h3 {
+            font-size: 18px;
+            color: var(--dark);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        #topWithdrawalsList {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .withdrawal-proof-card {
+            background: #F5F5F5;
+            padding: 12px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: var(--dark);
+        }
+        .proof-left .proof-name {
+            font-weight: 600;
+        }
+        .proof-left .proof-method-time {
+            font-size: 12px;
+            color: var(--gray);
+        }
+        .proof-right .proof-amount {
+            font-weight: 700;
+            color: var(--success);
+        }
+        .proof-right .proof-status {
+            font-size: 12px;
+            color: var(--success);
         }
 
         /* Bottom Navigation */
@@ -995,7 +914,6 @@
             z-index: 100;
             flex-shrink: 0;
         }
-
         .nav-item {
             display: flex;
             flex-direction: column;
@@ -1008,21 +926,17 @@
             transition: all 0.2s;
             cursor: pointer;
         }
-
         .nav-item.active {
             color: var(--primary);
             background: rgba(255, 82, 82, 0.1);
         }
-
         .nav-item i {
             font-size: 22px;
         }
-
         .nav-item span {
             font-size: 12px;
             font-weight: 600;
         }
-
         /* Notification */
         .notification {
             position: fixed;
@@ -1039,45 +953,35 @@
             gap: 10px;
             max-width: 90%;
         }
-
         .notification.show {
             display: flex;
             animation: slideDown 0.3s ease-out;
         }
-
         @keyframes slideDown {
             from { transform: translate(-50%, -100%); opacity: 0; }
             to { transform: translate(-50%, 0); opacity: 1; }
         }
-
         .notification.success {
             border-left: 4px solid var(--success);
         }
-
         .notification.error {
             border-left: 4px solid var(--danger);
         }
-
         .notification.info {
             border-left: 4px solid var(--primary);
         }
-
         .notification i {
             font-size: 20px;
         }
-
         .notification.success i {
             color: var(--success);
         }
-
         .notification.error i {
             color: var(--danger);
         }
-
         .notification.info i {
             color: var(--primary);
         }
-
         /* Responsive */
         @media (max-width: 500px) {
             .app-container {
@@ -1103,7 +1007,6 @@
                 <span id="userBalance">$0.00</span>
             </div>
         </div>
-
         <!-- Main Content -->
         <div class="main-content">
             <!-- Home Tab -->
@@ -1131,7 +1034,6 @@
                         <i class="fas fa-users stat-icon"></i>
                     </div>
                 </div>
-
                 <!-- Progress Container -->
                 <div class="progress-container">
                     <h3 class="progress-title">Daily Task Limit</h3>
@@ -1142,7 +1044,6 @@
                     <div class="progress-bar">
                         <div class="progress-fill" id="taskProgress" style="width: 0%"></div>
                     </div>
-                    
                     <!-- Enhanced Countdown Timer -->
                     <div class="countdown-container" id="countdownContainer">
                         <div class="countdown-label">
@@ -1153,7 +1054,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- Tasks Tab -->
             <div class="tab-content" id="tasks-tab">
                 <h2 class="dashboard-title">Daily Tasks</h2>
@@ -1174,7 +1074,6 @@
                             Check In
                         </button>
                     </div>
-                    
                     <!-- Featured Ad Task -->
                     <div class="featured-task">
                         <div class="featured-left">
@@ -1191,7 +1090,6 @@
                             Watch Now (0/30)
                         </button>
                     </div>
-                    
                     <!-- Link Ad Task -->
                     <div class="link-ad-task">
                         <div class="link-ad-left">
@@ -1208,7 +1106,6 @@
                             Visit Link (0/10)
                         </button>
                     </div>
-                    
                     <!-- YouTube Subscribe Task -->
                     <div class="youtube-task">
                         <div class="task-left">
@@ -1225,7 +1122,6 @@
                             Subscribe Now
                         </button>
                     </div>
-                    
                     <!-- Telegram Join Task -->
                     <div class="telegram-task">
                         <div class="task-left">
@@ -1244,7 +1140,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- Referral Tab -->
             <div class="tab-content" id="referral-tab">
                 <div class="referral-container">
@@ -1252,7 +1147,6 @@
                         <h2>Referral Program</h2>
                         <p>Invite friends and earn $0.50 for each qualified referral!</p>
                     </div>
-                    
                     <div class="referral-link-container">
                         <div class="referral-link" id="referralLink">Generating...</div>
                         <button class="copy-btn" id="copyBtn">
@@ -1260,7 +1154,6 @@
                             <span>Copy</span>
                         </button>
                     </div>
-                    
                     <div class="referral-stats">
                         <div class="referral-stat">
                             <div class="referral-stat-value" id="referralCount">0</div>
@@ -1271,7 +1164,6 @@
                             <div class="referral-stat-label">Referral Earnings</div>
                         </div>
                     </div>
-                    
                     <div class="referral-info">
                         <h3>How It Works</h3>
                         <ul>
@@ -1285,7 +1177,6 @@
                         </div>
                     </div>
                 </div>
-                
                 <div class="support-card">
                     <h3>Referral Benefits</h3>
                     <ul style="padding-left: 20px; color: var(--gray);">
@@ -1295,13 +1186,11 @@
                     </ul>
                 </div>
             </div>
-
             <!-- Support Tab -->
             <div class="tab-content" id="support-tab">
                 <div class="support-card">
                     <h3>Developer & Support</h3>
                     <p>Connect with the developer for support and updates</p>
-                    
                     <a href="https://t.me/EarnOnlineWithSufyan" class="support-link" target="_blank">
                         <i class="fab fa-telegram telegram"></i>
                         <div class="support-link-details">
@@ -1309,7 +1198,6 @@
                             <div class="support-link-subtitle">@EarnOnlineWithSufyan</div>
                         </div>
                     </a>
-                    
                     <a href="https://www.facebook.com/SufYanThePro" class="support-link" target="_blank">
                         <i class="fab fa-facebook facebook"></i>
                         <div class="support-link-details">
@@ -1318,7 +1206,6 @@
                         </div>
                     </a>
                 </div>
-                
                 <div class="support-card">
                     <h3>App Information</h3>
                     <div style="padding: 15px; background: #F5F5F5; border-radius: 12px;">
@@ -1334,12 +1221,10 @@
                     </div>
                 </div>
             </div>
-
             <!-- Withdraw Tab -->
             <div class="tab-content" id="withdraw-tab">
                 <div class="withdraw-container">
                     <h2>Withdraw Funds</h2>
-                    
                     <div class="withdraw-info">
                         <h3>Withdrawal Information</h3>
                         <div class="info-item">
@@ -1359,7 +1244,6 @@
                             <span>48 hours</span>
                         </div>
                     </div>
-                    
                     <form class="withdraw-form" id="withdrawForm">
                         <div class="form-group">
                             <label for="withdrawMethod">Withdrawal Method</label>
@@ -1370,23 +1254,27 @@
                                 <option value="binance">Binance</option>
                             </select>
                         </div>
-                        
                         <div class="form-group">
                             <label for="accountNumber" id="accountLabel">Account Number</label>
                             <input type="text" id="accountNumber" placeholder="Enter your account number" required>
                         </div>
-                        
                         <div class="form-group">
                             <label for="withdrawAmount">Amount ($)</label>
                             <input type="number" id="withdrawAmount" min="20" step="0.01" placeholder="Enter amount" required>
                         </div>
-                        
                         <button type="submit" class="withdraw-btn" id="withdrawBtn">Withdraw Funds</button>
                     </form>
+
+                    <!-- === NEW: Top 5 Withdrawals Section === -->
+                    <div class="top-withdrawals-section">
+                        <h3>Top 5 Withdrawals Today</h3>
+                        <div id="topWithdrawalsList">
+                            <!-- Generated daily -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
         <!-- Bottom Navigation -->
         <div class="bottom-nav">
             <div class="nav-item active" data-tab="home" onclick="openTab('home')">
@@ -1410,20 +1298,17 @@
                 <span>Withdraw</span>
             </div>
         </div>
-
         <!-- Notification -->
         <div class="notification" id="notification">
             <i class="fas fa-check-circle"></i>
             <span id="notificationText">Success!</span>
         </div>
-
         <!-- Ad Loading Overlay -->
         <div class="ad-loading-overlay" id="adLoadingOverlay" style="display: none;">
             <div class="ad-loading-spinner"></div>
             <p>Loading ad, please wait...</p>
         </div>
     </div>
-
     <script>
         // Initialize Firebase
         const firebaseConfig = {
@@ -1434,18 +1319,67 @@
             messagingSenderId: "772745138057",
             appId: "1:772745138057:web:70a1f8763335bbf7645b58"
         };
-
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-
         // Initialize Telegram Web App
         let tg = window.Telegram.WebApp;
         tg.expand();
 
+        // === DETERMINISTIC RANDOM GENERATOR (for daily proofs) ===
+        function createSeededRandom(seed) {
+            let s = seed;
+            return function() {
+                s = Math.sin(s) * 10000;
+                return s - Math.floor(s);
+            };
+        }
+
+        // === GENERATE TOP 5 WITHDRAWALS FOR TODAY ===
+        function generateTopWithdrawals() {
+            const today = new Date().toISOString().split('T')[0]; // "2024-06-15"
+            const seed = parseInt(today.replace(/-/g, ''), 10); // e.g., 20240615
+            const rand = createSeededRandom(seed);
+
+            const names = [
+                "Rahim Khan", "Sadia Akter", "Tareq Mahmud", "Nusrat Jahan", 
+                "Arif Hossain", "Farhana Yeasmin", "Mehedi Hasan", "Tasnim Rahman",
+                "Kamrul Islam", "Sabrina Akter", "Jannatul Ferdous", "Imran Ahmed",
+                "Nadia Sultana", "Fahim Reza", "Sumaiya Akter", "Zahid Hasan",
+                "Mariam Begum", "Sakib Al Hasan", "Tasneem Ara", "Rafiqul Islam"
+            ];
+            const methods = ["bKash", "Nagad", "Rocket", "Binance"];
+            const times = ["1 hour ago", "3 hours ago", "5 hours ago", "8 hours ago", "12 hours ago"];
+
+            const container = document.getElementById('topWithdrawalsList');
+            if (!container) return;
+
+            container.innerHTML = '';
+
+            for (let i = 0; i < 5; i++) {
+                const name = names[Math.floor(rand() * names.length)];
+                const amount = (20 + Math.floor(rand() * 131)).toFixed(2); // $20–$150
+                const method = methods[Math.floor(rand() * methods.length)];
+                const time = times[Math.floor(rand() * times.length)];
+
+                const card = document.createElement('div');
+                card.className = 'withdrawal-proof-card';
+                card.innerHTML = `
+                    <div class="proof-left">
+                        <div class="proof-name">${name}</div>
+                        <div class="proof-method-time">${method} • ${time}</div>
+                    </div>
+                    <div class="proof-right">
+                        <div class="proof-amount">$${amount}</div>
+                        <div class="proof-status">Completed ✅</div>
+                    </div>
+                `;
+                container.appendChild(card);
+            }
+        }
+
         // Function to get user initials from name
         function getUserInitials(name) {
             if (!name) return 'U';
-            
             const parts = name.trim().split(' ');
             if (parts.length >= 2) {
                 return (parts[0][0] + parts[1][0]).toUpperCase();
@@ -1454,28 +1388,21 @@
             }
             return 'U';
         }
-
         // Function to get user full name
         function getUserFullName(user) {
             if (!user) return 'User';
-            
             let fullName = user.first_name || '';
             if (user.last_name) {
                 fullName += ' ' + user.last_name;
             }
-            
             return fullName.trim() || 'User';
         }
-
         // Function to load user profile picture
         function loadUserProfilePicture(userId, photoUrl, avatarElement) {
             if (photoUrl) {
-                // If photo URL is available, use it
                 avatarElement.innerHTML = `<img src="${photoUrl}" alt="User" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
             } else {
-                // Try to fetch profile picture using Telegram API
                 const apiUrl = `https://api.telegram.org/bot${tg.initDataUnsafe.query_id}/getUserProfilePhotos?user_id=${userId}&limit=1`;
-                
                 fetch(apiUrl)
                     .then(response => response.json())
                     .then(data => {
@@ -1483,12 +1410,9 @@
                             const fileId = data.result.photos[0][0].file_id;
                             const filePath = `https://api.telegram.org/file/bot${tg.initDataUnsafe.query_id}/${fileId}`;
                             avatarElement.innerHTML = `<img src="${filePath}" alt="User" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
-                            
-                            // Save the photo URL to user data
                             userData.photo = filePath;
                             saveUserData();
                         } else {
-                            // If no photo available, use initials
                             const initials = getUserInitials(userData.name);
                             avatarElement.innerHTML = initials;
                             avatarElement.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
@@ -1501,7 +1425,6 @@
                     })
                     .catch(error => {
                         console.error('Error fetching profile picture:', error);
-                        // If error, use initials
                         const initials = getUserInitials(userData.name);
                         avatarElement.innerHTML = initials;
                         avatarElement.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
@@ -1513,7 +1436,6 @@
                     });
             }
         }
-
         // User data
         let userData = {
             id: tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : 12345,
@@ -1536,7 +1458,6 @@
             featuredAdsWatchedToday: 0,
             linkAdsVisitedToday: 0
         };
-
         // Link ad URLs - Updated with 10 new links
         const linkAdUrls = [
             'https://www.revenuecpmgate.com/ebpv48yuy?key=ec6b3137e555bdf5c6d2e3664ce83ed0',
@@ -1550,13 +1471,11 @@
             'https://otieu.com/4/9923537',
             'https://otieu.com/4/9904808'
         ];
-
         // Social task URLs
         const socialTaskUrls = {
             'youtubeTaskBtn': 'https://www.youtube.com/@SufyanCircuit',
             'telegramTaskBtn': 'https://t.me/EarnOnlineWithSufyan'
         };
-
         // Helper function to initialize default user data
         function initializeDefaultUserData() {
             userData = {
@@ -1581,7 +1500,6 @@
                 linkAdsVisitedToday: 0
             };
         }
-
         // Save user data to Firestore
         async function saveUserData() {
             try {
@@ -1592,16 +1510,12 @@
                 showNotification('Failed to save user data', 'error');
             }
         }
-
         // Load user data from Firestore
         async function loadUserData() {
             try {
                 const doc = await db.collection('users').doc(userData.id.toString()).get();
-                
                 if (doc.exists) {
                     userData = doc.data();
-                    
-                    // Update name and photo from Telegram if available
                     if (tg.initDataUnsafe.user) {
                         userData.name = getUserFullName(tg.initDataUnsafe.user);
                         if (tg.initDataUnsafe.user.photo_url && !userData.photo) {
@@ -1609,110 +1523,66 @@
                         }
                     }
                 } else {
-                    // Initialize default user data for new user
                     initializeDefaultUserData();
-                    // Save the new user
                     await saveUserData();
                 }
-                
-                // Check for referral
                 checkReferral();
-                
-                // Check if task limit needs to be reset
                 checkTaskLimitReset();
-                
-                // Generate referral code if not exists
                 generateReferralCode();
-                
-                // Update referral link with your bot username
                 const botUsername = 'quickCash_Earning_bot';
                 document.getElementById('referralLink').textContent = `https://t.me/${botUsername}?start=${userData.referralCode}`;
-                
-                // Update last updated date
                 const now = new Date();
                 const formattedDate = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
                 document.getElementById('lastUpdated').textContent = formattedDate;
-                
-                // Update task completion status
                 updateTaskButtons();
-                
-                // Update check-in button
                 updateCheckInButton();
-                
-                // Update featured ad button
                 updateFeaturedAdButton();
-                
-                // Update link ad button
                 updateLinkAdButton();
-                
-                // Update social task buttons
                 updateSocialTaskButtons();
-                
                 updateUI();
                 updateTaskLimit();
-                
-                // Load user profile picture
                 loadUserProfilePicture(userData.id, userData.photo, document.getElementById('userAvatar'));
             } catch (error) {
                 console.error('Error loading user data:', error);
                 showNotification('Failed to load user data', 'error');
             }
         }
-
         // Daily Check In function
         async function dailyCheckIn() {
-            const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
-            
-            // Check if already checked in today
+            const today = new Date().toISOString().split('T')[0];
             if (userData.lastCheckIn === today) {
                 showNotification('You have already checked in today. Come back tomorrow!', 'error');
                 return;
             }
-            
-            // Check daily task limit
             if (userData.tasksDoneToday >= 35) {
                 showNotification('Daily task limit reached. Try again tomorrow.', 'error');
                 return;
             }
-            
-            // Show loading overlay
             document.getElementById('adLoadingOverlay').style.display = 'flex';
-            
             try {
-                // Show ad before giving reward
                 await show_9916224();
-                
-                // Hide loading overlay
                 document.getElementById('adLoadingOverlay').style.display = 'none';
-                
-                // Add reward for daily check-in
                 const reward = 0.10;
                 userData.balance += reward;
                 userData.totalEarning += reward;
                 userData.clicks++;
                 userData.tasksDoneToday++;
-                userData.lastCheckIn = today; // Set last check-in to today
-                
+                userData.lastCheckIn = today;
                 await saveUserData();
                 updateUI();
                 updateCheckInButton();
                 updateTaskLimit();
-                
                 showNotification(`Daily check-in successful! $${reward.toFixed(2)} added to your balance.`);
             } catch (error) {
-                // Hide loading overlay
                 document.getElementById('adLoadingOverlay').style.display = 'none';
-                
                 showNotification('Failed to load ad. Please try again later.', 'error');
                 console.error('Ad error:', error);
             }
         }
-
-        // Update check-in button based on whether user has checked in today
+        // Update check-in button
         function updateCheckInButton() {
             const checkInBtn = document.getElementById('checkinBtn');
             const today = new Date().toISOString().split('T')[0];
-            
             if (userData.lastCheckIn === today) {
                 checkInBtn.disabled = true;
                 checkInBtn.textContent = 'Checked In';
@@ -1721,47 +1591,33 @@
                 checkInBtn.textContent = 'Check In';
             }
         }
-
         async function Watched() {
-            // Check if user has reached the 30 ads limit for featured ads
             if (userData.featuredAdsWatchedToday >= 30) {
                 showNotification('You have reached the daily limit of 30 featured ads. Try again tomorrow.', 'error');
                 return;
             }
-            
-            // Check daily task limit
             if (userData.tasksDoneToday >= 35) {
                 showNotification('Daily task limit reached. Try again tomorrow.', 'error');
                 return;
             }
-            
-            const featuredBtn = document.getElementById('featuredAdBtn');
-            
-            // Show loading overlay
             document.getElementById('adLoadingOverlay').style.display = 'flex';
-            
             try {
                 await show_9916224();
                 document.getElementById('adLoadingOverlay').style.display = 'none';
-                
-                // Add reward after watching ad
-                userData.featuredAdsWatchedToday++; // Increment featured ads count
+                userData.featuredAdsWatchedToday++;
                 addReward(0.05);
-                updateFeaturedAdButton(); // Update button text and state
+                updateFeaturedAdButton();
                 showNotification('Congratulations! You have earned $0.05', 'success');
             } catch (error) {
                 document.getElementById('adLoadingOverlay').style.display = 'none';
                 showNotification('Failed to load ad. Please try again later.', 'error');
                 console.error('Ad error:', error);
-                updateFeaturedAdButton(); // Restore button state
+                updateFeaturedAdButton();
             }
         }
-
-        // Update featured ad button text and state
         function updateFeaturedAdButton() {
             const featuredBtn = document.getElementById('featuredAdBtn');
             const watchedCount = userData.featuredAdsWatchedToday || 0;
-            
             if (watchedCount >= 30) {
                 featuredBtn.disabled = true;
                 featuredBtn.textContent = 'Limit Reached (30/30)';
@@ -1770,55 +1626,35 @@
                 featuredBtn.textContent = `Watch Now (${watchedCount}/30)`;
             }
         }
-
-        // Function to visit link ad - Updated for 10 links
         async function visitLinkAd() {
-            // Check if user has reached the 10 ads limit for link ads
             if (userData.linkAdsVisitedToday >= 10) {
                 showNotification('You have reached the daily limit of 10 link ads. Try again tomorrow.', 'error');
                 return;
             }
-            
-            // Check daily task limit
             if (userData.tasksDoneToday >= 35) {
                 showNotification('Daily task limit reached. Try again tomorrow.', 'error');
                 return;
             }
-            
-            const linkAdBtn = document.getElementById('linkAdBtn');
-            
-            // Show loading overlay
             document.getElementById('adLoadingOverlay').style.display = 'flex';
-            
             try {
-                // Get the next link in rotation
                 const linkIndex = userData.linkAdsVisitedToday % linkAdUrls.length;
                 const linkUrl = linkAdUrls[linkIndex];
-                
-                // Open the link in Telegram
                 tg.openLink(linkUrl);
-                
-                // Hide loading overlay
                 document.getElementById('adLoadingOverlay').style.display = 'none';
-                
-                // Add reward after visiting link
-                userData.linkAdsVisitedToday++; // Increment link ads count
+                userData.linkAdsVisitedToday++;
                 addReward(0.06);
-                updateLinkAdButton(); // Update button text and state
+                updateLinkAdButton();
                 showNotification('Congratulations! You have earned $0.06', 'success');
             } catch (error) {
                 document.getElementById('adLoadingOverlay').style.display = 'none';
                 showNotification('Failed to open link. Please try again later.', 'error');
                 console.error('Link error:', error);
-                updateLinkAdButton(); // Restore button state
+                updateLinkAdButton();
             }
         }
-
-        // Update link ad button text and state - Updated for 10 links
         function updateLinkAdButton() {
             const linkAdBtn = document.getElementById('linkAdBtn');
             const visitedCount = userData.linkAdsVisitedToday || 0;
-            
             if (visitedCount >= 10) {
                 linkAdBtn.disabled = true;
                 linkAdBtn.textContent = 'Limit Reached (10/10)';
@@ -1827,59 +1663,39 @@
                 linkAdBtn.textContent = `Visit Link (${visitedCount}/10)`;
             }
         }
-
-        // Function to add reward and update UI
         async function addReward(amount) {
             userData.balance += amount;
             userData.totalEarning += amount;
             userData.tasksDoneToday++;
             userData.clicks++;
-            
             await saveUserData();
             updateUI();
             updateTaskLimit();
         }
-
-        // Function to open social task (YouTube/Telegram)
         async function openSocialTask(taskId, link, reward) {
-            // Check if task is already completed
             if (userData.completedTasks.includes(taskId)) {
                 showNotification('You have already completed this task.', 'error');
                 return;
             }
-            
-            // Check daily task limit
             if (userData.tasksDoneToday >= 35) {
                 showNotification('Daily task limit reached. Try again tomorrow.', 'error');
                 return;
             }
-            
-            // Get the button element
             const button = document.getElementById(taskId);
-            
-            // Show loading state
             button.disabled = true;
             button.textContent = 'Opening...';
-            
-            // Open the link in Telegram
             try {
                 tg.openLink(link);
-                
-                // Add reward and mark task as completed
                 userData.balance += reward;
                 userData.totalEarning += reward;
                 userData.tasksDoneToday++;
                 userData.clicks++;
                 userData.completedTasks.push(taskId);
-                
                 await saveUserData();
                 updateUI();
                 updateSocialTaskButton(taskId);
                 updateTaskLimit();
-                
                 showNotification(`Task completed! $${reward.toFixed(2)} added to your balance.`);
-                
-                // Check if user completed 5 tasks and was referred
                 if (userData.tasksDoneToday === 5 && userData.referredBy) {
                     setTimeout(() => {
                         showNotification(`Congratulations! You've completed 5 tasks. Your referrer (${userData.referredBy}) will receive $0.50!`, 'success');
@@ -1892,8 +1708,6 @@
                 button.textContent = taskId === 'youtubeTaskBtn' ? 'Subscribe Now' : 'Join Now';
             }
         }
-
-        // Function to update a specific social task button
         function updateSocialTaskButton(taskId) {
             const button = document.getElementById(taskId);
             if (button) {
@@ -1909,11 +1723,8 @@
                 }
             }
         }
-
-        // Generate smart referral code
         function generateReferralCode() {
             if (!userData.referralCode) {
-                // Create a smart referral code that includes user ID and a timestamp
                 const timestamp = Date.now().toString(36);
                 const randomStr = Math.random().toString(36).substring(2, 6);
                 const userId = userData.id.toString().slice(-4);
@@ -1922,42 +1733,31 @@
             }
             return userData.referralCode;
         }
-
-        // Check if user was referred
         async function checkReferral() {
-            // Check if user came from a referral link
             if (tg.initDataUnsafe && tg.initDataUnsafe.start_param) {
                 const referralCode = tg.initDataUnsafe.start_param;
                 if (referralCode && !userData.referredBy) {
                     userData.referredBy = referralCode;
                     await saveUserData();
-                    
-                    // Show welcome message for referred users
                     setTimeout(() => {
                         showNotification(`Welcome! You were referred by ${referralCode}`, 'info');
                     }, 1000);
                 }
             }
         }
-
-        // Check if task limit needs to be reset
         function checkTaskLimitReset() {
             const today = new Date().toISOString().split('T')[0];
-            
             if (userData.lastTaskReset !== today) {
                 userData.tasksDoneToday = 0;
-                userData.featuredAdsWatchedToday = 0; // Reset featured ads counter
-                userData.linkAdsVisitedToday = 0; // Reset link ads counter
+                userData.featuredAdsWatchedToday = 0;
+                userData.linkAdsVisitedToday = 0;
                 userData.lastTaskReset = today;
                 saveUserData();
                 return true;
             }
             return false;
         }
-
-        // Update UI with user data
         function updateUI() {
-            // Use requestAnimationFrame for smoother UI updates
             requestAnimationFrame(() => {
                 document.getElementById('userName').textContent = userData.name;
                 document.getElementById('userBalance').textContent = `$${userData.balance.toFixed(2)}`;
@@ -1968,126 +1768,76 @@
                 document.getElementById('currentBalance').textContent = `$${userData.balance.toFixed(2)}`;
                 document.getElementById('referralCount').textContent = userData.totalRefers;
                 document.getElementById('referralEarnings').textContent = userData.referralEarnings.toFixed(2);
-                
-                // Update referral requirement
                 if (userData.hasWithdrawnBefore) {
                     document.getElementById('referralRequirement').textContent = 'No referral requirement';
                 } else {
                     document.getElementById('referralRequirement').textContent = `${userData.totalRefers}/30 referrals needed`;
                 }
-                
-                // Update withdraw button
                 updateWithdrawButton();
             });
         }
-
-        // Update task limit progress
         function updateTaskLimit() {
             const progressFill = document.getElementById('taskProgress');
             const taskLimitText = document.getElementById('taskLimitText');
             const countdownContainer = document.getElementById('countdownContainer');
-            
-            // Update progress
             const progress = (userData.tasksDoneToday / 35) * 100;
             progressFill.style.width = `${progress}%`;
             taskLimitText.textContent = `${userData.tasksDoneToday} of 35`;
-            
-            // Check if limit is reached
             if (userData.tasksDoneToday >= 35) {
-                // Show countdown
                 countdownContainer.style.display = 'block';
                 updateCountdown();
-                
-                // Disable all task buttons that aren't completed
                 disableLimitedTaskButtons();
             } else {
-                // Hide countdown
                 countdownContainer.style.display = 'none';
-                
-                // Enable all task buttons that aren't completed
                 enableTaskButtons();
             }
         }
-
-        // Update countdown timer
         function updateCountdown() {
             const countdown = document.getElementById('countdown');
-            
-            // Calculate remaining time until midnight
             const now = new Date();
             const midnight = new Date();
-            midnight.setHours(24, 0, 0, 0); // Set to midnight tonight
+            midnight.setHours(24, 0, 0, 0);
             const remaining = midnight - now;
-            
             if (remaining > 0) {
                 const hours = Math.floor(remaining / (1000 * 60 * 60));
                 const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
-                
                 countdown.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             }
         }
-
-        // Disable limited task buttons
         function disableLimitedTaskButtons() {
-            // Check-in button
             const checkInBtn = document.getElementById('checkinBtn');
             const today = new Date().toISOString().split('T')[0];
             if (userData.lastCheckIn !== today) {
                 checkInBtn.disabled = true;
                 checkInBtn.textContent = 'Limit Reached';
             }
-            
-            // Featured ad button
             updateFeaturedAdButton();
-            
-            // Link ad button
             updateLinkAdButton();
-            
-            // Social task buttons
             updateSocialTaskButtons();
         }
-
-        // Enable task buttons that aren't completed
         function enableTaskButtons() {
-            // Check-in button
             const checkInBtn = document.getElementById('checkinBtn');
             const today = new Date().toISOString().split('T')[0];
             if (userData.lastCheckIn !== today) {
                 checkInBtn.disabled = false;
                 checkInBtn.textContent = 'Check In';
             }
-            
-            // Featured ad button
             updateFeaturedAdButton();
-            
-            // Link ad button
             updateLinkAdButton();
-            
-            // Social task buttons
             updateSocialTaskButtons();
         }
-
-        // Update task buttons based on completion status
-        function updateTaskButtons() {
-            // This function is now handled by individual update functions
-        }
-
-        // Update social task buttons based on completion status
+        function updateTaskButtons() {}
         function updateSocialTaskButtons() {
             updateSocialTaskButton('youtubeTaskBtn');
             updateSocialTaskButton('telegramTaskBtn');
         }
-
-        // Show notification
         function showNotification(message, type = 'success') {
             const notification = document.getElementById('notification');
             const notificationText = document.getElementById('notificationText');
             const icon = notification.querySelector('i');
-            
             notificationText.textContent = message;
             notification.className = `notification ${type} show`;
-            
             if (type === 'success') {
                 icon.className = 'fas fa-check-circle';
             } else if (type === 'error') {
@@ -2095,41 +1845,28 @@
             } else if (type === 'info') {
                 icon.className = 'fas fa-info-circle';
             }
-            
             setTimeout(() => {
                 notification.classList.remove('show');
             }, 3000);
         }
-
-        // Tab switching function
         function openTab(tabName) {
-            // Hide all tab contents
             const tabContents = document.getElementsByClassName('tab-content');
             for (let i = 0; i < tabContents.length; i++) {
                 tabContents[i].classList.remove('active');
             }
-            
-            // Remove active class from all nav items
             const navItems = document.getElementsByClassName('nav-item');
             for (let i = 0; i < navItems.length; i++) {
                 navItems[i].classList.remove('active');
             }
-            
-            // Show the selected tab content
             document.getElementById(tabName + '-tab').classList.add('active');
-            
-            // Add active class to the clicked nav item
             const clickedNavItem = document.querySelector(`.nav-item[data-tab="${tabName}"]`);
             if (clickedNavItem) {
                 clickedNavItem.classList.add('active');
             }
         }
-
-        // Update withdraw button
         function updateWithdrawButton() {
             const withdrawBtn = document.getElementById('withdrawBtn');
             const amount = parseFloat(document.getElementById('withdrawAmount').value) || 0;
-            
             if (userData.balance < 20) {
                 withdrawBtn.disabled = true;
                 withdrawBtn.textContent = 'Insufficient Balance';
@@ -2144,30 +1881,21 @@
                 withdrawBtn.textContent = 'Withdraw Funds';
             }
         }
-
-        // Handle withdraw form submission
         document.getElementById('withdrawForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
             const method = document.getElementById('withdrawMethod').value;
             const accountNumber = document.getElementById('accountNumber').value;
             const amount = parseFloat(document.getElementById('withdrawAmount').value);
-            
             if (amount < 20 || amount > userData.balance) {
                 showNotification('Invalid withdrawal amount.', 'error');
                 return;
             }
-            
             if (!userData.hasWithdrawnBefore && userData.totalRefers < 30) {
                 showNotification('You need 30 referrals for your first withdrawal.', 'error');
                 return;
             }
-            
-            // Process withdrawal
             userData.balance -= amount;
             userData.hasWithdrawnBefore = true;
-            
-            // Add to withdrawal history
             const withdrawal = {
                 id: Date.now(),
                 amount: amount,
@@ -2176,27 +1904,17 @@
                 date: new Date().toISOString(),
                 status: 'pending'
             };
-            
             userData.withdrawalHistory.push(withdrawal);
-            
             await saveUserData();
             updateUI();
-            
-            // Reset form
             document.getElementById('withdrawForm').reset();
             updateWithdrawButton();
-            
             showNotification(`Withdrawal request of $${amount.toFixed(2)} submitted! It will be processed within 48 hours.`);
         });
-
-        // Update withdrawal button when amount changes
         document.getElementById('withdrawAmount').addEventListener('input', updateWithdrawButton);
-
-        // BINANCE UID FUNCTIONALITY
         document.getElementById('withdrawMethod').addEventListener('change', function() {
             const accountLabel = document.getElementById('accountLabel');
             const accountInput = document.getElementById('accountNumber');
-            
             if (this.value === 'binance') {
                 accountLabel.textContent = 'Binance UID or Email';
                 accountInput.placeholder = 'Enter your Binance UID or email';
@@ -2205,8 +1923,6 @@
                 accountInput.placeholder = 'Enter your account number';
             }
         });
-
-        // Copy referral link
         document.getElementById('copyBtn').addEventListener('click', () => {
             const referralLink = document.getElementById('referralLink').textContent;
             navigator.clipboard.writeText(referralLink).then(() => {
@@ -2215,10 +1931,7 @@
                 showNotification('Failed to copy referral link.', 'error');
             });
         });
-
-        // Set up social task buttons with proper event listeners
         function setupSocialTaskButtons() {
-            // YouTube button
             const youtubeBtn = document.getElementById('youtubeTaskBtn');
             if (youtubeBtn) {
                 youtubeBtn.replaceWith(youtubeBtn.cloneNode(true));
@@ -2227,8 +1940,6 @@
                     openSocialTask('youtubeTaskBtn', socialTaskUrls['youtubeTaskBtn'], 0.15);
                 });
             }
-            
-            // Telegram button
             const telegramBtn = document.getElementById('telegramTaskBtn');
             if (telegramBtn) {
                 telegramBtn.replaceWith(telegramBtn.cloneNode(true));
@@ -2238,13 +1949,10 @@
                 });
             }
         }
-
-        // Initialize app
         window.onload = function() {
             loadUserData();
             setupSocialTaskButtons();
-            
-            // Update countdown every second
+            generateTopWithdrawals(); // ← NEW: Generate daily top 5 proofs
             setInterval(() => {
                 if (userData.tasksDoneToday >= 35) {
                     updateCountdown();
@@ -2254,4 +1962,3 @@
     </script>
 </body>
 </html>
-
