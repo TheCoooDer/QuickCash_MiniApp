@@ -989,7 +989,7 @@
             }
         }
     </style>
-    <!-- Rewarded Popup Ad Script -->
+    <!-- Updated Ad Script -->
     <script src='//libtl.com/sdk.js' data-zone='9916224' data-sdk='show_9916224'></script>
 </head>
 <body>
@@ -1560,15 +1560,7 @@
             }
             document.getElementById('adLoadingOverlay').style.display = 'flex';
             try {
-                // Rewarded Popup Ad
-                await show_9916224('pop').then(() => {
-                    // user watch ad till the end or close it in interstitial format
-                    // your code to reward user for rewarded format
-                }).catch(e => {
-                    // user get error during playing ad
-                    // do nothing or whatever you want
-                });
-                
+                await show_9916224();
                 document.getElementById('adLoadingOverlay').style.display = 'none';
                 const reward = 0.10;
                 userData.balance += reward;
@@ -1610,15 +1602,7 @@
             }
             document.getElementById('adLoadingOverlay').style.display = 'flex';
             try {
-                // Rewarded Popup Ad
-                await show_9916224('pop').then(() => {
-                    // user watch ad till the end or close it in interstitial format
-                    // your code to reward user for rewarded format
-                }).catch(e => {
-                    // user get error during playing ad
-                    // do nothing or whatever you want
-                });
-                
+                await show_9916224();
                 document.getElementById('adLoadingOverlay').style.display = 'none';
                 userData.featuredAdsWatchedToday++;
                 addReward(0.05);
@@ -1978,3 +1962,4 @@
     </script>
 </body>
 </html>
+
