@@ -1237,7 +1237,7 @@
                         </div>
                         <div class="info-item">
                             <span>Referral Requirement:</span>
-                            <span id="referralRequirement">10 referrals needed</span>
+                            <span id="referralRequirement">30 referrals needed</span>
                         </div>
                         <div class="info-item">
                             <span>Processing Time:</span>
@@ -1402,38 +1402,14 @@
             if (photoUrl) {
                 avatarElement.innerHTML = `<img src="${photoUrl}" alt="User" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
             } else {
-                const apiUrl = `https://api.telegram.org/bot${tg.initDataUnsafe.query_id}/getUserProfilePhotos?user_id=${userId}&limit=1`;
-                fetch(apiUrl)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.ok && data.result.photos.length > 0) {
-                            const fileId = data.result.photos[0][0].file_id;
-                            const filePath = `https://api.telegram.org/file/bot${tg.initDataUnsafe.query_id}/${fileId}`;
-                            avatarElement.innerHTML = `<img src="${filePath}" alt="User" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
-                            userData.photo = filePath;
-                            saveUserData();
-                        } else {
-                            const initials = getUserInitials(userData.name);
-                            avatarElement.innerHTML = initials;
-                            avatarElement.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
-                            avatarElement.style.display = 'flex';
-                            avatarElement.style.alignItems = 'center';
-                            avatarElement.style.justifyContent = 'center';
-                            avatarElement.style.fontSize = '18px';
-                            avatarElement.style.fontWeight = 'bold';
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching profile picture:', error);
-                        const initials = getUserInitials(userData.name);
-                        avatarElement.innerHTML = initials;
-                        avatarElement.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
-                        avatarElement.style.display = 'flex';
-                        avatarElement.style.alignItems = 'center';
-                        avatarElement.style.justifyContent = 'center';
-                        avatarElement.style.fontSize = '18px';
-                        avatarElement.style.fontWeight = 'bold';
-                    });
+                const initials = getUserInitials(userData.name);
+                avatarElement.innerHTML = initials;
+                avatarElement.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+                avatarElement.style.display = 'flex';
+                avatarElement.style.alignItems = 'center';
+                avatarElement.style.justifyContent = 'center';
+                avatarElement.style.fontSize = '18px';
+                avatarElement.style.fontWeight = 'bold';
             }
         }
         // User data
@@ -1450,13 +1426,15 @@
             completedTasks: [],
             referralCode: '',
             referredBy: '',
+            referredById: null, // New field to store the referrer's ID
             referralEarnings: 0.00,
             withdrawalHistory: [],
             joinedAt: new Date().toISOString(),
             lastCheckIn: null,
             lastTaskReset: null,
             featuredAdsWatchedToday: 0,
-            linkAdsVisitedToday: 0
+            linkAdsVisitedToday: 0,
+            referralRewardProcessed: false // New field to track if referral reward has been processed
         };
         // Link ad URLs - Updated with 10 new links
         const linkAdUrls = [
@@ -1491,13 +1469,15 @@
                 completedTasks: [],
                 referralCode: '',
                 referredBy: '',
+                referredById: null, // New field to store the referrer's ID
                 referralEarnings: 0.00,
                 withdrawalHistory: [],
                 joinedAt: new Date().toISOString(),
                 lastCheckIn: null,
                 lastTaskReset: null,
                 featuredAdsWatchedToday: 0,
-                linkAdsVisitedToday: 0
+                linkAdsVisitedToday: 0,
+                referralRewardProcessed: false // New field to track if referral reward has been processed
             };
         }
         // Save user data to Firestore
@@ -1547,6 +1527,95 @@
                 showNotification('Failed to load user data', 'error');
             }
         }
+        // Process referral when a new user joins
+        async function processReferral(referralCode) {
+            try {
+                // Find the referrer by their referral code
+                const referrersSnapshot = await db.collection('users')
+                    .where('referralCode', '==', referralCode)
+                    .get();
+                
+                if (!referrersSnapshot.empty) {
+                    const referrerDoc = referrersSnapshot.docs[0];
+                    const referrerData = referrerDoc.data();
+                    
+                    // Update the referrer's data
+                    referrerData.totalRefers += 1;
+                    
+                    // Save the referrer's updated data
+                    await db.collection('users').doc(referrerData.id.toString()).set(referrerData);
+                    
+                    // Store the referrer's ID in the new user's data for future reward processing
+                    userData.referredById = referrerData.id;
+                    
+                    console.log('Referral processed successfully');
+                    return true;
+                }
+                return false;
+            } catch (error) {
+                console.error('Error processing referral:', error);
+                return false;
+            }
+        }
+        // Check if the user has completed the required tasks for referral reward
+        async function checkReferralReward() {
+            // Check if this user was referred and has completed at least 5 tasks
+            if (userData.referredBy && userData.tasksDoneToday >= 5 && !userData.referralRewardProcessed) {
+                try {
+                    // Get the referrer's data
+                    const referrersSnapshot = await db.collection('users')
+                        .where('referralCode', '==', userData.referredBy)
+                        .get();
+                    
+                    if (!referrersSnapshot.empty) {
+                        const referrerDoc = referrersSnapshot.docs[0];
+                        const referrerData = referrerDoc.data();
+                        
+                        // Add reward to referrer
+                        referrerData.balance += 0.30;
+                        referrerData.referralEarnings += 0.30;
+                        
+                        // Save the referrer's updated data
+                        await db.collection('users').doc(referrerData.id.toString()).set(referrerData);
+                        
+                        // Mark that this referral reward has been processed
+                        userData.referralRewardProcessed = true;
+                        await saveUserData();
+                        
+                        // Notify the referrer (if we had a way to send notifications)
+                        // For now, we'll just log it
+                        console.log(`Referral reward of $0.30 processed for referrer ${referrerData.id}`);
+                        
+                        // Show notification to the current user
+                        setTimeout(() => {
+                            showNotification(`Congratulations! You've completed 5 tasks. Your referrer (${userData.referredBy}) has received $0.30!`, 'success');
+                        }, 1000);
+                    }
+                } catch (error) {
+                    console.error('Error processing referral reward:', error);
+                }
+            }
+        }
+        // Update the checkReferral function to process the referral
+        async function checkReferral() {
+            if (tg.initDataUnsafe && tg.initDataUnsafe.start_param) {
+                const referralCode = tg.initDataUnsafe.start_param;
+                if (referralCode && !userData.referredBy) {
+                    userData.referredBy = referralCode;
+                    
+                    // Process the referral
+                    const referralProcessed = await processReferral(referralCode);
+                    
+                    if (referralProcessed) {
+                        setTimeout(() => {
+                            showNotification(`Welcome! You were referred by ${referralCode}`, 'info');
+                        }, 1000);
+                    }
+                    
+                    await saveUserData();
+                }
+            }
+        }
         // Daily Check In function
         async function dailyCheckIn() {
             const today = new Date().toISOString().split('T')[0];
@@ -1568,6 +1637,10 @@
                 userData.clicks++;
                 userData.tasksDoneToday++;
                 userData.lastCheckIn = today;
+                
+                // Check if this user qualifies for a referral reward
+                await checkReferralReward();
+                
                 await saveUserData();
                 updateUI();
                 updateCheckInButton();
@@ -1605,7 +1678,10 @@
                 await show_9916224();
                 document.getElementById('adLoadingOverlay').style.display = 'none';
                 userData.featuredAdsWatchedToday++;
-                addReward(0.05);
+                
+                // Add reward and check for referral rewards
+                await addReward(0.05);
+                
                 updateFeaturedAdButton();
                 showNotification('Congratulations! You have earned $0.05', 'success');
             } catch (error) {
@@ -1642,7 +1718,10 @@
                 tg.openLink(linkUrl);
                 document.getElementById('adLoadingOverlay').style.display = 'none';
                 userData.linkAdsVisitedToday++;
-                addReward(0.06);
+                
+                // Add reward and check for referral rewards
+                await addReward(0.06);
+                
                 updateLinkAdButton();
                 showNotification('Congratulations! You have earned $0.06', 'success');
             } catch (error) {
@@ -1668,6 +1747,10 @@
             userData.totalEarning += amount;
             userData.tasksDoneToday++;
             userData.clicks++;
+            
+            // Check if this user qualifies for a referral reward
+            await checkReferralReward();
+            
             await saveUserData();
             updateUI();
             updateTaskLimit();
@@ -1691,16 +1774,15 @@
                 userData.tasksDoneToday++;
                 userData.clicks++;
                 userData.completedTasks.push(taskId);
+                
+                // Check if this user qualifies for a referral reward
+                await checkReferralReward();
+                
                 await saveUserData();
                 updateUI();
                 updateSocialTaskButton(taskId);
                 updateTaskLimit();
                 showNotification(`Task completed! $${reward.toFixed(2)} added to your balance.`);
-                if (userData.tasksDoneToday === 5 && userData.referredBy) {
-                    setTimeout(() => {
-                        showNotification(`Congratulations! You've completed 5 tasks. Your referrer (${userData.referredBy}) will receive $0.30!`, 'success');
-                    }, 1000);
-                }
             } catch (error) {
                 console.error('Error opening link:', error);
                 showNotification('Failed to open link. Please try again.', 'error');
@@ -1733,18 +1815,6 @@
             }
             return userData.referralCode;
         }
-        async function checkReferral() {
-            if (tg.initDataUnsafe && tg.initDataUnsafe.start_param) {
-                const referralCode = tg.initDataUnsafe.start_param;
-                if (referralCode && !userData.referredBy) {
-                    userData.referredBy = referralCode;
-                    await saveUserData();
-                    setTimeout(() => {
-                        showNotification(`Welcome! You were referred by ${referralCode}`, 'info');
-                    }, 1000);
-                }
-            }
-        }
         function checkTaskLimitReset() {
             const today = new Date().toISOString().split('T')[0];
             if (userData.lastTaskReset !== today) {
@@ -1771,7 +1841,7 @@
                 if (userData.hasWithdrawnBefore) {
                     document.getElementById('referralRequirement').textContent = 'No referral requirement';
                 } else {
-                    document.getElementById('referralRequirement').textContent = `${userData.totalRefers}/10 referrals needed`;
+                    document.getElementById('referralRequirement').textContent = `${userData.totalRefers}/30 referrals needed`;
                 }
                 updateWithdrawButton();
             });
@@ -1870,7 +1940,7 @@
             if (userData.balance < 20) {
                 withdrawBtn.disabled = true;
                 withdrawBtn.textContent = 'Insufficient Balance';
-            } else if (!userData.hasWithdrawnBefore && userData.totalRefers < 10) {
+            } else if (!userData.hasWithdrawnBefore && userData.totalRefers < 30) {
                 withdrawBtn.disabled = true;
                 withdrawBtn.textContent = 'Referral Requirement Not Met';
             } else if (amount < 20 || amount > userData.balance) {
@@ -1890,8 +1960,8 @@
                 showNotification('Invalid withdrawal amount.', 'error');
                 return;
             }
-            if (!userData.hasWithdrawnBefore && userData.totalRefers < 10) {
-                showNotification('You need 10 referrals for your first withdrawal.', 'error');
+            if (!userData.hasWithdrawnBefore && userData.totalRefers < 30) {
+                showNotification('You need 30 referrals for your first withdrawal.', 'error');
                 return;
             }
             userData.balance -= amount;
