@@ -255,6 +255,34 @@
             margin-right: 8px;
             vertical-align: middle;
         }
+        /* UTC Time Container */
+        .utc-time-container {
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(135deg, #E3F2FD, #BBDEFB);
+            border: 2px solid #2196F3;
+            border-radius: 12px;
+            margin-top: 15px;
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.2);
+        }
+        .utc-time-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+        .utc-time {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2196F3;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .utc-time-icon {
+            font-size: 20px;
+            color: #2196F3;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
         /* Tasks - NEW DESIGN */
         .task-list {
             display: flex;
@@ -1052,6 +1080,14 @@
                         </div>
                         <div class="countdown" id="countdown">--:--:--</div>
                     </div>
+                    <!-- UTC Time Display -->
+                    <div class="utc-time-container">
+                        <div class="utc-time-label">
+                            <i class="fas fa-globe utc-time-icon"></i>
+                            Current UTC Time:
+                        </div>
+                        <div class="utc-time" id="utcTime">--:--:--</div>
+                    </div>
                 </div>
             </div>
             <!-- Tasks Tab -->
@@ -1375,6 +1411,13 @@
                 `;
                 container.appendChild(card);
             }
+        }
+
+        // Function to update UTC time
+        function updateUTCTime() {
+            const now = new Date();
+            const utcTime = now.toUTCString().split(' ')[4];
+            document.getElementById('utcTime').textContent = utcTime;
         }
 
         // Function to get user initials from name
@@ -2022,7 +2065,12 @@
         window.onload = function() {
             loadUserData();
             setupSocialTaskButtons();
-            generateTopWithdrawals(); // ← NEW: Generate daily top 5 proofs
+            generateTopWithdrawals();
+            
+            // Update UTC time immediately and then every second
+            updateUTCTime();
+            setInterval(updateUTCTime, 1000);
+            
             setInterval(() => {
                 if (userData.tasksDoneToday >= 35) {
                     updateCountdown();
