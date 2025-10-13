@@ -751,6 +751,68 @@
             font-weight: 600;
             margin-top: 10px;
         }
+        /* Referral List */
+        .referral-list {
+            margin-top: 20px;
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+        .referral-list h3 {
+            font-size: 18px;
+            color: var(--dark);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .referral-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: #F5F5F5;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        .referral-item:last-child {
+            margin-bottom: 0;
+        }
+        .referral-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        .referral-details {
+            flex: 1;
+        }
+        .referral-name {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        .referral-date {
+            font-size: 12px;
+            color: var(--gray);
+        }
+        .referral-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .referral-status.pending {
+            background-color: #FFF8E1;
+            color: var(--warning);
+        }
+        .referral-status.completed {
+            background-color: #E8F5E9;
+            color: var(--success);
+        }
         /* Support */
         .support-card {
             background: white;
@@ -1103,7 +1165,7 @@
                             <div class="checkin-info">
                                 <div class="checkin-title">Daily Check In</div>
                                 <div class="checkin-description">Claim your daily reward</div>
-                                <div class="checkin-reward">Reward: $0.10</div>
+                                <div class="checkin-reward">Reward: $0.08</div>
                             </div>
                         </div>
                         <button onclick="dailyCheckIn()" class="checkin-btn" id="checkinBtn">
@@ -1119,7 +1181,7 @@
                             <div class="featured-info">
                                 <div class="featured-title">Premium Ads</div>
                                 <div class="featured-description">Click Continue</div>
-                                <div class="featured-reward">Reward: $0.05</div>
+                                <div class="featured-reward">Reward: $0.04</div>
                             </div>
                         </div>
                         <button onclick="Watched()" class="featured-btn" id="featuredAdBtn">
@@ -1135,7 +1197,7 @@
                             <div class="link-ad-info">
                                 <div class="link-ad-title">Link Ads</div>
                                 <div class="link-ad-description">Visit External Link</div>
-                                <div class="link-ad-reward">Reward: $0.06</div>
+                                <div class="link-ad-reward">Reward: $0.05</div>
                             </div>
                         </div>
                         <button onclick="visitLinkAd()" class="link-ad-btn" id="linkAdBtn">
@@ -1151,7 +1213,7 @@
                             <div class="task-info">
                                 <div class="task-title">Subscribe YouTube</div>
                                 <div class="task-description">Subscribe to our channel</div>
-                                <div class="task-reward">Reward: $0.15</div>
+                                <div class="task-reward">Reward: $0.12</div>
                             </div>
                         </div>
                         <button class="task-btn" id="youtubeTaskBtn">
@@ -1167,7 +1229,7 @@
                             <div class="task-info">
                                 <div class="task-title">Join Telegram</div>
                                 <div class="task-description">Join our channel</div>
-                                <div class="task-reward">Reward: $0.10</div>
+                                <div class="task-reward">Reward: $0.08</div>
                             </div>
                         </div>
                         <button class="task-btn" id="telegramTaskBtn">
@@ -1181,7 +1243,7 @@
                 <div class="referral-container">
                     <div class="referral-header">
                         <h2>Referral Program</h2>
-                        <p>Invite friends and earn $0.30 for each qualified referral!</p>
+                        <p>Invite friends and earn $0.24 for each qualified referral!</p>
                     </div>
                     <div class="referral-link-container">
                         <div class="referral-link" id="referralLink">Generating...</div>
@@ -1205,7 +1267,7 @@
                         <ul>
                             <li>Share your unique referral link with friends</li>
                             <li>They must join using your link and complete at least 5 tasks</li>
-                            <li>You'll earn $0.30 for each qualified referral</li>
+                            <li>You'll earn $0.24 for each qualified referral</li>
                             <li>No limit on how many you can refer!</li>
                         </ul>
                         <div class="referral-badge">
@@ -1213,6 +1275,15 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- NEW: Referral List Section -->
+                <div class="referral-list">
+                    <h3>Your Referrals</h3>
+                    <div id="referralListContainer">
+                        <p style="text-align: center; color: var(--gray);">No referrals yet. Start sharing your link!</p>
+                    </div>
+                </div>
+                
                 <div class="support-card">
                     <h3>Referral Benefits</h3>
                     <ul style="padding-left: 20px; color: var(--gray);">
@@ -1470,7 +1541,8 @@
             lastTaskReset: null,
             featuredAdsWatchedToday: 0,
             linkAdsVisitedToday: 0,
-            referralRewardProcessed: false // New field to track if referral reward has been processed
+            referralRewardProcessed: false, // New field to track if referral reward has been processed
+            referrals: [] // New field to store detailed referral information
         };
         // Link ad URLs - Updated with 10 new links
         const linkAdUrls = [
@@ -1513,7 +1585,8 @@
                 lastTaskReset: null,
                 featuredAdsWatchedToday: 0,
                 linkAdsVisitedToday: 0,
-                referralRewardProcessed: false // New field to track if referral reward has been processed
+                referralRewardProcessed: false, // New field to track if referral reward has been processed
+                referrals: [] // New field to store detailed referral information
             };
         }
         // Save user data to Firestore
@@ -1558,6 +1631,7 @@
                 updateUI();
                 updateTaskLimit();
                 loadUserProfilePicture(userData.id, userData.photo, document.getElementById('userAvatar'));
+                updateReferralList();
             } catch (error) {
                 console.error('Error loading user data:', error);
                 showNotification('Failed to load user data', 'error');
@@ -1577,6 +1651,21 @@
                     
                     // Update the referrer's data
                     referrerData.totalRefers += 1;
+                    
+                    // Add referral to referrer's detailed list
+                    if (!referrerData.referrals) {
+                        referrerData.referrals = [];
+                    }
+                    
+                    const newReferral = {
+                        id: userData.id,
+                        name: userData.name,
+                        joinedAt: new Date().toISOString(),
+                        status: 'pending', // pending until they complete 5 tasks
+                        tasksCompleted: 0
+                    };
+                    
+                    referrerData.referrals.push(newReferral);
                     
                     // Save the referrer's updated data
                     await db.collection('users').doc(referrerData.id.toString()).set(referrerData);
@@ -1607,9 +1696,20 @@
                         const referrerDoc = referrersSnapshot.docs[0];
                         const referrerData = referrerDoc.data();
                         
-                        // Add reward to referrer
-                        referrerData.balance += 0.30;
-                        referrerData.referralEarnings += 0.30;
+                        // Add reward to referrer (decreased by 20% from $0.30 to $0.24)
+                        const rewardAmount = 0.24;
+                        referrerData.balance += rewardAmount;
+                        referrerData.referralEarnings += rewardAmount;
+                        
+                        // Update the referral status in the referrer's detailed list
+                        if (referrerData.referrals) {
+                            const referralIndex = referrerData.referrals.findIndex(r => r.id === userData.id);
+                            if (referralIndex !== -1) {
+                                referrerData.referrals[referralIndex].status = 'completed';
+                                referrerData.referrals[referralIndex].tasksCompleted = userData.tasksDoneToday;
+                                referrerData.referrals[referralIndex].completedAt = new Date().toISOString();
+                            }
+                        }
                         
                         // Save the referrer's updated data
                         await db.collection('users').doc(referrerData.id.toString()).set(referrerData);
@@ -1620,11 +1720,11 @@
                         
                         // Notify the referrer (if we had a way to send notifications)
                         // For now, we'll just log it
-                        console.log(`Referral reward of $0.30 processed for referrer ${referrerData.id}`);
+                        console.log(`Referral reward of $${rewardAmount} processed for referrer ${referrerData.id}`);
                         
                         // Show notification to the current user
                         setTimeout(() => {
-                            showNotification(`Congratulations! You've completed 5 tasks. Your referrer (${userData.referredBy}) has received $0.30!`, 'success');
+                            showNotification(`Congratulations! You've completed 5 tasks. Your referrer (${userData.referredBy}) has received $${rewardAmount}!`, 'success');
                         }, 1000);
                     }
                 } catch (error) {
@@ -1652,6 +1752,37 @@
                 }
             }
         }
+        // Update referral list display
+        function updateReferralList() {
+            const container = document.getElementById('referralListContainer');
+            if (!container) return;
+            
+            if (!userData.referrals || userData.referrals.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: var(--gray);">No referrals yet. Start sharing your link!</p>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            userData.referrals.forEach(referral => {
+                const referralItem = document.createElement('div');
+                referralItem.className = 'referral-item';
+                
+                const statusClass = referral.status === 'completed' ? 'completed' : 'pending';
+                const statusText = referral.status === 'completed' ? 'Completed' : 'Pending';
+                
+                referralItem.innerHTML = `
+                    <div class="referral-avatar">${getUserInitials(referral.name)}</div>
+                    <div class="referral-details">
+                        <div class="referral-name">${referral.name}</div>
+                        <div class="referral-date">Joined: ${new Date(referral.joinedAt).toLocaleDateString()}</div>
+                    </div>
+                    <div class="referral-status ${statusClass}">${statusText}</div>
+                `;
+                
+                container.appendChild(referralItem);
+            });
+        }
         // Daily Check In function
         async function dailyCheckIn() {
             const today = new Date().toISOString().split('T')[0];
@@ -1667,7 +1798,8 @@
             try {
                 await show_9916224();
                 document.getElementById('adLoadingOverlay').style.display = 'none';
-                const reward = 0.10;
+                // Decreased by 20% from $0.10 to $0.08
+                const reward = 0.08;
                 userData.balance += reward;
                 userData.totalEarning += reward;
                 userData.clicks++;
@@ -1715,11 +1847,11 @@
                 document.getElementById('adLoadingOverlay').style.display = 'none';
                 userData.featuredAdsWatchedToday++;
                 
-                // Add reward and check for referral rewards
-                await addReward(0.05);
+                // Add reward and check for referral rewards (decreased by 20% from $0.05 to $0.04)
+                await addReward(0.04);
                 
                 updateFeaturedAdButton();
-                showNotification('Congratulations! You have earned $0.05', 'success');
+                showNotification('Congratulations! You have earned $0.04', 'success');
             } catch (error) {
                 document.getElementById('adLoadingOverlay').style.display = 'none';
                 showNotification('Failed to load ad. Please try again later.', 'error');
@@ -1755,11 +1887,11 @@
                 document.getElementById('adLoadingOverlay').style.display = 'none';
                 userData.linkAdsVisitedToday++;
                 
-                // Add reward and check for referral rewards
-                await addReward(0.06);
+                // Add reward and check for referral rewards (decreased by 20% from $0.06 to $0.05)
+                await addReward(0.05);
                 
                 updateLinkAdButton();
-                showNotification('Congratulations! You have earned $0.06', 'success');
+                showNotification('Congratulations! You have earned $0.05', 'success');
             } catch (error) {
                 document.getElementById('adLoadingOverlay').style.display = 'none';
                 showNotification('Failed to open link. Please try again later.', 'error');
@@ -1969,6 +2101,11 @@
             if (clickedNavItem) {
                 clickedNavItem.classList.add('active');
             }
+            
+            // Refresh referral list when opening the referral tab
+            if (tabName === 'referral') {
+                updateReferralList();
+            }
         }
         function updateWithdrawButton() {
             const withdrawBtn = document.getElementById('withdrawBtn');
@@ -2043,7 +2180,8 @@
                 youtubeBtn.replaceWith(youtubeBtn.cloneNode(true));
                 const freshYoutubeBtn = document.getElementById('youtubeTaskBtn');
                 freshYoutubeBtn.addEventListener('click', () => {
-                    openSocialTask('youtubeTaskBtn', socialTaskUrls['youtubeTaskBtn'], 0.15);
+                    // Decreased by 20% from $0.15 to $0.12
+                    openSocialTask('youtubeTaskBtn', socialTaskUrls['youtubeTaskBtn'], 0.12);
                 });
             }
             const telegramBtn = document.getElementById('telegramTaskBtn');
@@ -2051,7 +2189,8 @@
                 telegramBtn.replaceWith(telegramBtn.cloneNode(true));
                 const freshTelegramBtn = document.getElementById('telegramTaskBtn');
                 freshTelegramBtn.addEventListener('click', () => {
-                    openSocialTask('telegramTaskBtn', socialTaskUrls['telegramTaskBtn'], 0.10);
+                    // Decreased by 20% from $0.10 to $0.08
+                    openSocialTask('telegramTaskBtn', socialTaskUrls['telegramTaskBtn'], 0.08);
                 });
             }
         }
