@@ -1612,6 +1612,39 @@
                 const doc = await db.collection('users').doc(userData.id.toString()).get();
                 if (doc.exists) {
                     userData = doc.data();
+                    
+                    // DATA MIGRATION: Handle missing fields for existing users
+                    let dataUpdated = false;
+                    
+                    // Initialize totalTasksCompleted if it doesn't exist
+                    if (userData.totalTasksCompleted === undefined) {
+                        // For existing users, estimate total tasks based on their current stats
+                        userData.totalTasksCompleted = userData.tasksDoneToday || 0;
+                        dataUpdated = true;
+                        console.log('Migrated totalTasksCompleted field');
+                    }
+                    
+                    // Initialize referrals array if it doesn't exist
+                    if (!userData.referrals) {
+                        userData.referrals = [];
+                        dataUpdated = true;
+                        console.log('Migrated referrals field');
+                    }
+                    
+                    // Initialize referralRewardProcessed if it doesn't exist
+                    if (userData.referralRewardProcessed === undefined) {
+                        userData.referralRewardProcessed = false;
+                        dataUpdated = true;
+                        console.log('Migrated referralRewardProcessed field');
+                    }
+                    
+                    // Save the updated data if migration was needed
+                    if (dataUpdated) {
+                        await saveUserData();
+                        console.log('User data migration completed');
+                    }
+                    
+                    // Update user info from Telegram if available
                     if (tg.initDataUnsafe.user) {
                         userData.name = getUserFullName(tg.initDataUnsafe.user);
                         if (tg.initDataUnsafe.user.photo_url && !userData.photo) {
@@ -2115,7 +2148,7 @@
             updateFeaturedAdButton();
             updateSocialTaskButtons();
         }
-        function function enableTaskButtons() {
+        function enableTaskButtons() {
             const checkInBtn = document.getElementById('checkinBtn');
             const today = new Date().toISOString().split('T')[0];
             if (userData.lastCheckIn !== today) {
