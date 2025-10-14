@@ -1906,7 +1906,7 @@
             document.getElementById('verificationTimer').textContent = verificationSeconds;
             document.getElementById('verificationProgress').style.width = '0%';
             
-            // Open the link in a new window
+            // Open the link in Telegram's in-app browser
             tg.openLink(url);
             
             // Start countdown
@@ -2065,6 +2065,7 @@
             button.disabled = true;
             button.textContent = 'Opening...';
             try {
+                // Open link in Telegram's in-app browser
                 tg.openLink(link);
                 userData.balance += reward;
                 userData.totalEarning += reward;
