@@ -26,6 +26,7 @@
             --checkin: #00897B;
             --link: #2962FF;
             --darkblue: #0D47A1; /* New dark blue color */
+            --rewarded: #7B1FA2; /* New color for rewarded ads */
         }
         * {
             margin: 0;
@@ -423,6 +424,75 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
         }
         .featured-btn:disabled {
+            background: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
+            transform: none;
+        }
+        /* NEW: Rewarded Ad Task */
+        .rewarded-task {
+            background: linear-gradient(135deg, var(--rewarded), #9C27B0);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 6px 15px rgba(123, 31, 162, 0.15);
+            color: white;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .rewarded-task::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(45deg);
+        }
+        .rewarded-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .rewarded-icon {
+            font-size: 28px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        .rewarded-info {
+            text-align: left;
+        }
+        .rewarded-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+        .rewarded-reward {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--warning);
+        }
+        .rewarded-btn {
+            background: white;
+            color: var(--rewarded);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            white-space: nowrap;
+            z-index: 0;
+            position: relative;
+        }
+        .rewarded-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+        .rewarded-btn:disabled {
             background: rgba(255, 255, 255, 0.5);
             cursor: not-allowed;
             transform: none;
@@ -1184,6 +1254,21 @@
                             Watch Now (0/100)
                         </button>
                     </div>
+                    <!-- NEW: Rewarded Ad Task -->
+                    <div class="rewarded-task">
+                        <div class="rewarded-left">
+                            <div class="rewarded-icon">
+                                <i class="fas fa-play-circle"></i>
+                            </div>
+                            <div class="rewarded-info">
+                                <div class="rewarded-title">Rewarded Video</div>
+                                <div class="rewarded-reward">Reward: $0.05</div>
+                            </div>
+                        </div>
+                        <button onclick="showRewardedAd()" class="rewarded-btn" id="rewardedAdBtn">
+                            Watch Video
+                        </button>
+                    </div>
                     <!-- YouTube Subscribe Task -->
                     <div class="youtube-task">
                         <div class="task-left">
@@ -1412,6 +1497,10 @@
             <button class="verification-close" id="verificationClose">Cancel</button>
         </div>
     </div>
+    
+    <!-- NEW: Libtl Ad Script -->
+    <script src='//libtl.com/sdk.js' data-zone='10038004' data-sdk='show_10038004'></script>
+    
     <script>
         // Initialize Firebase
         const firebaseConfig = {
@@ -1540,41 +1629,9 @@
             linkAdsVisitedToday: 0,
             referralRewardProcessed: false, // New field to track if referral reward has been processed
             referrals: [], // New field to store detailed referral information
-            totalTasksCompleted: 0 // New field to track total tasks across all days
+            totalTasksCompleted: 0, // New field to track total tasks across all days
+            rewardedAdsWatchedToday: 0 // New field to track rewarded ads watched today
         };
-        // Ad URLs - Updated with new links
-        const adUrls = [
-            'https://www.effectivegatecpm.com/z2jn2ydz?key=696d7ad4454b7be1c8222a47f044f154',
-            'https://www.effectivegatecpm.com/ejv0m8cv?key=7775dda4ea4b32769399558afb9597af',
-            'https://www.effectivegatecpm.com/qub3zbrq3i?key=d852fef756861bd89c4f775136e1fdda',
-            'https://www.effectivegatecpm.com/vrz22uepfw?key=298621cc890b0e61db6be8866a62bc88',
-            'https://www.effectivegatecpm.com/suw0nq9i?key=466383182ed764e6be16b50776d8e8fc',
-            'https://www.effectivegatecpm.com/ebpv48yuy?key=ec6b3137e555bdf5c6d2e3664ce83ed0',
-            'https://www.effectivegatecpm.com/kfarq0tuw?key=e6a1cde9dcf8a5bf8f73fb24245c3de5',
-            'https://www.effectivegatecpm.com/tutkw1sahh?key=272554dae7b213c13d92f046080861a2',
-            'https://www.effectivegatecpm.com/tqypp62y2w?key=74cc971fb77af7a1038cdccbafd2432f',
-            'https://www.effectivegatecpm.com/abxysby62i?key=4061879b22a9fa181066a0f2c57ae72d',
-            'https://shrinkme.click/EJjdY',
-            'https://shrinkme.click/wqEEOAbM',
-            'https://shrinkme.click/tgchannel',
-            'https://shrinkme.click/FiverrSellerProfile',
-            'https://shrinkme.click/eyioEWz',
-            'https://shrinkme.click/cwYDenBL',
-            'https://shrinkme.click/omUU80PH',
-            'https://shrinkme.click/H1HE',
-            'https://shrinkme.click/FhEPlc',
-            'https://shrinkme.click/rKbEDC',
-            'https://shrinkme.click/QzhmDlw0',
-            'https://shrinkme.click/qACSwKf',
-            'https://shrinkme.click/5ZHr6x',
-            'https://shrinkme.click/Dix0',
-            'https://shrinkme.click/KGujtV3',
-            'https://shrinkme.click/q4gDv',
-            'https://shrinkme.click/LKT0I',
-            'https://shrinkme.click/erQAl',
-            'https://shrinkme.click/0MkYXAWl',
-            'https://shrinkme.click/i6VD'
-        ];
         // Social task URLs
         const socialTaskUrls = {
             'youtubeTaskBtn': 'https://www.youtube.com/@SufyanCircuit',
@@ -1605,7 +1662,8 @@
                 linkAdsVisitedToday: 0,
                 referralRewardProcessed: false, // New field to track if referral reward has been processed
                 referrals: [], // New field to store detailed referral information
-                totalTasksCompleted: 0 // New field to track total tasks across all days
+                totalTasksCompleted: 0, // New field to track total tasks across all days
+                rewardedAdsWatchedToday: 0 // New field to track rewarded ads watched today
             };
         }
         // Save user data to Firestore
@@ -1650,6 +1708,13 @@
                         console.log('Migrated referralRewardProcessed field');
                     }
                     
+                    // Initialize rewardedAdsWatchedToday if it doesn't exist
+                    if (userData.rewardedAdsWatchedToday === undefined) {
+                        userData.rewardedAdsWatchedToday = 0;
+                        dataUpdated = true;
+                        console.log('Migrated rewardedAdsWatchedToday field');
+                    }
+                    
                     // Save the updated data if migration was needed
                     if (dataUpdated) {
                         await saveUserData();
@@ -1678,6 +1743,7 @@
                 updateTaskButtons();
                 updateCheckInButton();
                 updateFeaturedAdButton();
+                updateRewardedAdButton();
                 updateSocialTaskButtons();
                 updateUI();
                 updateTaskLimit();
@@ -1975,12 +2041,26 @@
                 return;
             }
             
-            // Get a random ad URL for check-in
-            const linkIndex = Math.floor(Math.random() * adUrls.length);
-            const linkUrl = adUrls[linkIndex];
+            // Directly add reward without opening an ad link
+            userData.balance += 0.06;
+            userData.totalEarning += 0.06;
+            userData.tasksDoneToday++;
+            userData.clicks++;
+            userData.totalTasksCompleted++;
+            userData.lastCheckIn = today;
             
-            // Start verification timer with 15 seconds
-            startVerificationTimer(linkUrl, 0.06, 'checkin');
+            // Check if this user qualifies for a referral reward
+            await checkReferralReward();
+            
+            // Update referral progress for referrer
+            await updateReferralProgress();
+            
+            await saveUserData();
+            updateUI();
+            updateTaskLimit();
+            updateCheckInButton();
+            
+            showNotification(`Check-in successful! $0.06 added to your balance.`, 'success');
         }
         
         // Update check-in button
@@ -2006,12 +2086,26 @@
                 return;
             }
             
-            // Get a random ad URL for featured ads
-            const linkIndex = Math.floor(Math.random() * adUrls.length);
-            const linkUrl = adUrls[linkIndex];
+            // Directly add reward without opening an ad link
+            userData.balance += 0.03;
+            userData.totalEarning += 0.03;
+            userData.tasksDoneToday++;
+            userData.clicks++;
+            userData.totalTasksCompleted++;
+            userData.featuredAdsWatchedToday++;
             
-            // Start verification timer with 15 seconds
-            startVerificationTimer(linkUrl, 0.03, 'featured');
+            // Check if this user qualifies for a referral reward
+            await checkReferralReward();
+            
+            // Update referral progress for referrer
+            await updateReferralProgress();
+            
+            await saveUserData();
+            updateUI();
+            updateTaskLimit();
+            updateFeaturedAdButton();
+            
+            showNotification(`Ad watched successfully! $0.03 added to your balance.`, 'success');
         }
         
         function updateFeaturedAdButton() {
@@ -2023,6 +2117,70 @@
             } else {
                 featuredBtn.disabled = false;
                 featuredBtn.textContent = `Watch Now (${watchedCount}/100)`;
+            }
+        }
+        
+        // NEW: Rewarded Ad function
+        async function showRewardedAd() {
+            if (userData.rewardedAdsWatchedToday >= 10) {
+                showNotification('You have reached the daily limit of 10 rewarded ads. Try again tomorrow.', 'error');
+                return;
+            }
+            if (userData.tasksDoneToday >= 100) {
+                showNotification('Daily task limit reached. Try again tomorrow.', 'error');
+                return;
+            }
+            
+            // Show loading overlay
+            document.getElementById('adLoadingOverlay').style.display = 'flex';
+            
+            try {
+                // Call the rewarded ad function
+                if (typeof show_10038004 === 'function') {
+                    await show_10038004();
+                    
+                    // Ad was watched successfully, add reward
+                    userData.balance += 0.05;
+                    userData.totalEarning += 0.05;
+                    userData.tasksDoneToday++;
+                    userData.clicks++;
+                    userData.totalTasksCompleted++;
+                    userData.rewardedAdsWatchedToday++;
+                    
+                    // Check if this user qualifies for a referral reward
+                    await checkReferralReward();
+                    
+                    // Update referral progress for referrer
+                    await updateReferralProgress();
+                    
+                    await saveUserData();
+                    updateUI();
+                    updateTaskLimit();
+                    updateRewardedAdButton();
+                    
+                    showNotification(`Rewarded ad watched successfully! $0.05 added to your balance.`, 'success');
+                } else {
+                    showNotification('Ad service not available. Please try again later.', 'error');
+                }
+            } catch (error) {
+                console.error('Error showing rewarded ad:', error);
+                showNotification('Failed to load ad. Please try again.', 'error');
+            } finally {
+                // Hide loading overlay
+                document.getElementById('adLoadingOverlay').style.display = 'none';
+            }
+        }
+        
+        // Update rewarded ad button
+        function updateRewardedAdButton() {
+            const rewardedBtn = document.getElementById('rewardedAdBtn');
+            const watchedCount = userData.rewardedAdsWatchedToday || 0;
+            if (watchedCount >= 10) {
+                rewardedBtn.disabled = true;
+                rewardedBtn.textContent = 'Limit Reached';
+            } else {
+                rewardedBtn.disabled = false;
+                rewardedBtn.textContent = 'Watch Video';
             }
         }
         
@@ -2096,6 +2254,7 @@
                 userData.tasksDoneToday = 0;
                 userData.featuredAdsWatchedToday = 0;
                 userData.linkAdsVisitedToday = 0;
+                userData.rewardedAdsWatchedToday = 0; // Reset rewarded ads counter
                 userData.lastTaskReset = today;
                 saveUserData();
                 return true;
@@ -2158,6 +2317,7 @@
                 checkInBtn.textContent = 'Limit Reached';
             }
             updateFeaturedAdButton();
+            updateRewardedAdButton();
             updateSocialTaskButtons();
         }
         function enableTaskButtons() {
@@ -2168,6 +2328,7 @@
                 checkInBtn.textContent = 'Check In';
             }
             updateFeaturedAdButton();
+            updateRewardedAdButton();
             updateSocialTaskButtons();
         }
         function updateTaskButtons() {}
