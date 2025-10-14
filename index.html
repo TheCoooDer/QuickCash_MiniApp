@@ -25,6 +25,7 @@
             --external: #673AB7;
             --checkin: #00897B;
             --link: #2962FF;
+            --darkblue: #0D47A1; /* New dark blue color */
         }
         * {
             margin: 0;
@@ -916,11 +917,11 @@
         }
         .proof-right .proof-amount {
             font-weight: 700;
-            color: var(--success);
+            color: var(--darkblue); /* Changed to dark blue */
         }
         .proof-right .proof-status {
             font-size: 11px;
-            color: var(--success);
+            color: var(--darkblue); /* Changed to dark blue */
         }
 
         /* Bottom Navigation */
@@ -1459,7 +1460,8 @@
 
             for (let i = 0; i < 5; i++) {
                 const name = names[Math.floor(rand() * names.length)];
-                const amount = (20 + Math.floor(rand() * 131)).toFixed(2); // $20–$150
+                // Changed amount range to 20-50
+                const amount = (20 + Math.floor(rand() * 31)).toFixed(2); // $20–$50
                 const method = methods[Math.floor(rand() * methods.length)];
                 const time = times[Math.floor(rand() * times.length)];
 
