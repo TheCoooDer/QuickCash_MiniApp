@@ -681,6 +681,11 @@
             background: #F5F5F5;
             border-radius: 10px;
             margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+        .referral-item:hover {
+            background: #E8EAF6;
+            transform: translateX(5px);
         }
         .referral-item:last-child {
             margin-bottom: 0;
@@ -721,6 +726,11 @@
         .referral-status.completed {
             background-color: #E8F5E9;
             color: var(--success);
+        }
+        .referral-progress {
+            font-size: 11px;
+            color: var(--gray);
+            margin-top: 2px;
         }
         /* Support */
         .support-card {
@@ -1210,7 +1220,7 @@
                 <div class="referral-container">
                     <div class="referral-header">
                         <h2>Referral Program</h2>
-                        <p>Invite friends and earn $0.17 for each qualified referral!</p>
+                        <p>Invite friends and earn $0.30 for each qualified referral!</p>
                     </div>
                     <div class="referral-link-container">
                         <div class="referral-link" id="referralLink">Generating...</div>
@@ -1233,8 +1243,8 @@
                         <h3>How It Works</h3>
                         <ul>
                             <li>Share your unique referral link with friends</li>
-                            <li>They must join using your link and complete at least 5 tasks</li>
-                            <li>You'll earn $0.17 for each qualified referral</li>
+                            <li>They must join using your link and complete at least 10 tasks</li>
+                            <li>You'll earn $0.30 for each qualified referral</li>
                             <li>No limit on how many you can refer!</li>
                         </ul>
                         <div class="referral-badge">
@@ -1311,7 +1321,7 @@
                         </div>
                         <div class="info-item">
                             <span>Referral Requirement:</span>
-                            <span id="referralRequirement">10 referrals needed</span>
+                            <span id="referralRequirement">20 referrals needed</span>
                         </div>
                         <div class="info-item">
                             <span>Processing Time:</span>
@@ -1527,7 +1537,8 @@
             featuredAdsWatchedToday: 0,
             linkAdsVisitedToday: 0,
             referralRewardProcessed: false, // New field to track if referral reward has been processed
-            referrals: [] // New field to store detailed referral information
+            referrals: [], // New field to store detailed referral information
+            totalTasksCompleted: 0 // New field to track total tasks across all days
         };
         // Ad URLs - Updated with new links
         const adUrls = [
@@ -1581,7 +1592,8 @@
                 featuredAdsWatchedToday: 0,
                 linkAdsVisitedToday: 0,
                 referralRewardProcessed: false, // New field to track if referral reward has been processed
-                referrals: [] // New field to store detailed referral information
+                referrals: [], // New field to store detailed referral information
+                totalTasksCompleted: 0 // New field to track total tasks across all days
             };
         }
         // Save user data to Firestore
@@ -1634,6 +1646,12 @@
         // Process referral when a new user joins
         async function processReferral(referralCode) {
             try {
+                // Prevent self-referral
+                if (userData.referralCode === referralCode) {
+                    console.log('Self-referral detected and blocked');
+                    return false;
+                }
+                
                 // Find the referrer by their referral code
                 const referrersSnapshot = await db.collection('users')
                     .where('referralCode', '==', referralCode)
@@ -1642,6 +1660,12 @@
                 if (!referrersSnapshot.empty) {
                     const referrerDoc = referrersSnapshot.docs[0];
                     const referrerData = referrerDoc.data();
+                    
+                    // Check if this user was already referred by someone
+                    if (userData.referredBy) {
+                        console.log('User already has a referrer');
+                        return false;
+                    }
                     
                     // Update the referrer's data
                     referrerData.totalRefers += 1;
@@ -1655,8 +1679,9 @@
                         id: userData.id,
                         name: userData.name,
                         joinedAt: new Date().toISOString(),
-                        status: 'pending', // pending until they complete 5 tasks
-                        tasksCompleted: 0
+                        status: 'pending', // pending until they complete 10 tasks
+                        tasksCompleted: 0,
+                        totalTasksCompleted: 0
                     };
                     
                     referrerData.referrals.push(newReferral);
@@ -1665,6 +1690,7 @@
                     await db.collection('users').doc(referrerData.id.toString()).set(referrerData);
                     
                     // Store the referrer's ID in the new user's data for future reward processing
+                    userData.referredBy = referralCode;
                     userData.referredById = referrerData.id;
                     
                     console.log('Referral processed successfully');
@@ -1678,20 +1704,17 @@
         }
         // Check if the user has completed the required tasks for referral reward
         async function checkReferralReward() {
-            // Check if this user was referred and has completed at least 5 tasks
-            if (userData.referredBy && userData.tasksDoneToday >= 5 && !userData.referralRewardProcessed) {
+            // Check if this user was referred and has completed at least 10 total tasks
+            if (userData.referredBy && userData.totalTasksCompleted >= 10 && !userData.referralRewardProcessed) {
                 try {
                     // Get the referrer's data
-                    const referrersSnapshot = await db.collection('users')
-                        .where('referralCode', '==', userData.referredBy)
-                        .get();
+                    const referrerDoc = await db.collection('users').doc(userData.referredById.toString()).get();
                     
-                    if (!referrersSnapshot.empty) {
-                        const referrerDoc = referrersSnapshot.docs[0];
+                    if (referrerDoc.exists) {
                         const referrerData = referrerDoc.data();
                         
-                        // Add reward to referrer (decreased by 30% from $0.24 to $0.17)
-                        const rewardAmount = 0.17;
+                        // Add reward to referrer (increased to $0.30)
+                        const rewardAmount = 0.30;
                         referrerData.balance += rewardAmount;
                         referrerData.referralEarnings += rewardAmount;
                         
@@ -1700,7 +1723,7 @@
                             const referralIndex = referrerData.referrals.findIndex(r => r.id === userData.id);
                             if (referralIndex !== -1) {
                                 referrerData.referrals[referralIndex].status = 'completed';
-                                referrerData.referrals[referralIndex].tasksCompleted = userData.tasksDoneToday;
+                                referrerData.referrals[referralIndex].tasksCompleted = userData.totalTasksCompleted;
                                 referrerData.referrals[referralIndex].completedAt = new Date().toISOString();
                             }
                         }
@@ -1712,17 +1735,45 @@
                         userData.referralRewardProcessed = true;
                         await saveUserData();
                         
-                        // Notify the referrer (if we had a way to send notifications)
-                        // For now, we'll just log it
+                        // Log the successful referral reward
                         console.log(`Referral reward of $${rewardAmount} processed for referrer ${referrerData.id}`);
                         
                         // Show notification to the current user
                         setTimeout(() => {
-                            showNotification(`Congratulations! You've completed 5 tasks. Your referrer (${userData.referredBy}) has received $${rewardAmount}!`, 'success');
+                            showNotification(`Congratulations! You've completed 10 tasks. Your referrer has received $${rewardAmount}!`, 'success');
                         }, 1000);
+                        
+                        // Try to send notification to referrer (if they're online)
+                        // In a real implementation, you might use Firebase Cloud Messaging or Telegram Bot API
+                        console.log(`Notification: Referrer ${referrerData.id} earned $${rewardAmount} from ${userData.name}'s completion!`);
                     }
                 } catch (error) {
                     console.error('Error processing referral reward:', error);
+                }
+            }
+        }
+        // Update referral progress for referrer
+        async function updateReferralProgress() {
+            if (userData.referredById) {
+                try {
+                    const referrerDoc = await db.collection('users').doc(userData.referredById.toString()).get();
+                    if (referrerDoc.exists) {
+                        const referrerData = referrerDoc.data();
+                        
+                        // Update the referral progress in referrer's list
+                        if (referrerData.referrals) {
+                            const referralIndex = referrerData.referrals.findIndex(r => r.id === userData.id);
+                            if (referralIndex !== -1) {
+                                referrerData.referrals[referralIndex].tasksCompleted = userData.totalTasksCompleted;
+                                referrerData.referrals[referralIndex].totalTasksCompleted = userData.totalTasksCompleted;
+                                
+                                // Save the updated referrer data
+                                await db.collection('users').doc(referrerData.id.toString()).set(referrerData);
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error updating referral progress:', error);
                 }
             }
         }
@@ -1731,8 +1782,6 @@
             if (tg.initDataUnsafe && tg.initDataUnsafe.start_param) {
                 const referralCode = tg.initDataUnsafe.start_param;
                 if (referralCode && !userData.referredBy) {
-                    userData.referredBy = referralCode;
-                    
                     // Process the referral
                     const referralProcessed = await processReferral(referralCode);
                     
@@ -1764,12 +1813,16 @@
                 
                 const statusClass = referral.status === 'completed' ? 'completed' : 'pending';
                 const statusText = referral.status === 'completed' ? 'Completed' : 'Pending';
+                const progressText = referral.status === 'pending' ? 
+                    `Progress: ${referral.tasksCompleted || 0}/10 tasks` : 
+                    `Completed at: ${new Date(referral.completedAt).toLocaleDateString()}`;
                 
                 referralItem.innerHTML = `
                     <div class="referral-avatar">${getUserInitials(referral.name)}</div>
                     <div class="referral-details">
                         <div class="referral-name">${referral.name}</div>
                         <div class="referral-date">Joined: ${new Date(referral.joinedAt).toLocaleDateString()}</div>
+                        <div class="referral-progress">${progressText}</div>
                     </div>
                     <div class="referral-status ${statusClass}">${statusText}</div>
                 `;
@@ -1835,6 +1888,7 @@
             userData.totalEarning += verificationReward;
             userData.tasksDoneToday++;
             userData.clicks++;
+            userData.totalTasksCompleted++; // Update total tasks
             
             // Update specific task counters
             if (verificationTaskType === 'checkin') {
@@ -1846,6 +1900,9 @@
             
             // Check if this user qualifies for a referral reward
             await checkReferralReward();
+            
+            // Update referral progress for referrer
+            await updateReferralProgress();
             
             await saveUserData();
             updateUI();
@@ -1942,10 +1999,14 @@
                 userData.totalEarning += reward;
                 userData.tasksDoneToday++;
                 userData.clicks++;
+                userData.totalTasksCompleted++; // Update total tasks
                 userData.completedTasks.push(taskId);
                 
                 // Check if this user qualifies for a referral reward
                 await checkReferralReward();
+                
+                // Update referral progress for referrer
+                await updateReferralProgress();
                 
                 await saveUserData();
                 updateUI();
@@ -2010,7 +2071,7 @@
                 if (userData.hasWithdrawnBefore) {
                     document.getElementById('referralRequirement').textContent = 'No referral requirement';
                 } else {
-                    document.getElementById('referralRequirement').textContent = `${userData.totalRefers}/10 referrals needed`;
+                    document.getElementById('referralRequirement').textContent = `${userData.totalRefers}/20 referrals needed`;
                 }
                 updateWithdrawButton();
             });
@@ -2054,7 +2115,7 @@
             updateFeaturedAdButton();
             updateSocialTaskButtons();
         }
-        function enableTaskButtons() {
+        function function enableTaskButtons() {
             const checkInBtn = document.getElementById('checkinBtn');
             const today = new Date().toISOString().split('T')[0];
             if (userData.lastCheckIn !== today) {
@@ -2112,7 +2173,7 @@
             if (userData.balance < 20) {
                 withdrawBtn.disabled = true;
                 withdrawBtn.textContent = 'Insufficient Balance';
-            } else if (!userData.hasWithdrawnBefore && userData.totalRefers < 10) {
+            } else if (!userData.hasWithdrawnBefore && userData.totalRefers < 20) {
                 withdrawBtn.disabled = true;
                 withdrawBtn.textContent = 'Referral Requirement Not Met';
             } else if (amount < 20 || amount > userData.balance) {
@@ -2132,8 +2193,8 @@
                 showNotification('Invalid withdrawal amount.', 'error');
                 return;
             }
-            if (!userData.hasWithdrawnBefore && userData.totalRefers < 10) {
-                showNotification('You need 10 referrals for your first withdrawal.', 'error');
+            if (!userData.hasWithdrawnBefore && userData.totalRefers < 20) {
+                showNotification('You need 20 referrals for your first withdrawal.', 'error');
                 return;
             }
             userData.balance -= amount;
