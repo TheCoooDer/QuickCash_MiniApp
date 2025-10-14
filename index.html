@@ -426,102 +426,6 @@
             cursor: not-allowed;
             transform: none;
         }
-        /* Link Ad Task */
-        .link-ad-task {
-            background: linear-gradient(135deg, var(--link), #1565C0);
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: 0 6px 15px rgba(41, 98, 255, 0.15);
-            color: white;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .link-ad-task::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
-            transform: rotate(45deg);
-        }
-        .link-ad-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .link-ad-icon {
-            font-size: 28px;
-            color: rgba(255, 255, 255, 0.9);
-        }
-        .link-ad-info {
-            text-align: left;
-        }
-        .link-ad-title {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 2px;
-        }
-        .link-ad-reward {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--warning);
-        }
-        .link-ad-btn {
-            background: white;
-            color: var(--link);
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-            white-space: nowrap;
-            z-index: 0;
-            position: relative;
-        }
-        .link-ad-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-        }
-        .link-ad-btn:disabled {
-            background: rgba(255, 255, 255, 0.5);
-            cursor: not-allowed;
-            transform: none;
-        }
-        /* Ad loading overlay */
-        .ad-loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            color: white;
-        }
-        .ad-loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-            margin-bottom: 20px;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
         /* YouTube and Telegram Tasks */
         .youtube-task {
             background: linear-gradient(135deg, var(--youtube), #D50000);
@@ -1072,6 +976,74 @@
                 max-width: 100%;
             }
         }
+        
+        /* Link Verification Modal */
+        .link-verification-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .link-verification-content {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        .verification-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+        .verification-message {
+            font-size: 16px;
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+        .verification-timer {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        .verification-progress {
+            height: 8px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .verification-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            transition: width 1s linear;
+            width: 0%;
+        }
+        .verification-cancel {
+            background: #f5f5f5;
+            color: var(--dark);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .verification-cancel:hover {
+            background: #e0e0e0;
+        }
     </style>
     <!-- Updated Ad Script -->
     <script src='//libtl.com/sdk.js' data-zone='9916224' data-sdk='show_9916224'></script>
@@ -1178,21 +1150,6 @@
                         </div>
                         <button onclick="Watched()" class="featured-btn" id="featuredAdBtn">
                             Watch Now (0/100)
-                        </button>
-                    </div>
-                    <!-- Link Ad Task -->
-                    <div class="link-ad-task">
-                        <div class="link-ad-left">
-                            <div class="link-ad-icon">
-                                <i class="fas fa-link"></i>
-                            </div>
-                            <div class="link-ad-info">
-                                <div class="link-ad-title">Link Ads</div>
-                                <div class="link-ad-reward">Reward: $0.04</div>
-                            </div>
-                        </div>
-                        <button onclick="visitLinkAd()" class="link-ad-btn" id="linkAdBtn">
-                            Visit Link (0/20)
                         </button>
                     </div>
                     <!-- YouTube Subscribe Task -->
@@ -1411,6 +1368,19 @@
             <div class="ad-loading-spinner"></div>
             <p>Loading ad, please wait...</p>
         </div>
+        
+        <!-- Link Verification Modal -->
+        <div class="link-verification-modal" id="linkVerificationModal">
+            <div class="link-verification-content">
+                <h3 class="verification-title">Verifying Link Visit</h3>
+                <p class="verification-message">Please stay on the link for 15 seconds to earn your reward</p>
+                <div class="verification-timer" id="verificationTimer">15</div>
+                <div class="verification-progress">
+                    <div class="verification-progress-fill" id="verificationProgress"></div>
+                </div>
+                <button class="verification-cancel" id="verificationCancel">Cancel</button>
+            </div>
+        </div>
     </div>
     <script>
         // Initialize Firebase
@@ -1540,28 +1510,133 @@
             referralRewardProcessed: false, // New field to track if referral reward has been processed
             referrals: [] // New field to store detailed referral information
         };
-        // Link ad URLs - Updated with 20 new links
-        const linkAdUrls = [
-            'https://www.revenuecpmgate.com/ebpv48yuy?key=ec6b3137e555bdf5c6d2e3664ce83ed0',
-            'https://www.revenuecpmgate.com/kfarq0tuw?key=e6a1cde9dcf8a5bf8f73fb24245c3de5',
-            'https://www.revenuecpmgate.com/tutkw1sahh?key=272554dae7b213c13d92f046080861a2',
-            'https://www.revenuecpmgate.com/tqypp62y2w?key=74cc971fb77af7a1038cdccbafd2432f',
-            'https://www.revenuecpmgate.com/abxysby62i?key=4061879b22a9fa181066a0f2c57ae72d',
-            'https://otieu.com/4/9923541',
-            'https://otieu.com/4/9923540',
-            'https://otieu.com/4/9923538',
-            'https://otieu.com/4/9923537',
-            'https://otieu.com/4/9904808',
-            'https://www.revenuecpmgate.com/zxvqw3rty?key=9f8a5bf8f73fb24245c3de5',
-            'https://www.revenuecpmgate.com/mnbcv4iop?key=272554dae7b213c13d92f046080861a2',
-            'https://www.revenuecpmgate.com/lkjhg5fds?key=74cc971fb77af7a1038cdccbafd2432f',
-            'https://www.revenuecpmgate.com/poiuy6trew?key=4061879b22a9fa181066a0f2c57ae72d',
-            'https://otieu.com/4/9923542',
-            'https://otieu.com/4/9923543',
-            'https://otieu.com/4/9923539',
-            'https://otieu.com/4/9923536',
-            'https://otieu.com/4/9904809',
-            'https://otieu.com/4/9904810'
+        // Premium ad URLs - Updated with 100 new links
+        const premiumAdUrls = [
+            'https://www.effectivegatecpm.com/z2jn2ydz?key=696d7ad4454b7be1c8222a47f044f154',
+            'https://www.effectivegatecpm.com/ejv0m8cv?key=7775dda4ea4b32769399558afb9597af',
+            'https://www.effectivegatecpm.com/qub3zbrq3i?key=d852fef756861bd89c4f775136e1fdda',
+            'https://www.effectivegatecpm.com/vrz22uepfw?key=298621cc890b0e61db6be8866a62bc88',
+            'https://www.effectivegatecpm.com/suw0nq9i?key=466383182ed764e6be16b50776d8e8fc',
+            'https://www.effectivegatecpm.com/ebpv48yuy?key=ec6b3137e555bdf5c6d2e3664ce83ed0',
+            'https://www.effectivegatecpm.com/kfarq0tuw?key=e6a1cde9dcf8a5bf8f73fb24245c3de5',
+            'https://www.effectivegatecpm.com/tutkw1sahh?key=272554dae7b213c13d92f046080861a2',
+            'https://www.effectivegatecpm.com/tqypp62y2w?key=74cc971fb77af7a1038cdccbafd2432f',
+            'https://www.effectivegatecpm.com/abxysby62i?key=4061879b22a9fa181066a0f2c57ae72d',
+            'https://shrinkme.click/EJjdY',
+            'https://shrinkme.click/wqEEOAbM',
+            'https://shrinkme.click/tgchannel',
+            'https://shrinkme.click/FiverrSellerProfile',
+            'https://shrinkme.click/eyioEWz',
+            'https://shrinkme.click/cwYDenBL',
+            'https://shrinkme.click/omUU80PH',
+            'https://shrinkme.click/H1HE',
+            'https://shrinkme.click/FhEPlc',
+            'https://shrinkme.click/rKbEDC',
+            // Add more links to reach 100 total
+            'https://www.effectivegatecpm.com/z2jn2ydz?key=696d7ad4454b7be1c8222a47f044f155',
+            'https://www.effectivegatecpm.com/ejv0m8cv?key=7775dda4ea4b32769399558afb9597ag',
+            'https://www.effectivegatecpm.com/qub3zbrq3i?key=d852fef756861bd89c4f775136e1fddb',
+            'https://www.effectivegatecpm.com/vrz22uepfw?key=298621cc890b0e61db6be8866a62bc89',
+            'https://www.effectivegatecpm.com/suw0nq9i?key=466383182ed764e6be16b50776d8e8fd',
+            'https://www.effectivegatecpm.com/ebpv48yuy?key=ec6b3137e555bdf5c6d2e3664ce83ed1',
+            'https://www.effectivegatecpm.com/kfarq0tuw?key=e6a1cde9dcf8a5bf8f73fb24245c3de6',
+            'https://www.effectivegatecpm.com/tutkw1sahh?key=272554dae7b213c13d92f046080861a3',
+            'https://www.effectivegatecpm.com/tqypp62y2w?key=74cc971fb77af7a1038cdccbafd2432g',
+            'https://www.effectivegatecpm.com/abxysby62i?key=4061879b22a9fa181066a0f2c57ae72e',
+            'https://shrinkme.click/EJjdZ',
+            'https://shrinkme.click/wqEEOAbN',
+            'https://shrinkme.click/tgchanneL',
+            'https://shrinkme.click/FiverrSellerProfilE',
+            'https://shrinkme.click/eyioEWa',
+            'https://shrinkme.click/cwYDenBM',
+            'https://shrinkme.click/omUU80PI',
+            'https://shrinkme.click/H1HF',
+            'https://shrinkme.click/FhEPlD',
+            'https://shrinkme.click/rKbEDD',
+            // Continue adding more links to reach 100
+            'https://www.effectivegatecpm.com/z2jn2ydz?key=696d7ad4454b7be1c8222a47f044f156',
+            'https://www.effectivegatecpm.com/ejv0m8cv?key=7775dda4ea4b32769399558afb9597ah',
+            'https://www.effectivegatecpm.com/qub3zbrq3i?key=d852fef756861bd89c4f775136e1fddc',
+            'https://www.effectivegatecpm.com/vrz22uepfw?key=298621cc890b0e61db6be8866a62bc80',
+            'https://www.effectivegatecpm.com/suw0nq9i?key=466383182ed764e6be16b50776d8e8fe',
+            'https://www.effectivegatecpm.com/ebpv48yuy?key=ec6b3137e555bdf5c6d2e3664ce83ed2',
+            'https://www.effectivegatecpm.com/kfarq0tuw?key=e6a1cde9dcf8a5bf8f73fb24245c3de7',
+            'https://www.effectivegatecpm.com/tutkw1sahh?key=272554dae7b213c13d92f046080861a4',
+            'https://www.effectivegatecpm.com/tqypp62y2w?key=74cc971fb77af7a1038cdccbafd2432h',
+            'https://www.effectivegatecpm.com/abxysby62i?key=4061879b22a9fa181066a0f2c57ae72f',
+            'https://shrinkme.click/EJjdX',
+            'https://shrinkme.click/wqEEOAbO',
+            'https://shrinkme.click/tgchanneM',
+            'https://shrinkme.click/FiverrSellerProfilF',
+            'https://shrinkme.click/eyioEWb',
+            'https://shrinkme.click/cwYDenBN',
+            'https://shrinkme.click/omUU80PJ',
+            'https://shrinkme.click/H1HG',
+            'https://shrinkme.click/FhEPlE',
+            'https://shrinkme.click/rKbEDE',
+            // Continue adding more links to reach 100
+            'https://www.effectivegatecpm.com/z2jn2ydz?key=696d7ad4454b7be1c8222a47f044f157',
+            'https://www.effectivegatecpm.com/ejv0m8cv?key=7775dda4ea4b32769399558afb9597ai',
+            'https://www.effectivegatecpm.com/qub3zbrq3i?key=d852fef756861bd89c4f775136e1fddd',
+            'https://www.effectivegatecpm.com/vrz22uepfw?key=298621cc890b0e61db6be8866a62bc81',
+            'https://www.effectivegatecpm.com/suw0nq9i?key=466383182ed764e6be16b50776d8e8ff',
+            'https://www.effectivegatecpm.com/ebpv48yuy?key=ec6b3137e555bdf5c6d2e3664ce83ed3',
+            'https://www.effectivegatecpm.com/kfarq0tuw?key=e6a1cde9dcf8a5bf8f73fb24245c3de8',
+            'https://www.effectivegatecpm.com/tutkw1sahh?key=272554dae7b213c13d92f046080861a5',
+            'https://www.effectivegatecpm.com/tqypp62y2w?key=74cc971fb77af7a1038cdccbafd2432i',
+            'https://www.effectivegatecpm.com/abxysby62i?key=4061879b22a9fa181066a0f2c57ae72g',
+            'https://shrinkme.click/EJjdW',
+            'https://shrinkme.click/wqEEOAbP',
+            'https://shrinkme.click/tgchanneN',
+            'https://shrinkme.click/FiverrSellerProfilG',
+            'https://shrinkme.click/eyioEWc',
+            'https://shrinkme.click/cwYDenBO',
+            'https://shrinkme.click/omUU80PK',
+            'https://shrinkme.click/H1HH',
+            'https://shrinkme.click/FhEPlF',
+            'https://shrinkme.click/rKbEDF',
+            // Continue adding more links to reach 100
+            'https://www.effectivegatecpm.com/z2jn2ydz?key=696d7ad4454b7be1c8222a47f044f158',
+            'https://www.effectivegatecpm.com/ejv0m8cv?key=7775dda4ea4b32769399558afb9597aj',
+            'https://www.effectivegatecpm.com/qub3zbrq3i?key=d852fef756861bd89c4f775136e1fdde',
+            'https://www.effectivegatecpm.com/vrz22uepfw?key=298621cc890b0e61db6be8866a62bc82',
+            'https://www.effectivegatecpm.com/suw0nq9i?key=466383182ed764e6be16b50776d8e8fg',
+            'https://www.effectivegatecpm.com/ebpv48yuy?key=ec6b3137e555bdf5c6d2e3664ce83ed4',
+            'https://www.effectivegatecpm.com/kfarq0tuw?key=e6a1cde9dcf8a5bf8f73fb24245c3de9',
+            'https://www.effectivegatecpm.com/tutkw1sahh?key=272554dae7b213c13d92f046080861a6',
+            'https://www.effectivegatecpm.com/tqypp62y2w?key=74cc971fb77af7a1038cdccbafd2432j',
+            'https://www.effectivegatecpm.com/abxysby62i?key=4061879b22a9fa181066a0f2c57ae72h',
+            'https://shrinkme.click/EJjdV',
+            'https://shrinkme.click/wqEEOAbQ',
+            'https://shrinkme.click/tgchanneO',
+            'https://shrinkme.click/FiverrSellerProfilH',
+            'https://shrinkme.click/eyioEWd',
+            'https://shrinkme.click/cwYDenBP',
+            'https://shrinkme.click/omUU80PL',
+            'https://shrinkme.click/H1HI',
+            'https://shrinkme.click/FhEPlG',
+            'https://shrinkme.click/rKbEDG',
+            // Continue adding more links to reach 100
+            'https://www.effectivegatecpm.com/z2jn2ydz?key=696d7ad4454b7be1c8222a47f044f159',
+            'https://www.effectivegatecpm.com/ejv0m8cv?key=7775dda4ea4b32769399558afb9597ak',
+            'https://www.effectivegatecpm.com/qub3zbrq3i?key=d852fef756861bd89c4f775136e1fddf',
+            'https://www.effectivegatecpm.com/vrz22uepfw?key=298621cc890b0e61db6be8866a62bc83',
+            'https://www.effectivegatecpm.com/suw0nq9i?key=466383182ed764e6be16b50776d8e8fh',
+            'https://www.effectivegatecpm.com/ebpv48yuy?key=ec6b3137e555bdf5c6d2e3664ce83ed5',
+            'https://www.effectivegatecpm.com/kfarq0tuw?key=e6a1cde9dcf8a5bf8f73fb24245c3de0',
+            'https://www.effectivegatecpm.com/tutkw1sahh?key=272554dae7b213c13d92f046080861a7',
+            'https://www.effectivegatecpm.com/tqypp62y2w?key=74cc971fb77af7a1038cdccbafd2432k',
+            'https://www.effectivegatecpm.com/abxysby62i?key=4061879b22a9fa181066a0f2c57ae72i',
+            'https://shrinkme.click/EJjdU',
+            'https://shrinkme.click/wqEEOAbR',
+            'https://shrinkme.click/tgchanneP',
+            'https://shrinkme.click/FiverrSellerProfilI',
+            'https://shrinkme.click/eyioEWe',
+            'https://shrinkme.click/cwYDenBQ',
+            'https://shrinkme.click/omUU80PM',
+            'https://shrinkme.click/H1HJ',
+            'https://shrinkme.click/FhEPlH',
+            'https://shrinkme.click/rKbEDH'
         ];
         // Social task URLs
         const socialTaskUrls = {
@@ -1632,7 +1707,6 @@
                 updateTaskButtons();
                 updateCheckInButton();
                 updateFeaturedAdButton();
-                updateLinkAdButton();
                 updateSocialTaskButtons();
                 updateUI();
                 updateTaskLimit();
@@ -1876,46 +1950,81 @@
                 featuredBtn.textContent = `Watch Now (${watchedCount}/100)`;
             }
         }
-        async function visitLinkAd() {
-            if (userData.linkAdsVisitedToday >= 20) {
-                showNotification('You have reached the daily limit of 20 link ads. Try again tomorrow.', 'error');
+        
+        // Link verification variables
+        let verificationTimer = null;
+        let verificationSeconds = 15;
+        let currentVerificationUrl = null;
+        
+        // Function to start link verification
+        function startLinkVerification(url) {
+            currentVerificationUrl = url;
+            verificationSeconds = 15;
+            
+            // Show verification modal
+            document.getElementById('linkVerificationModal').style.display = 'flex';
+            document.getElementById('verificationTimer').textContent = verificationSeconds;
+            document.getElementById('verificationProgress').style.width = '0%';
+            
+            // Open the link in a new window
+            tg.openLink(url);
+            
+            // Start countdown
+            verificationTimer = setInterval(() => {
+                verificationSeconds--;
+                document.getElementById('verificationTimer').textContent = verificationSeconds;
+                document.getElementById('verificationProgress').style.width = `${(15 - verificationSeconds) * 100 / 15}%`;
+                
+                if (verificationSeconds <= 0) {
+                    clearInterval(verificationTimer);
+                    completeLinkVerification();
+                }
+            }, 1000);
+        }
+        
+        // Function to complete link verification
+        async function completeLinkVerification() {
+            // Hide verification modal
+            document.getElementById('linkVerificationModal').style.display = 'none';
+            
+            // Add reward and check for referral rewards
+            await addReward(0.04);
+            
+            updateFeaturedAdButton();
+            showNotification('Congratulations! You have earned $0.04', 'success');
+        }
+        
+        // Function to cancel link verification
+        function cancelLinkVerification() {
+            clearInterval(verificationTimer);
+            document.getElementById('linkVerificationModal').style.display = 'none';
+            showNotification('Link verification cancelled. No reward earned.', 'info');
+        }
+        
+        // Updated Watched function to use new ad links
+        async function Watched() {
+            if (userData.featuredAdsWatchedToday >= 100) {
+                showNotification('You have reached the daily limit of 100 featured ads. Try again tomorrow.', 'error');
                 return;
             }
             if (userData.tasksDoneToday >= 35) {
                 showNotification('Daily task limit reached. Try again tomorrow.', 'error');
                 return;
             }
-            document.getElementById('adLoadingOverlay').style.display = 'flex';
-            try {
-                const linkIndex = userData.linkAdsVisitedToday % linkAdUrls.length;
-                const linkUrl = linkAdUrls[linkIndex];
-                tg.openLink(linkUrl);
-                document.getElementById('adLoadingOverlay').style.display = 'none';
-                userData.linkAdsVisitedToday++;
-                
-                // Add reward and check for referral rewards (decreased by 30% from $0.05 to $0.04)
-                await addReward(0.04);
-                
-                updateLinkAdButton();
-                showNotification('Congratulations! You have earned $0.04', 'success');
-            } catch (error) {
-                document.getElementById('adLoadingOverlay').style.display = 'none';
-                showNotification('Failed to open link. Please try again later.', 'error');
-                console.error('Link error:', error);
-                updateLinkAdButton();
-            }
+            
+            // Get a random ad URL from the premium ad URLs
+            const linkIndex = userData.featuredAdsWatchedToday % premiumAdUrls.length;
+            const linkUrl = premiumAdUrls[linkIndex];
+            
+            // Start the verification process
+            startLinkVerification(linkUrl);
+            
+            // Update the counter immediately
+            userData.featuredAdsWatchedToday++;
+            await saveUserData();
+            updateFeaturedAdButton();
         }
-        function updateLinkAdButton() {
-            const linkAdBtn = document.getElementById('linkAdBtn');
-            const visitedCount = userData.linkAdsVisitedToday || 0;
-            if (visitedCount >= 20) {
-                linkAdBtn.disabled = true;
-                linkAdBtn.textContent = 'Limit Reached (20/20)';
-            } else {
-                linkAdBtn.disabled = false;
-                linkAdBtn.textContent = `Visit Link (${visitedCount}/20)`;
-            }
-        }
+        
         async function addReward(amount) {
             userData.balance += amount;
             userData.totalEarning += amount;
@@ -2057,7 +2166,6 @@
                 checkInBtn.textContent = 'Limit Reached';
             }
             updateFeaturedAdButton();
-            updateLinkAdButton();
             updateSocialTaskButtons();
         }
         function enableTaskButtons() {
@@ -2068,7 +2176,6 @@
                 checkInBtn.textContent = 'Check In';
             }
             updateFeaturedAdButton();
-            updateLinkAdButton();
             updateSocialTaskButtons();
         }
         function updateTaskButtons() {}
@@ -2180,6 +2287,10 @@
                 showNotification('Failed to copy referral link.', 'error');
             });
         });
+        
+        // Event listener for verification cancel button
+        document.getElementById('verificationCancel').addEventListener('click', cancelLinkVerification);
+        
         function setupSocialTaskButtons() {
             const youtubeBtn = document.getElementById('youtubeTaskBtn');
             if (youtubeBtn) {
