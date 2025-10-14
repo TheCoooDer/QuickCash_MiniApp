@@ -997,64 +997,69 @@
         .notification.info i {
             color: var(--primary);
         }
-        /* Verification Timer */
+        /* Verification Timer - Made smaller */
         .verification-timer {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             background: white;
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             z-index: 1001;
             text-align: center;
             display: none;
+            width: 80%;
+            max-width: 280px;
         }
         .verification-timer.show {
             display: block;
         }
         .verification-timer h3 {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             color: var(--dark);
+            font-size: 16px;
         }
         .timer-circle {
-            width: 120px;
-            height: 120px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             background: conic-gradient(var(--primary) 0%, var(--primary) var(--progress), #e9ecef var(--progress), #e9ecef 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
+            margin: 0 auto 10px;
             position: relative;
         }
         .timer-circle::before {
             content: '';
             position: absolute;
-            width: 100px;
-            height: 100px;
+            width: 65px;
+            height: 65px;
             border-radius: 50%;
             background: white;
         }
         .timer-text {
             position: relative;
-            font-size: 24px;
+            font-size: 18px;
             font-weight: 700;
             color: var(--primary);
         }
         .verification-message {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             color: var(--gray);
+            font-size: 13px;
         }
         .verification-close {
             background: var(--primary);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 6px 12px;
+            border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
+            font-size: 13px;
         }
         /* Responsive */
         @media (max-width: 500px) {
