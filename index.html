@@ -25,8 +25,8 @@
             --external: #673AB7;
             --checkin: #00897B;
             --link: #2962FF;
-            --darkblue: #0D47A1; /* New dark blue color */
-            --rewarded: #7B1FA2; /* New color for rewarded ads */
+            --darkblue: #0D47A1;
+            --rewarded: #7B1FA2;
         }
         * {
             margin: 0;
@@ -987,11 +987,11 @@
         }
         .proof-right .proof-amount {
             font-weight: 700;
-            color: var(--darkblue); /* Changed to dark blue */
+            color: var(--darkblue);
         }
         .proof-right .proof-status {
             font-size: 11px;
-            color: var(--darkblue); /* Changed to dark blue */
+            color: var(--darkblue);
         }
 
         /* Bottom Navigation */
@@ -1261,7 +1261,7 @@
                                 <i class="fas fa-play-circle"></i>
                             </div>
                             <div class="rewarded-info">
-                                <div class="rewarded-title">Rewarded Video</div>
+                                <div class="rewarded-title">Watch Video</div>
                                 <div class="rewarded-reward">Reward: $0.05</div>
                             </div>
                         </div>
@@ -1632,6 +1632,39 @@
             totalTasksCompleted: 0, // New field to track total tasks across all days
             rewardedAdsWatchedToday: 0 // New field to track rewarded ads watched today
         };
+        // Ad URLs - Updated with new links
+        const adUrls = [
+            'https://www.effectivegatecpm.com/z2jn2ydz?key=696d7ad4454b7be1c8222a47f044f154',
+            'https://www.effectivegatecpm.com/ejv0m8cv?key=7775dda4ea4b32769399558afb9597af',
+            'https://www.effectivegatecpm.com/qub3zbrq3i?key=d852fef756861bd89c4f775136e1fdda',
+            'https://www.effectivegatecpm.com/vrz22uepfw?key=298621cc890b0e61db6be8866a62bc88',
+            'https://www.effectivegatecpm.com/suw0nq9i?key=466383182ed764e6be16b50776d8e8fc',
+            'https://www.effectivegatecpm.com/ebpv48yuy?key=ec6b3137e555bdf5c6d2e3664ce83ed0',
+            'https://www.effectivegatecpm.com/kfarq0tuw?key=e6a1cde9dcf8a5bf8f73fb24245c3de5',
+            'https://www.effectivegatecpm.com/tutkw1sahh?key=272554dae7b213c13d92f046080861a2',
+            'https://www.effectivegatecpm.com/tqypp62y2w?key=74cc971fb77af7a1038cdccbafd2432f',
+            'https://www.effectivegatecpm.com/abxysby62i?key=4061879b22a9fa181066a0f2c57ae72d',
+            'https://shrinkme.click/EJjdY',
+            'https://shrinkme.click/wqEEOAbM',
+            'https://shrinkme.click/tgchannel',
+            'https://shrinkme.click/FiverrSellerProfile',
+            'https://shrinkme.click/eyioEWz',
+            'https://shrinkme.click/cwYDenBL',
+            'https://shrinkme.click/omUU80PH',
+            'https://shrinkme.click/H1HE',
+            'https://shrinkme.click/FhEPlc',
+            'https://shrinkme.click/rKbEDC',
+            'https://shrinkme.click/QzhmDlw0',
+            'https://shrinkme.click/qACSwKf',
+            'https://shrinkme.click/5ZHr6x',
+            'https://shrinkme.click/Dix0',
+            'https://shrinkme.click/KGujtV3',
+            'https://shrinkme.click/q4gDv',
+            'https://shrinkme.click/LKT0I',
+            'https://shrinkme.click/erQAl',
+            'https://shrinkme.click/0MkYXAWl',
+            'https://shrinkme.click/i6VD'
+        ];
         // Social task URLs
         const socialTaskUrls = {
             'youtubeTaskBtn': 'https://www.youtube.com/@SufyanCircuit',
@@ -2041,26 +2074,63 @@
                 return;
             }
             
-            // Directly add reward without opening an ad link
-            userData.balance += 0.06;
-            userData.totalEarning += 0.06;
-            userData.tasksDoneToday++;
-            userData.clicks++;
-            userData.totalTasksCompleted++;
-            userData.lastCheckIn = today;
+            // Show loading overlay
+            document.getElementById('adLoadingOverlay').style.display = 'flex';
             
-            // Check if this user qualifies for a referral reward
-            await checkReferralReward();
-            
-            // Update referral progress for referrer
-            await updateReferralProgress();
-            
-            await saveUserData();
-            updateUI();
-            updateTaskLimit();
-            updateCheckInButton();
-            
-            showNotification(`Check-in successful! $0.06 added to your balance.`, 'success');
+            try {
+                // Call the rewarded ad function
+                if (typeof show_10038004 === 'function') {
+                    await show_10038004();
+                    
+                    // Ad was watched successfully, add reward
+                    userData.balance += 0.06;
+                    userData.totalEarning += 0.06;
+                    userData.tasksDoneToday++;
+                    userData.clicks++;
+                    userData.totalTasksCompleted++;
+                    userData.lastCheckIn = today;
+                    
+                    // Check if this user qualifies for a referral reward
+                    await checkReferralReward();
+                    
+                    // Update referral progress for referrer
+                    await updateReferralProgress();
+                    
+                    await saveUserData();
+                    updateUI();
+                    updateTaskLimit();
+                    updateCheckInButton();
+                    
+                    showNotification(`Check-in successful! $0.06 added to your balance.`, 'success');
+                } else {
+                    // Fallback to direct reward if ad script is not available
+                    userData.balance += 0.06;
+                    userData.totalEarning += 0.06;
+                    userData.tasksDoneToday++;
+                    userData.clicks++;
+                    userData.totalTasksCompleted++;
+                    userData.lastCheckIn = today;
+                    
+                    // Check if this user qualifies for a referral reward
+                    await checkReferralReward();
+                    
+                    // Update referral progress for referrer
+                    await updateReferralProgress();
+                    
+                    await saveUserData();
+                    updateUI();
+                    updateTaskLimit();
+                    updateCheckInButton();
+                    
+                    showNotification(`Check-in successful! $0.06 added to your balance.`, 'success');
+                }
+            } catch (error) {
+                console.error('Error showing rewarded ad for check-in:', error);
+                showNotification('Failed to load ad. Please try again.', 'error');
+            } finally {
+                // Hide loading overlay
+                document.getElementById('adLoadingOverlay').style.display = 'none';
+            }
         }
         
         // Update check-in button
@@ -2086,26 +2156,63 @@
                 return;
             }
             
-            // Directly add reward without opening an ad link
-            userData.balance += 0.03;
-            userData.totalEarning += 0.03;
-            userData.tasksDoneToday++;
-            userData.clicks++;
-            userData.totalTasksCompleted++;
-            userData.featuredAdsWatchedToday++;
+            // Show loading overlay
+            document.getElementById('adLoadingOverlay').style.display = 'flex';
             
-            // Check if this user qualifies for a referral reward
-            await checkReferralReward();
-            
-            // Update referral progress for referrer
-            await updateReferralProgress();
-            
-            await saveUserData();
-            updateUI();
-            updateTaskLimit();
-            updateFeaturedAdButton();
-            
-            showNotification(`Ad watched successfully! $0.03 added to your balance.`, 'success');
+            try {
+                // Call the rewarded ad function
+                if (typeof show_10038004 === 'function') {
+                    await show_10038004();
+                    
+                    // Ad was watched successfully, add reward
+                    userData.balance += 0.03;
+                    userData.totalEarning += 0.03;
+                    userData.tasksDoneToday++;
+                    userData.clicks++;
+                    userData.totalTasksCompleted++;
+                    userData.featuredAdsWatchedToday++;
+                    
+                    // Check if this user qualifies for a referral reward
+                    await checkReferralReward();
+                    
+                    // Update referral progress for referrer
+                    await updateReferralProgress();
+                    
+                    await saveUserData();
+                    updateUI();
+                    updateTaskLimit();
+                    updateFeaturedAdButton();
+                    
+                    showNotification(`Ad watched successfully! $0.03 added to your balance.`, 'success');
+                } else {
+                    // Fallback to direct reward if ad script is not available
+                    userData.balance += 0.03;
+                    userData.totalEarning += 0.03;
+                    userData.tasksDoneToday++;
+                    userData.clicks++;
+                    userData.totalTasksCompleted++;
+                    userData.featuredAdsWatchedToday++;
+                    
+                    // Check if this user qualifies for a referral reward
+                    await checkReferralReward();
+                    
+                    // Update referral progress for referrer
+                    await updateReferralProgress();
+                    
+                    await saveUserData();
+                    updateUI();
+                    updateTaskLimit();
+                    updateFeaturedAdButton();
+                    
+                    showNotification(`Ad watched successfully! $0.03 added to your balance.`, 'success');
+                }
+            } catch (error) {
+                console.error('Error showing rewarded ad for featured ad:', error);
+                showNotification('Failed to load ad. Please try again.', 'error');
+            } finally {
+                // Hide loading overlay
+                document.getElementById('adLoadingOverlay').style.display = 'none';
+            }
         }
         
         function updateFeaturedAdButton() {
