@@ -1372,8 +1372,8 @@
         <!-- Link Verification Modal -->
         <div class="link-verification-modal" id="linkVerificationModal">
             <div class="link-verification-content">
-                <h3 class="verification-title">Verifying Link Visit</h3>
-                <p class="verification-message">Please stay on the link for 15 seconds to earn your reward</p>
+                <h3 class="verification-title" id="verificationTitle">Verifying Link Visit</h3>
+                <p class="verification-message" id="verificationMessage">Please stay on the link for 15 seconds to earn your reward</p>
                 <div class="verification-timer" id="verificationTimer">15</div>
                 <div class="verification-progress">
                     <div class="verification-progress-fill" id="verificationProgress"></div>
@@ -1600,7 +1600,7 @@
             'https://www.effectivegatecpm.com/ejv0m8cv?key=7775dda4ea4b32769399558afb9597aj',
             'https://www.effectivegatecpm.com/qub3zbrq3i?key=d852fef756861bd89c4f775136e1fdde',
             'https://www.effectivegatecpm.com/vrz22uepfw?key=298621cc890b0e61db6be8866a62bc82',
-            'https://www.effectivegatecpm.com/suw0nq9i?key=466383182ed764e6be16b50776d8e8fg',
+            'https://www.effectivegatecpm.com/suw0nq9i?key=466383182ed764e6be16b50776d8e8fh',
             'https://www.effectivegatecpm.com/ebpv48yuy?key=ec6b3137e555bdf5c6d2e3664ce83ed4',
             'https://www.effectivegatecpm.com/kfarq0tuw?key=e6a1cde9dcf8a5bf8f73fb24245c3de9',
             'https://www.effectivegatecpm.com/tutkw1sahh?key=272554dae7b213c13d92f046080861a6',
@@ -1621,7 +1621,7 @@
             'https://www.effectivegatecpm.com/ejv0m8cv?key=7775dda4ea4b32769399558afb9597ak',
             'https://www.effectivegatecpm.com/qub3zbrq3i?key=d852fef756861bd89c4f775136e1fddf',
             'https://www.effectivegatecpm.com/vrz22uepfw?key=298621cc890b0e61db6be8866a62bc83',
-            'https://www.effectivegatecpm.com/suw0nq9i?key=466383182ed764e6be16b50776d8e8fh',
+            'https://www.effectivegatecpm.com/suw0nq9i?key=466383182ed764e6be16b50776d8e8fg',
             'https://www.effectivegatecpm.com/ebpv48yuy?key=ec6b3137e555bdf5c6d2e3664ce83ed5',
             'https://www.effectivegatecpm.com/kfarq0tuw?key=e6a1cde9dcf8a5bf8f73fb24245c3de0',
             'https://www.effectivegatecpm.com/tutkw1sahh?key=272554dae7b213c13d92f046080861a7',
@@ -1637,6 +1637,19 @@
             'https://shrinkme.click/H1HJ',
             'https://shrinkme.click/FhEPlH',
             'https://shrinkme.click/rKbEDH'
+        ];
+        // Check-in ad URLs
+        const checkinAdUrls = [
+            'https://www.effectivegatecpm.com/z2jn2ydz?key=696d7ad4454b7be1c8222a47f044f154',
+            'https://www.effectivegatecpm.com/ejv0m8cv?key=7775dda4ea4b32769399558afb9597af',
+            'https://www.effectivegatecpm.com/qub3zbrq3i?key=d852fef756861bd89c4f775136e1fdda',
+            'https://www.effectivegatecpm.com/vrz22uepfw?key=298621cc890b0e61db6be8866a62bc88',
+            'https://www.effectivegatecpm.com/suw0nq9i?key=466383182ed764e6be16b50776d8e8fc',
+            'https://shrinkme.click/EJjdY',
+            'https://shrinkme.click/wqEEOAbM',
+            'https://shrinkme.click/tgchannel',
+            'https://shrinkme.click/FiverrSellerProfile',
+            'https://shrinkme.click/eyioEWz'
         ];
         // Social task URLs
         const socialTaskUrls = {
@@ -1863,103 +1876,30 @@
                 container.appendChild(referralItem);
             });
         }
-        // Daily Check In function
-        async function dailyCheckIn() {
-            const today = new Date().toISOString().split('T')[0];
-            if (userData.lastCheckIn === today) {
-                showNotification('You have already checked in today. Come back tomorrow!', 'error');
-                return;
-            }
-            if (userData.tasksDoneToday >= 35) {
-                showNotification('Daily task limit reached. Try again tomorrow.', 'error');
-                return;
-            }
-            document.getElementById('adLoadingOverlay').style.display = 'flex';
-            try {
-                await show_9916224();
-                document.getElementById('adLoadingOverlay').style.display = 'none';
-                // Decreased by 30% from $0.08 to $0.06
-                const reward = 0.06;
-                userData.balance += reward;
-                userData.totalEarning += reward;
-                userData.clicks++;
-                userData.tasksDoneToday++;
-                userData.lastCheckIn = today;
-                
-                // Check if this user qualifies for a referral reward
-                await checkReferralReward();
-                
-                await saveUserData();
-                updateUI();
-                updateCheckInButton();
-                updateTaskLimit();
-                showNotification(`Daily check-in successful! $${reward.toFixed(2)} added to your balance.`);
-            } catch (error) {
-                document.getElementById('adLoadingOverlay').style.display = 'none';
-                showNotification('Failed to load ad. Please try again later.', 'error');
-                console.error('Ad error:', error);
-            }
-        }
-        // Update check-in button
-        function updateCheckInButton() {
-            const checkInBtn = document.getElementById('checkinBtn');
-            const today = new Date().toISOString().split('T')[0];
-            if (userData.lastCheckIn === today) {
-                checkInBtn.disabled = true;
-                checkInBtn.textContent = 'Checked In';
-            } else {
-                checkInBtn.disabled = false;
-                checkInBtn.textContent = 'Check In';
-            }
-        }
-        async function Watched() {
-            if (userData.featuredAdsWatchedToday >= 100) {
-                showNotification('You have reached the daily limit of 100 featured ads. Try again tomorrow.', 'error');
-                return;
-            }
-            if (userData.tasksDoneToday >= 35) {
-                showNotification('Daily task limit reached. Try again tomorrow.', 'error');
-                return;
-            }
-            document.getElementById('adLoadingOverlay').style.display = 'flex';
-            try {
-                await show_9916224();
-                document.getElementById('adLoadingOverlay').style.display = 'none';
-                userData.featuredAdsWatchedToday++;
-                
-                // Add reward and check for referral rewards (decreased by 30% from $0.04 to $0.03)
-                await addReward(0.03);
-                
-                updateFeaturedAdButton();
-                showNotification('Congratulations! You have earned $0.03', 'success');
-            } catch (error) {
-                document.getElementById('adLoadingOverlay').style.display = 'none';
-                showNotification('Failed to load ad. Please try again later.', 'error');
-                console.error('Ad error:', error);
-                updateFeaturedAdButton();
-            }
-        }
-        function updateFeaturedAdButton() {
-            const featuredBtn = document.getElementById('featuredAdBtn');
-            const watchedCount = userData.featuredAdsWatchedToday || 0;
-            if (watchedCount >= 100) {
-                featuredBtn.disabled = true;
-                featuredBtn.textContent = 'Limit Reached (100/100)';
-            } else {
-                featuredBtn.disabled = false;
-                featuredBtn.textContent = `Watch Now (${watchedCount}/100)`;
-            }
-        }
         
         // Link verification variables
         let verificationTimer = null;
         let verificationSeconds = 15;
         let currentVerificationUrl = null;
+        let currentVerificationType = null; // 'checkin' or 'premium'
         
         // Function to start link verification
-        function startLinkVerification(url) {
+        function startLinkVerification(url, type = 'premium') {
             currentVerificationUrl = url;
+            currentVerificationType = type;
             verificationSeconds = 15;
+            
+            // Update modal content based on type
+            const title = document.getElementById('verificationTitle');
+            const message = document.getElementById('verificationMessage');
+            
+            if (type === 'checkin') {
+                title.textContent = 'Daily Check In Verification';
+                message.textContent = 'Please stay on the link for 15 seconds to complete your daily check-in';
+            } else {
+                title.textContent = 'Verifying Link Visit';
+                message.textContent = 'Please stay on the link for 15 seconds to earn your reward';
+            }
             
             // Show verification modal
             document.getElementById('linkVerificationModal').style.display = 'flex';
@@ -1987,18 +1927,80 @@
             // Hide verification modal
             document.getElementById('linkVerificationModal').style.display = 'none';
             
-            // Add reward and check for referral rewards
-            await addReward(0.04);
-            
-            updateFeaturedAdButton();
-            showNotification('Congratulations! You have earned $0.04', 'success');
+            // Process based on verification type
+            if (currentVerificationType === 'checkin') {
+                // Process check-in reward
+                const today = new Date().toISOString().split('T')[0];
+                const reward = 0.06;
+                userData.balance += reward;
+                userData.totalEarning += reward;
+                userData.clicks++;
+                userData.tasksDoneToday++;
+                userData.lastCheckIn = today;
+                
+                // Check if this user qualifies for a referral reward
+                await checkReferralReward();
+                
+                await saveUserData();
+                updateUI();
+                updateCheckInButton();
+                updateTaskLimit();
+                showNotification(`Daily check-in successful! $${reward.toFixed(2)} added to your balance.`);
+            } else {
+                // Process premium ad reward
+                await addReward(0.03);
+                updateFeaturedAdButton();
+                showNotification('Congratulations! You have earned $0.03', 'success');
+            }
         }
         
         // Function to cancel link verification
         function cancelLinkVerification() {
             clearInterval(verificationTimer);
             document.getElementById('linkVerificationModal').style.display = 'none';
-            showNotification('Link verification cancelled. No reward earned.', 'info');
+            
+            // If it was a check-in verification, we need to revert the counter
+            if (currentVerificationType === 'checkin') {
+                // The counter was already incremented, so we need to decrement it
+                userData.featuredAdsWatchedToday--;
+                await saveUserData();
+                updateFeaturedAdButton();
+            }
+            
+            showNotification('Verification cancelled. No reward earned.', 'info');
+        }
+        
+        // Updated Daily Check In function to use verification
+        async function dailyCheckIn() {
+            const today = new Date().toISOString().split('T')[0];
+            if (userData.lastCheckIn === today) {
+                showNotification('You have already checked in today. Come back tomorrow!', 'error');
+                return;
+            }
+            if (userData.tasksDoneToday >= 35) {
+                showNotification('Daily task limit reached. Try again tomorrow.', 'error');
+                return;
+            }
+            
+            // Get a random check-in ad URL
+            const linkIndex = Math.floor(Math.random() * checkinAdUrls.length);
+            const linkUrl = checkinAdUrls[linkIndex];
+            
+            // Start the verification process
+            startLinkVerification(linkUrl, 'checkin');
+        }
+        
+        // Update check-in button
+        function updateCheckInButton() {
+            const checkInBtn = document.getElementById('checkinBtn');
+            const today = new Date().toISOString().split('T')[0];
+            if (userData.lastCheckIn === today) {
+                checkInBtn.disabled = true;
+                checkInBtn.textContent = 'Checked In';
+            } else {
+                checkInBtn.disabled = false;
+                checkInBtn.textContent = 'Check In';
+            }
         }
         
         // Updated Watched function to use new ad links
@@ -2017,12 +2019,24 @@
             const linkUrl = premiumAdUrls[linkIndex];
             
             // Start the verification process
-            startLinkVerification(linkUrl);
+            startLinkVerification(linkUrl, 'premium');
             
             // Update the counter immediately
             userData.featuredAdsWatchedToday++;
             await saveUserData();
             updateFeaturedAdButton();
+        }
+        
+        function updateFeaturedAdButton() {
+            const featuredBtn = document.getElementById('featuredAdBtn');
+            const watchedCount = userData.featuredAdsWatchedToday || 0;
+            if (watchedCount >= 100) {
+                featuredBtn.disabled = true;
+                featuredBtn.textContent = 'Limit Reached (100/100)';
+            } else {
+                featuredBtn.disabled = false;
+                featuredBtn.textContent = `Watch Now (${watchedCount}/100)`;
+            }
         }
         
         async function addReward(amount) {
