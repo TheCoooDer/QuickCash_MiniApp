@@ -26,7 +26,7 @@
             --checkin: #00897B;
             --link: #2962FF;
             --darkblue: #0D47A1;
-            --rewarded: #7B1FA2;
+            --links: #2196F3; /* Changed color for links ad */
         }
         * {
             margin: 0;
@@ -428,12 +428,12 @@
             cursor: not-allowed;
             transform: none;
         }
-        /* NEW: Rewarded Ad Task */
-        .rewarded-task {
-            background: linear-gradient(135deg, var(--rewarded), #9C27B0);
+        /* NEW: Links Ad Task */
+        .links-task {
+            background: linear-gradient(135deg, var(--links), #1976D2);
             border-radius: 12px;
             padding: 15px;
-            box-shadow: 0 6px 15px rgba(123, 31, 162, 0.15);
+            box-shadow: 0 6px 15px rgba(33, 150, 243, 0.15);
             color: white;
             position: relative;
             overflow: hidden;
@@ -441,7 +441,7 @@
             align-items: center;
             justify-content: space-between;
         }
-        .rewarded-task::before {
+        .links-task::before {
             content: '';
             position: absolute;
             top: -50%;
@@ -451,31 +451,31 @@
             background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
             transform: rotate(45deg);
         }
-        .rewarded-left {
+        .links-left {
             display: flex;
             align-items: center;
             gap: 12px;
         }
-        .rewarded-icon {
+        .links-icon {
             font-size: 28px;
             color: rgba(255, 255, 255, 0.9);
         }
-        .rewarded-info {
+        .links-info {
             text-align: left;
         }
-        .rewarded-title {
+        .links-title {
             font-size: 16px;
             font-weight: 700;
             margin-bottom: 2px;
         }
-        .rewarded-reward {
+        .links-reward {
             font-size: 13px;
             font-weight: 600;
             color: var(--warning);
         }
-        .rewarded-btn {
+        .links-btn {
             background: white;
-            color: var(--rewarded);
+            color: var(--links);
             border: none;
             padding: 8px 16px;
             border-radius: 20px;
@@ -488,11 +488,11 @@
             z-index: 0;
             position: relative;
         }
-        .rewarded-btn:hover {
+        .links-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
         }
-        .rewarded-btn:disabled {
+        .links-btn:disabled {
             background: rgba(255, 255, 255, 0.5);
             cursor: not-allowed;
             transform: none;
@@ -1254,19 +1254,19 @@
                             Watch Now (0/100)
                         </button>
                     </div>
-                    <!-- NEW: Rewarded Ad Task -->
-                    <div class="rewarded-task">
-                        <div class="rewarded-left">
-                            <div class="rewarded-icon">
-                                <i class="fas fa-play-circle"></i>
+                    <!-- NEW: Links Ad Task -->
+                    <div class="links-task">
+                        <div class="links-left">
+                            <div class="links-icon">
+                                <i class="fas fa-link"></i>
                             </div>
-                            <div class="rewarded-info">
-                                <div class="rewarded-title">Watch Video</div>
-                                <div class="rewarded-reward">Reward: $0.05</div>
+                            <div class="links-info">
+                                <div class="links-title">Links Ad</div>
+                                <div class="links-reward">Reward: $0.05</div>
                             </div>
                         </div>
-                        <button onclick="showRewardedAd()" class="rewarded-btn" id="rewardedAdBtn">
-                            Watch Video
+                        <button onclick="openLinksAd()" class="links-btn" id="linksAdBtn">
+                            Visit Link (0/10)
                         </button>
                     </div>
                     <!-- YouTube Subscribe Task -->
@@ -1630,7 +1630,7 @@
             referralRewardProcessed: false, // New field to track if referral reward has been processed
             referrals: [], // New field to store detailed referral information
             totalTasksCompleted: 0, // New field to track total tasks across all days
-            rewardedAdsWatchedToday: 0 // New field to track rewarded ads watched today
+            linksAdsVisitedToday: 0 // New field to track links ads visited today
         };
         // Ad URLs - Updated with new links
         const adUrls = [
@@ -1696,7 +1696,7 @@
                 referralRewardProcessed: false, // New field to track if referral reward has been processed
                 referrals: [], // New field to store detailed referral information
                 totalTasksCompleted: 0, // New field to track total tasks across all days
-                rewardedAdsWatchedToday: 0 // New field to track rewarded ads watched today
+                linksAdsVisitedToday: 0 // New field to track links ads visited today
             };
         }
         // Save user data to Firestore
@@ -1741,11 +1741,11 @@
                         console.log('Migrated referralRewardProcessed field');
                     }
                     
-                    // Initialize rewardedAdsWatchedToday if it doesn't exist
-                    if (userData.rewardedAdsWatchedToday === undefined) {
-                        userData.rewardedAdsWatchedToday = 0;
+                    // Initialize linksAdsVisitedToday if it doesn't exist
+                    if (userData.linksAdsVisitedToday === undefined) {
+                        userData.linksAdsVisitedToday = 0;
                         dataUpdated = true;
-                        console.log('Migrated rewardedAdsWatchedToday field');
+                        console.log('Migrated linksAdsVisitedToday field');
                     }
                     
                     // Save the updated data if migration was needed
@@ -1776,7 +1776,7 @@
                 updateTaskButtons();
                 updateCheckInButton();
                 updateFeaturedAdButton();
-                updateRewardedAdButton();
+                updateLinksAdButton();
                 updateSocialTaskButtons();
                 updateUI();
                 updateTaskLimit();
@@ -2040,6 +2040,8 @@
                 userData.lastCheckIn = today;
             } else if (verificationTaskType === 'featured') {
                 userData.featuredAdsWatchedToday++;
+            } else if (verificationTaskType === 'links') {
+                userData.linksAdsVisitedToday++;
             }
             
             // Check if this user qualifies for a referral reward
@@ -2057,6 +2059,8 @@
                 updateCheckInButton();
             } else if (verificationTaskType === 'featured') {
                 updateFeaturedAdButton();
+            } else if (verificationTaskType === 'links') {
+                updateLinksAdButton();
             }
             
             showNotification(`Verification complete! $${verificationReward.toFixed(2)} added to your balance.`, 'success');
@@ -2183,7 +2187,7 @@
                     updateTaskLimit();
                     updateFeaturedAdButton();
                     
-                    showNotification(`$0.03 Earned.`, 'success');
+                    showNotification(`Ad watched successfully! $0.03 added to your balance.`, 'success');
                 } else {
                     // Fallback to direct reward if ad script is not available
                     userData.balance += 0.03;
@@ -2227,10 +2231,10 @@
             }
         }
         
-        // NEW: Rewarded Ad function
-        async function showRewardedAd() {
-            if (userData.rewardedAdsWatchedToday >= 10) {
-                showNotification('You have reached the daily limit of 10 rewarded ads. Try again tomorrow.', 'error');
+        // NEW: Links Ad function
+        async function openLinksAd() {
+            if (userData.linksAdsVisitedToday >= 10) {
+                showNotification('You have reached the daily limit of 10 links ads. Try again tomorrow.', 'error');
                 return;
             }
             if (userData.tasksDoneToday >= 100) {
@@ -2238,56 +2242,24 @@
                 return;
             }
             
-            // Show loading overlay
-            document.getElementById('adLoadingOverlay').style.display = 'flex';
+            // Get a random ad URL
+            const linkIndex = Math.floor(Math.random() * adUrls.length);
+            const linkUrl = adUrls[linkIndex];
             
-            try {
-                // Call the rewarded ad function
-                if (typeof show_10038004 === 'function') {
-                    await show_10038004();
-                    
-                    // Ad was watched successfully, add reward
-                    userData.balance += 0.05;
-                    userData.totalEarning += 0.05;
-                    userData.tasksDoneToday++;
-                    userData.clicks++;
-                    userData.totalTasksCompleted++;
-                    userData.rewardedAdsWatchedToday++;
-                    
-                    // Check if this user qualifies for a referral reward
-                    await checkReferralReward();
-                    
-                    // Update referral progress for referrer
-                    await updateReferralProgress();
-                    
-                    await saveUserData();
-                    updateUI();
-                    updateTaskLimit();
-                    updateRewardedAdButton();
-                    
-                    showNotification(`Rewarded ad watched successfully! $0.05 added to your balance.`, 'success');
-                } else {
-                    showNotification('Ad service not available. Please try again later.', 'error');
-                }
-            } catch (error) {
-                console.error('Error showing rewarded ad:', error);
-                showNotification('Failed to load ad. Please try again.', 'error');
-            } finally {
-                // Hide loading overlay
-                document.getElementById('adLoadingOverlay').style.display = 'none';
-            }
+            // Start verification timer with 15 seconds
+            startVerificationTimer(linkUrl, 0.05, 'links');
         }
         
-        // Update rewarded ad button
-        function updateRewardedAdButton() {
-            const rewardedBtn = document.getElementById('rewardedAdBtn');
-            const watchedCount = userData.rewardedAdsWatchedToday || 0;
-            if (watchedCount >= 10) {
-                rewardedBtn.disabled = true;
-                rewardedBtn.textContent = 'Limit Reached';
+        // Update links ad button
+        function updateLinksAdButton() {
+            const linksBtn = document.getElementById('linksAdBtn');
+            const visitedCount = userData.linksAdsVisitedToday || 0;
+            if (visitedCount >= 10) {
+                linksBtn.disabled = true;
+                linksBtn.textContent = 'Limit Reached';
             } else {
-                rewardedBtn.disabled = false;
-                rewardedBtn.textContent = 'Watch Video';
+                linksBtn.disabled = false;
+                linksBtn.textContent = `Visit Link (${visitedCount}/10)`;
             }
         }
         
@@ -2361,7 +2333,7 @@
                 userData.tasksDoneToday = 0;
                 userData.featuredAdsWatchedToday = 0;
                 userData.linkAdsVisitedToday = 0;
-                userData.rewardedAdsWatchedToday = 0; // Reset rewarded ads counter
+                userData.linksAdsVisitedToday = 0; // Reset links ads counter
                 userData.lastTaskReset = today;
                 saveUserData();
                 return true;
@@ -2424,7 +2396,7 @@
                 checkInBtn.textContent = 'Limit Reached';
             }
             updateFeaturedAdButton();
-            updateRewardedAdButton();
+            updateLinksAdButton();
             updateSocialTaskButtons();
         }
         function enableTaskButtons() {
@@ -2435,7 +2407,7 @@
                 checkInBtn.textContent = 'Check In';
             }
             updateFeaturedAdButton();
-            updateRewardedAdButton();
+            updateLinksAdButton();
             updateSocialTaskButtons();
         }
         function updateTaskButtons() {}
@@ -2588,4 +2560,3 @@
     </script>
 </body>
 </html>
-
