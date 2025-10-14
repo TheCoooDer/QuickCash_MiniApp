@@ -426,6 +426,33 @@
             cursor: not-allowed;
             transform: none;
         }
+        /* Ad loading overlay */
+        .ad-loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            color: white;
+        }
+        .ad-loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
         /* YouTube and Telegram Tasks */
         .youtube-task {
             background: linear-gradient(135deg, var(--youtube), #D50000);
@@ -970,83 +997,72 @@
         .notification.info i {
             color: var(--primary);
         }
+        /* Verification Timer */
+        .verification-timer {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            text-align: center;
+            display: none;
+        }
+        .verification-timer.show {
+            display: block;
+        }
+        .verification-timer h3 {
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+        .timer-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(var(--primary) 0%, var(--primary) var(--progress), #e9ecef var(--progress), #e9ecef 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+        .timer-circle::before {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: white;
+        }
+        .timer-text {
+            position: relative;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .verification-message {
+            margin-bottom: 20px;
+            color: var(--gray);
+        }
+        .verification-close {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
         /* Responsive */
         @media (max-width: 500px) {
             .app-container {
                 max-width: 100%;
             }
         }
-        
-        /* Link Verification Modal */
-        .link-verification-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        .link-verification-content {
-            background: white;
-            border-radius: 16px;
-            padding: 25px;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-        .verification-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 15px;
-        }
-        .verification-message {
-            font-size: 16px;
-            color: var(--gray);
-            margin-bottom: 20px;
-        }
-        .verification-timer {
-            font-size: 36px;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 20px;
-        }
-        .verification-progress {
-            height: 8px;
-            background-color: #e9ecef;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 20px;
-        }
-        .verification-progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: 10px;
-            transition: width 1s linear;
-            width: 0%;
-        }
-        .verification-cancel {
-            background: #f5f5f5;
-            color: var(--dark);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .verification-cancel:hover {
-            background: #e0e0e0;
-        }
     </style>
-    <!-- Updated Ad Script -->
-    <script src='//libtl.com/sdk.js' data-zone='9916224' data-sdk='show_9916224'></script>
 </head>
 <body>
     <div class="app-container">
@@ -1095,7 +1111,7 @@
                     <h3 class="progress-title">Daily Task Limit</h3>
                     <div class="progress-header">
                         <span>Progress</span>
-                        <span id="taskLimitText">0 of 35</span>
+                        <span id="taskLimitText">0 of 100</span>
                     </div>
                     <div class="progress-bar">
                         <div class="progress-fill" id="taskProgress" style="width: 0%"></div>
@@ -1368,18 +1384,16 @@
             <div class="ad-loading-spinner"></div>
             <p>Loading ad, please wait...</p>
         </div>
-        
-        <!-- Link Verification Modal -->
-        <div class="link-verification-modal" id="linkVerificationModal">
-            <div class="link-verification-content">
-                <h3 class="verification-title" id="verificationTitle">Verifying Link Visit</h3>
-                <p class="verification-message" id="verificationMessage">Please stay on the link for 15 seconds to earn your reward</p>
-                <div class="verification-timer" id="verificationTimer">15</div>
-                <div class="verification-progress">
-                    <div class="verification-progress-fill" id="verificationProgress"></div>
-                </div>
-                <button class="verification-cancel" id="verificationCancel">Cancel</button>
+        <!-- Verification Timer -->
+        <div class="verification-timer" id="verificationTimer">
+            <h3>Verification in Progress</h3>
+            <div class="timer-circle" style="--progress: 0%">
+                <div class="timer-text" id="timerText">15s</div>
             </div>
+            <div class="verification-message">
+                Please stay on the page for 15 seconds to verify your visit
+            </div>
+            <button class="verification-close" id="verificationClose">Cancel</button>
         </div>
     </div>
     <script>
@@ -1510,8 +1524,8 @@
             referralRewardProcessed: false, // New field to track if referral reward has been processed
             referrals: [] // New field to store detailed referral information
         };
-        // Premium ad URLs - Updated with 100 new links
-        const premiumAdUrls = [
+        // Ad URLs - Updated with new links
+        const adUrls = [
             'https://www.effectivegatecpm.com/z2jn2ydz?key=696d7ad4454b7be1c8222a47f044f154',
             'https://www.effectivegatecpm.com/ejv0m8cv?key=7775dda4ea4b32769399558afb9597af',
             'https://www.effectivegatecpm.com/qub3zbrq3i?key=d852fef756861bd89c4f775136e1fdda',
@@ -1531,125 +1545,7 @@
             'https://shrinkme.click/omUU80PH',
             'https://shrinkme.click/H1HE',
             'https://shrinkme.click/FhEPlc',
-            'https://shrinkme.click/rKbEDC',
-            // Add more links to reach 100 total
-            'https://www.effectivegatecpm.com/z2jn2ydz?key=696d7ad4454b7be1c8222a47f044f155',
-            'https://www.effectivegatecpm.com/ejv0m8cv?key=7775dda4ea4b32769399558afb9597ag',
-            'https://www.effectivegatecpm.com/qub3zbrq3i?key=d852fef756861bd89c4f775136e1fddb',
-            'https://www.effectivegatecpm.com/vrz22uepfw?key=298621cc890b0e61db6be8866a62bc89',
-            'https://www.effectivegatecpm.com/suw0nq9i?key=466383182ed764e6be16b50776d8e8fd',
-            'https://www.effectivegatecpm.com/ebpv48yuy?key=ec6b3137e555bdf5c6d2e3664ce83ed1',
-            'https://www.effectivegatecpm.com/kfarq0tuw?key=e6a1cde9dcf8a5bf8f73fb24245c3de6',
-            'https://www.effectivegatecpm.com/tutkw1sahh?key=272554dae7b213c13d92f046080861a3',
-            'https://www.effectivegatecpm.com/tqypp62y2w?key=74cc971fb77af7a1038cdccbafd2432g',
-            'https://www.effectivegatecpm.com/abxysby62i?key=4061879b22a9fa181066a0f2c57ae72e',
-            'https://shrinkme.click/EJjdZ',
-            'https://shrinkme.click/wqEEOAbN',
-            'https://shrinkme.click/tgchanneL',
-            'https://shrinkme.click/FiverrSellerProfilE',
-            'https://shrinkme.click/eyioEWa',
-            'https://shrinkme.click/cwYDenBM',
-            'https://shrinkme.click/omUU80PI',
-            'https://shrinkme.click/H1HF',
-            'https://shrinkme.click/FhEPlD',
-            'https://shrinkme.click/rKbEDD',
-            // Continue adding more links to reach 100
-            'https://www.effectivegatecpm.com/z2jn2ydz?key=696d7ad4454b7be1c8222a47f044f156',
-            'https://www.effectivegatecpm.com/ejv0m8cv?key=7775dda4ea4b32769399558afb9597ah',
-            'https://www.effectivegatecpm.com/qub3zbrq3i?key=d852fef756861bd89c4f775136e1fddc',
-            'https://www.effectivegatecpm.com/vrz22uepfw?key=298621cc890b0e61db6be8866a62bc80',
-            'https://www.effectivegatecpm.com/suw0nq9i?key=466383182ed764e6be16b50776d8e8fe',
-            'https://www.effectivegatecpm.com/ebpv48yuy?key=ec6b3137e555bdf5c6d2e3664ce83ed2',
-            'https://www.effectivegatecpm.com/kfarq0tuw?key=e6a1cde9dcf8a5bf8f73fb24245c3de7',
-            'https://www.effectivegatecpm.com/tutkw1sahh?key=272554dae7b213c13d92f046080861a4',
-            'https://www.effectivegatecpm.com/tqypp62y2w?key=74cc971fb77af7a1038cdccbafd2432h',
-            'https://www.effectivegatecpm.com/abxysby62i?key=4061879b22a9fa181066a0f2c57ae72f',
-            'https://shrinkme.click/EJjdX',
-            'https://shrinkme.click/wqEEOAbO',
-            'https://shrinkme.click/tgchanneM',
-            'https://shrinkme.click/FiverrSellerProfilF',
-            'https://shrinkme.click/eyioEWb',
-            'https://shrinkme.click/cwYDenBN',
-            'https://shrinkme.click/omUU80PJ',
-            'https://shrinkme.click/H1HG',
-            'https://shrinkme.click/FhEPlE',
-            'https://shrinkme.click/rKbEDE',
-            // Continue adding more links to reach 100
-            'https://www.effectivegatecpm.com/z2jn2ydz?key=696d7ad4454b7be1c8222a47f044f157',
-            'https://www.effectivegatecpm.com/ejv0m8cv?key=7775dda4ea4b32769399558afb9597ai',
-            'https://www.effectivegatecpm.com/qub3zbrq3i?key=d852fef756861bd89c4f775136e1fddd',
-            'https://www.effectivegatecpm.com/vrz22uepfw?key=298621cc890b0e61db6be8866a62bc81',
-            'https://www.effectivegatecpm.com/suw0nq9i?key=466383182ed764e6be16b50776d8e8ff',
-            'https://www.effectivegatecpm.com/ebpv48yuy?key=ec6b3137e555bdf5c6d2e3664ce83ed3',
-            'https://www.effectivegatecpm.com/kfarq0tuw?key=e6a1cde9dcf8a5bf8f73fb24245c3de8',
-            'https://www.effectivegatecpm.com/tutkw1sahh?key=272554dae7b213c13d92f046080861a5',
-            'https://www.effectivegatecpm.com/tqypp62y2w?key=74cc971fb77af7a1038cdccbafd2432i',
-            'https://www.effectivegatecpm.com/abxysby62i?key=4061879b22a9fa181066a0f2c57ae72g',
-            'https://shrinkme.click/EJjdW',
-            'https://shrinkme.click/wqEEOAbP',
-            'https://shrinkme.click/tgchanneN',
-            'https://shrinkme.click/FiverrSellerProfilG',
-            'https://shrinkme.click/eyioEWc',
-            'https://shrinkme.click/cwYDenBO',
-            'https://shrinkme.click/omUU80PK',
-            'https://shrinkme.click/H1HH',
-            'https://shrinkme.click/FhEPlF',
-            'https://shrinkme.click/rKbEDF',
-            // Continue adding more links to reach 100
-            'https://www.effectivegatecpm.com/z2jn2ydz?key=696d7ad4454b7be1c8222a47f044f158',
-            'https://www.effectivegatecpm.com/ejv0m8cv?key=7775dda4ea4b32769399558afb9597aj',
-            'https://www.effectivegatecpm.com/qub3zbrq3i?key=d852fef756861bd89c4f775136e1fdde',
-            'https://www.effectivegatecpm.com/vrz22uepfw?key=298621cc890b0e61db6be8866a62bc82',
-            'https://www.effectivegatecpm.com/suw0nq9i?key=466383182ed764e6be16b50776d8e8fh',
-            'https://www.effectivegatecpm.com/ebpv48yuy?key=ec6b3137e555bdf5c6d2e3664ce83ed4',
-            'https://www.effectivegatecpm.com/kfarq0tuw?key=e6a1cde9dcf8a5bf8f73fb24245c3de9',
-            'https://www.effectivegatecpm.com/tutkw1sahh?key=272554dae7b213c13d92f046080861a6',
-            'https://www.effectivegatecpm.com/tqypp62y2w?key=74cc971fb77af7a1038cdccbafd2432j',
-            'https://www.effectivegatecpm.com/abxysby62i?key=4061879b22a9fa181066a0f2c57ae72h',
-            'https://shrinkme.click/EJjdV',
-            'https://shrinkme.click/wqEEOAbQ',
-            'https://shrinkme.click/tgchanneO',
-            'https://shrinkme.click/FiverrSellerProfilH',
-            'https://shrinkme.click/eyioEWd',
-            'https://shrinkme.click/cwYDenBP',
-            'https://shrinkme.click/omUU80PL',
-            'https://shrinkme.click/H1HI',
-            'https://shrinkme.click/FhEPlG',
-            'https://shrinkme.click/rKbEDG',
-            // Continue adding more links to reach 100
-            'https://www.effectivegatecpm.com/z2jn2ydz?key=696d7ad4454b7be1c8222a47f044f159',
-            'https://www.effectivegatecpm.com/ejv0m8cv?key=7775dda4ea4b32769399558afb9597ak',
-            'https://www.effectivegatecpm.com/qub3zbrq3i?key=d852fef756861bd89c4f775136e1fddf',
-            'https://www.effectivegatecpm.com/vrz22uepfw?key=298621cc890b0e61db6be8866a62bc83',
-            'https://www.effectivegatecpm.com/suw0nq9i?key=466383182ed764e6be16b50776d8e8fg',
-            'https://www.effectivegatecpm.com/ebpv48yuy?key=ec6b3137e555bdf5c6d2e3664ce83ed5',
-            'https://www.effectivegatecpm.com/kfarq0tuw?key=e6a1cde9dcf8a5bf8f73fb24245c3de0',
-            'https://www.effectivegatecpm.com/tutkw1sahh?key=272554dae7b213c13d92f046080861a7',
-            'https://www.effectivegatecpm.com/tqypp62y2w?key=74cc971fb77af7a1038cdccbafd2432k',
-            'https://www.effectivegatecpm.com/abxysby62i?key=4061879b22a9fa181066a0f2c57ae72i',
-            'https://shrinkme.click/EJjdU',
-            'https://shrinkme.click/wqEEOAbR',
-            'https://shrinkme.click/tgchanneP',
-            'https://shrinkme.click/FiverrSellerProfilI',
-            'https://shrinkme.click/eyioEWe',
-            'https://shrinkme.click/cwYDenBQ',
-            'https://shrinkme.click/omUU80PM',
-            'https://shrinkme.click/H1HJ',
-            'https://shrinkme.click/FhEPlH',
-            'https://shrinkme.click/rKbEDH'
-        ];
-        // Check-in ad URLs
-        const checkinAdUrls = [
-            'https://www.effectivegatecpm.com/z2jn2ydz?key=696d7ad4454b7be1c8222a47f044f154',
-            'https://www.effectivegatecpm.com/ejv0m8cv?key=7775dda4ea4b32769399558afb9597af',
-            'https://www.effectivegatecpm.com/qub3zbrq3i?key=d852fef756861bd89c4f775136e1fdda',
-            'https://www.effectivegatecpm.com/vrz22uepfw?key=298621cc890b0e61db6be8866a62bc88',
-            'https://www.effectivegatecpm.com/suw0nq9i?key=466383182ed764e6be16b50776d8e8fc',
-            'https://shrinkme.click/EJjdY',
-            'https://shrinkme.click/wqEEOAbM',
-            'https://shrinkme.click/tgchannel',
-            'https://shrinkme.click/FiverrSellerProfile',
-            'https://shrinkme.click/eyioEWz'
+            'https://shrinkme.click/rKbEDC'
         ];
         // Social task URLs
         const socialTaskUrls = {
@@ -1876,118 +1772,108 @@
                 container.appendChild(referralItem);
             });
         }
-        
-        // Link verification variables
+        // Verification timer variables
         let verificationTimer = null;
-        let verificationSeconds = 15;
-        let currentVerificationUrl = null;
-        let currentVerificationType = null; // 'checkin' or 'premium'
+        let verificationStartTime = null;
+        let verificationUrl = null;
+        let verificationReward = 0;
+        let verificationTaskType = null;
         
-        // Function to start link verification
-        function startLinkVerification(url, type = 'premium') {
-            currentVerificationUrl = url;
-            currentVerificationType = type;
-            verificationSeconds = 15;
+        // Start verification timer
+        function startVerificationTimer(url, reward, taskType) {
+            verificationUrl = url;
+            verificationReward = reward;
+            verificationTaskType = taskType;
+            verificationStartTime = Date.now();
             
-            // Update modal content based on type
-            const title = document.getElementById('verificationTitle');
-            const message = document.getElementById('verificationMessage');
+            const timerElement = document.getElementById('verificationTimer');
+            const timerText = document.getElementById('timerText');
+            const timerCircle = document.querySelector('.timer-circle');
             
-            if (type === 'checkin') {
-                title.textContent = 'Daily Check In Verification';
-                message.textContent = 'Please stay on the link for 15 seconds to complete your daily check-in';
-            } else {
-                title.textContent = 'Verifying Link Visit';
-                message.textContent = 'Please stay on the link for 15 seconds to earn your reward';
-            }
+            timerElement.classList.add('show');
             
-            // Show verification modal
-            document.getElementById('linkVerificationModal').style.display = 'flex';
-            document.getElementById('verificationTimer').textContent = verificationSeconds;
-            document.getElementById('verificationProgress').style.width = '0%';
-            
-            // Open the link in Telegram's in-app browser
+            // Open the link in a new tab
             tg.openLink(url);
             
-            // Start countdown
+            let secondsLeft = 15;
+            timerText.textContent = `${secondsLeft}s`;
+            
             verificationTimer = setInterval(() => {
-                verificationSeconds--;
-                document.getElementById('verificationTimer').textContent = verificationSeconds;
-                document.getElementById('verificationProgress').style.width = `${(15 - verificationSeconds) * 100 / 15}%`;
+                secondsLeft--;
+                timerText.textContent = `${secondsLeft}s`;
                 
-                if (verificationSeconds <= 0) {
+                // Update the progress circle
+                const progress = ((15 - secondsLeft) / 15) * 100;
+                timerCircle.style.setProperty('--progress', `${progress}%`);
+                
+                if (secondsLeft <= 0) {
                     clearInterval(verificationTimer);
-                    completeLinkVerification();
+                    completeVerification();
                 }
             }, 1000);
+            
+            // Handle cancel button
+            document.getElementById('verificationClose').onclick = () => {
+                clearInterval(verificationTimer);
+                timerElement.classList.remove('show');
+                showNotification('Verification cancelled. No reward was given.', 'error');
+            };
         }
         
-        // Function to complete link verification
-        async function completeLinkVerification() {
-            // Hide verification modal
-            document.getElementById('linkVerificationModal').style.display = 'none';
+        // Complete verification and give reward
+        async function completeVerification() {
+            const timerElement = document.getElementById('verificationTimer');
+            timerElement.classList.remove('show');
             
-            // Process based on verification type
-            if (currentVerificationType === 'checkin') {
-                // Process check-in reward
+            // Add reward and update user data
+            userData.balance += verificationReward;
+            userData.totalEarning += verificationReward;
+            userData.tasksDoneToday++;
+            userData.clicks++;
+            
+            // Update specific task counters
+            if (verificationTaskType === 'checkin') {
                 const today = new Date().toISOString().split('T')[0];
-                const reward = 0.06;
-                userData.balance += reward;
-                userData.totalEarning += reward;
-                userData.clicks++;
-                userData.tasksDoneToday++;
                 userData.lastCheckIn = today;
-                
-                // Check if this user qualifies for a referral reward
-                await checkReferralReward();
-                
-                await saveUserData();
-                updateUI();
+            } else if (verificationTaskType === 'featured') {
+                userData.featuredAdsWatchedToday++;
+            }
+            
+            // Check if this user qualifies for a referral reward
+            await checkReferralReward();
+            
+            await saveUserData();
+            updateUI();
+            updateTaskLimit();
+            
+            // Update specific buttons
+            if (verificationTaskType === 'checkin') {
                 updateCheckInButton();
-                updateTaskLimit();
-                showNotification(`Daily check-in successful! $${reward.toFixed(2)} added to your balance.`);
-            } else {
-                // Process premium ad reward
-                await addReward(0.03);
-                updateFeaturedAdButton();
-                showNotification('Congratulations! You have earned $0.03', 'success');
-            }
-        }
-        
-        // Function to cancel link verification
-        function cancelLinkVerification() {
-            clearInterval(verificationTimer);
-            document.getElementById('linkVerificationModal').style.display = 'none';
-            
-            // If it was a check-in verification, we need to revert the counter
-            if (currentVerificationType === 'checkin') {
-                // The counter was already incremented, so we need to decrement it
-                userData.featuredAdsWatchedToday--;
-                await saveUserData();
+            } else if (verificationTaskType === 'featured') {
                 updateFeaturedAdButton();
             }
             
-            showNotification('Verification cancelled. No reward earned.', 'info');
+            showNotification(`Verification complete! $${verificationReward.toFixed(2)} added to your balance.`, 'success');
         }
         
-        // Updated Daily Check In function to use verification
+        // Daily Check In function
         async function dailyCheckIn() {
             const today = new Date().toISOString().split('T')[0];
             if (userData.lastCheckIn === today) {
                 showNotification('You have already checked in today. Come back tomorrow!', 'error');
                 return;
             }
-            if (userData.tasksDoneToday >= 35) {
+            if (userData.tasksDoneToday >= 100) {
                 showNotification('Daily task limit reached. Try again tomorrow.', 'error');
                 return;
             }
             
-            // Get a random check-in ad URL
-            const linkIndex = Math.floor(Math.random() * checkinAdUrls.length);
-            const linkUrl = checkinAdUrls[linkIndex];
+            // Get a random ad URL for check-in
+            const linkIndex = Math.floor(Math.random() * adUrls.length);
+            const linkUrl = adUrls[linkIndex];
             
-            // Start the verification process
-            startLinkVerification(linkUrl, 'checkin');
+            // Start verification timer with 15 seconds
+            startVerificationTimer(linkUrl, 0.06, 'checkin');
         }
         
         // Update check-in button
@@ -2003,28 +1889,22 @@
             }
         }
         
-        // Updated Watched function to use new ad links
         async function Watched() {
             if (userData.featuredAdsWatchedToday >= 100) {
                 showNotification('You have reached the daily limit of 100 featured ads. Try again tomorrow.', 'error');
                 return;
             }
-            if (userData.tasksDoneToday >= 35) {
+            if (userData.tasksDoneToday >= 100) {
                 showNotification('Daily task limit reached. Try again tomorrow.', 'error');
                 return;
             }
             
-            // Get a random ad URL from the premium ad URLs
-            const linkIndex = userData.featuredAdsWatchedToday % premiumAdUrls.length;
-            const linkUrl = premiumAdUrls[linkIndex];
+            // Get a random ad URL for featured ads
+            const linkIndex = Math.floor(Math.random() * adUrls.length);
+            const linkUrl = adUrls[linkIndex];
             
-            // Start the verification process
-            startLinkVerification(linkUrl, 'premium');
-            
-            // Update the counter immediately
-            userData.featuredAdsWatchedToday++;
-            await saveUserData();
-            updateFeaturedAdButton();
+            // Start verification timer with 15 seconds
+            startVerificationTimer(linkUrl, 0.03, 'featured');
         }
         
         function updateFeaturedAdButton() {
@@ -2039,25 +1919,12 @@
             }
         }
         
-        async function addReward(amount) {
-            userData.balance += amount;
-            userData.totalEarning += amount;
-            userData.tasksDoneToday++;
-            userData.clicks++;
-            
-            // Check if this user qualifies for a referral reward
-            await checkReferralReward();
-            
-            await saveUserData();
-            updateUI();
-            updateTaskLimit();
-        }
         async function openSocialTask(taskId, link, reward) {
             if (userData.completedTasks.includes(taskId)) {
                 showNotification('You have already completed this task.', 'error');
                 return;
             }
-            if (userData.tasksDoneToday >= 35) {
+            if (userData.tasksDoneToday >= 100) {
                 showNotification('Daily task limit reached. Try again tomorrow.', 'error');
                 return;
             }
@@ -2065,7 +1932,6 @@
             button.disabled = true;
             button.textContent = 'Opening...';
             try {
-                // Open link in Telegram's in-app browser
                 tg.openLink(link);
                 userData.balance += reward;
                 userData.totalEarning += reward;
@@ -2094,7 +1960,7 @@
                 if (userData.completedTasks.includes(taskId)) {
                     button.disabled = true;
                     button.textContent = 'Completed';
-                } else if (userData.tasksDoneToday >= 35) {
+                } else if (userData.tasksDoneToday >= 100) {
                     button.disabled = true;
                     button.textContent = 'Limit Reached';
                 } else {
@@ -2148,10 +2014,10 @@
             const progressFill = document.getElementById('taskProgress');
             const taskLimitText = document.getElementById('taskLimitText');
             const countdownContainer = document.getElementById('countdownContainer');
-            const progress = (userData.tasksDoneToday / 35) * 100;
+            const progress = (userData.tasksDoneToday / 100) * 100;
             progressFill.style.width = `${progress}%`;
-            taskLimitText.textContent = `${userData.tasksDoneToday} of 35`;
-            if (userData.tasksDoneToday >= 35) {
+            taskLimitText.textContent = `${userData.tasksDoneToday} of 100`;
+            if (userData.tasksDoneToday >= 100) {
                 countdownContainer.style.display = 'block';
                 updateCountdown();
                 disableLimitedTaskButtons();
@@ -2302,10 +2168,6 @@
                 showNotification('Failed to copy referral link.', 'error');
             });
         });
-        
-        // Event listener for verification cancel button
-        document.getElementById('verificationCancel').addEventListener('click', cancelLinkVerification);
-        
         function setupSocialTaskButtons() {
             const youtubeBtn = document.getElementById('youtubeTaskBtn');
             if (youtubeBtn) {
@@ -2339,7 +2201,7 @@
             generateTopWithdrawals();
             updateCurrentDate();
             setInterval(() => {
-                if (userData.tasksDoneToday >= 35) {
+                if (userData.tasksDoneToday >= 100) {
                     updateCountdown();
                 }
             }, 1000);
