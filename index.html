@@ -283,18 +283,18 @@
             margin-right: 8px;
             vertical-align: middle;
         }
-        /* Tasks - NEW DESIGN */
+        /* Tasks - IMPROVED DESIGN */
         .task-list {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
         }
         /* Daily Check In Card */
         .checkin-task {
             background: linear-gradient(135deg, var(--checkin), #4DB6AC);
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 8px 20px rgba(0, 137, 123, 0.15);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 6px 15px rgba(0, 137, 123, 0.15);
             color: white;
             position: relative;
             overflow: hidden;
@@ -315,47 +315,42 @@
         .checkin-left {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
         .checkin-icon {
-            font-size: 36px;
+            font-size: 28px;
             color: rgba(255, 255, 255, 0.9);
         }
         .checkin-info {
             text-align: left;
         }
         .checkin-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-        .checkin-description {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-bottom: 8px;
-        }
-        .checkin-reward {
             font-size: 16px;
             font-weight: 700;
+            margin-bottom: 2px;
+        }
+        .checkin-reward {
+            font-size: 13px;
+            font-weight: 600;
             color: #FFFFFF;
         }
         .checkin-btn {
             background: white;
             color: var(--checkin);
             border: none;
-            padding: 12px 20px;
-            border-radius: 30px;
-            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
             white-space: nowrap;
             z-index: 0;
         }
         .checkin-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
         }
         .checkin-btn:disabled {
             background: rgba(255, 255, 255, 0.5);
@@ -365,9 +360,9 @@
         /* Featured Ad Task */
         .featured-task {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 8px 20px rgba(255, 82, 82, 0.15);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 6px 15px rgba(255, 82, 82, 0.15);
             color: white;
             position: relative;
             overflow: hidden;
@@ -388,61 +383,151 @@
         .featured-left {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
         .featured-icon {
-            font-size: 36px;
+            font-size: 28px;
             color: rgba(255, 255, 255, 0.9);
         }
         .featured-info {
             text-align: left;
         }
         .featured-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-        .featured-description {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-bottom: 8px;
-        }
-        .featured-reward {
-            color: white;
             font-size: 16px;
             font-weight: 700;
+            margin-bottom: 2px;
+        }
+        .featured-reward {
+            font-size: 13px;
+            font-weight: 600;
             color: var(--warning);
         }
         .featured-btn {
             background: white;
             color: var(--primary);
             border: none;
-            padding: 12px 20px;
-            border-radius: 30px;
-            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
             white-space: nowrap;
             z-index: 0;
             position: relative;
         }
         .featured-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
         }
         .featured-btn:disabled {
             background: rgba(255, 255, 255, 0.5);
             cursor: not-allowed;
             transform: none;
         }
+        /* Link Ad Task */
+        .link-ad-task {
+            background: linear-gradient(135deg, var(--link), #1565C0);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 6px 15px rgba(41, 98, 255, 0.15);
+            color: white;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .link-ad-task::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(45deg);
+        }
+        .link-ad-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .link-ad-icon {
+            font-size: 28px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        .link-ad-info {
+            text-align: left;
+        }
+        .link-ad-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+        .link-ad-reward {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--warning);
+        }
+        .link-ad-btn {
+            background: white;
+            color: var(--link);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            white-space: nowrap;
+            z-index: 0;
+            position: relative;
+        }
+        .link-ad-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+        .link-ad-btn:disabled {
+            background: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
+            transform: none;
+        }
+        /* Ad loading overlay */
+        .ad-loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            color: white;
+        }
+        .ad-loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
         /* YouTube and Telegram Tasks */
         .youtube-task {
             background: linear-gradient(135deg, var(--youtube), #D50000);
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 8px 20px rgba(255, 0, 0, 0.15);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 6px 15px rgba(255, 0, 0, 0.15);
             color: white;
             position: relative;
             overflow: hidden;
@@ -462,9 +547,9 @@
         }
         .telegram-task {
             background: linear-gradient(135deg, var(--telegram), #006699);
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 8px 20px rgba(0, 136, 204, 0.15);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 6px 15px rgba(0, 136, 204, 0.15);
             color: white;
             position: relative;
             overflow: hidden;
@@ -485,40 +570,35 @@
         .task-left {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
         .task-icon {
-            font-size: 36px;
+            font-size: 28px;
             color: rgba(255, 255, 255, 0.9);
         }
         .task-info {
             text-align: left;
         }
         .task-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-        .task-description {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-bottom: 8px;
-        }
-        .task-reward {
             font-size: 16px;
             font-weight: 700;
+            margin-bottom: 2px;
+        }
+        .task-reward {
+            font-size: 13px;
+            font-weight: 600;
             color: var(--warning);
         }
         .task-btn {
             background: white;
             border: none;
-            padding: 12px 18px;
-            border-radius: 30px;
-            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
             white-space: nowrap;
             position: relative;
             z-index: 1;
@@ -531,108 +611,12 @@
         }
         .task-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
         }
         .task-btn:disabled {
             background: rgba(255, 255, 255, 0.5);
             cursor: not-allowed;
             transform: none;
-        }
-        /* Verification Modal */
-        .verification-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        .verification-modal.show {
-            display: flex;
-        }
-        .verification-content {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-        .verification-icon {
-            font-size: 60px;
-            color: var(--primary);
-            margin-bottom: 20px;
-        }
-        .verification-title {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 15px;
-        }
-        .verification-description {
-            font-size: 16px;
-            color: var(--gray);
-            margin-bottom: 25px;
-            line-height: 1.5;
-        }
-        .verification-timer {
-            font-size: 36px;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 20px;
-        }
-        .verification-progress {
-            width: 100%;
-            height: 8px;
-            background-color: #e9ecef;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 25px;
-        }
-        .verification-progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: 10px;
-            transition: width 1s linear;
-        }
-        .verification-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-        }
-        .verification-btn {
-            padding: 12px 25px;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: none;
-        }
-        .verify-btn {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-        }
-        .verify-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 82, 82, 0.3);
-        }
-        .verify-btn:disabled {
-            background: var(--gray);
-            cursor: not-allowed;
-            transform: none;
-        }
-        .cancel-btn {
-            background: #f5f5f5;
-            color: var(--dark);
-        }
-        .cancel-btn:hover {
-            background: #e0e0e0;
         }
         /* Referral */
         .referral-container {
@@ -745,6 +729,68 @@
             font-weight: 600;
             margin-top: 10px;
         }
+        /* Referral List */
+        .referral-list {
+            margin-top: 20px;
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+        .referral-list h3 {
+            font-size: 18px;
+            color: var(--dark);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .referral-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: #F5F5F5;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        .referral-item:last-child {
+            margin-bottom: 0;
+        }
+        .referral-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        .referral-details {
+            flex: 1;
+        }
+        .referral-name {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        .referral-date {
+            font-size: 12px;
+            color: var(--gray);
+        }
+        .referral-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .referral-status.pending {
+            background-color: #FFF8E1;
+            color: var(--warning);
+        }
+        .referral-status.completed {
+            background-color: #E8F5E9;
+            color: var(--success);
+        }
         /* Support */
         .support-card {
             background: white;
@@ -811,46 +857,62 @@
         .withdraw-info {
             background: #F5F5F5;
             border-radius: 12px;
-            padding: 20px;
+            padding: 15px;
             margin-bottom: 25px;
         }
         .withdraw-info h3 {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             color: var(--dark);
-            font-size: 18px;
+            font-size: 16px;
         }
         .info-item {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 12px;
-            padding-bottom: 12px;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
             border-bottom: 1px solid #E0E0E0;
+            font-size: 14px;
         }
         .info-item:last-child {
             margin-bottom: 0;
             padding-bottom: 0;
             border-bottom: none;
         }
+        .withdraw-message {
+            background: #FFF8E1;
+            border: 1px solid var(--warning);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: var(--dark);
+            text-align: center;
+        }
+        .withdraw-message i {
+            color: var(--warning);
+            margin-right: 5px;
+        }
         .withdraw-form {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
         }
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
         .form-group label {
             font-weight: 600;
             color: var(--dark);
+            font-size: 14px;
         }
         .form-group select,
         .form-group input {
-            padding: 15px;
+            padding: 12px;
             border: 1px solid #E0E0E0;
-            border-radius: 10px;
-            font-size: 16px;
+            border-radius: 8px;
+            font-size: 14px;
             transition: border-color 0.3s;
         }
         .form-group select:focus,
@@ -862,9 +924,9 @@
             background: linear-gradient(135deg, var(--success), #00A152);
             color: white;
             border: none;
-            padding: 18px;
-            border-radius: 10px;
-            font-size: 16px;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
@@ -881,34 +943,34 @@
 
         /* === NEW: Top 5 Withdrawals Section === */
         .top-withdrawals-section {
-            margin-top: 30px;
+            margin-top: 25px;
         }
         .top-withdrawals-section h3 {
-            font-size: 18px;
+            font-size: 16px;
             color: var(--dark);
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             text-align: center;
         }
         #topWithdrawalsList {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
         .withdrawal-proof-card {
             background: #F5F5F5;
-            padding: 12px;
-            border-radius: 10px;
+            padding: 10px;
+            border-radius: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 14px;
+            font-size: 13px;
             color: var(--dark);
         }
         .proof-left .proof-name {
             font-weight: 600;
         }
         .proof-left .proof-method-time {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--gray);
         }
         .proof-right .proof-amount {
@@ -916,7 +978,7 @@
             color: var(--success);
         }
         .proof-right .proof-status {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--success);
         }
 
@@ -1011,6 +1073,8 @@
             }
         }
     </style>
+    <!-- Updated Ad Script -->
+    <script src='//libtl.com/sdk.js' data-zone='9916224' data-sdk='show_9916224'></script>
 </head>
 <body>
     <div class="app-container">
@@ -1094,8 +1158,7 @@
                             </div>
                             <div class="checkin-info">
                                 <div class="checkin-title">Daily Check In</div>
-                                <div class="checkin-description">Claim your daily reward</div>
-                                <div class="checkin-reward">Reward: $0.10</div>
+                                <div class="checkin-reward">Reward: $0.06</div>
                             </div>
                         </div>
                         <button onclick="dailyCheckIn()" class="checkin-btn" id="checkinBtn">
@@ -1110,12 +1173,26 @@
                             </div>
                             <div class="featured-info">
                                 <div class="featured-title">Premium Ads</div>
-                                <div class="featured-description">Click Continue</div>
-                                <div class="featured-reward">Reward: $0.05</div>
+                                <div class="featured-reward">Reward: $0.03</div>
                             </div>
                         </div>
                         <button onclick="Watched()" class="featured-btn" id="featuredAdBtn">
                             Watch Now (0/100)
+                        </button>
+                    </div>
+                    <!-- Link Ad Task -->
+                    <div class="link-ad-task">
+                        <div class="link-ad-left">
+                            <div class="link-ad-icon">
+                                <i class="fas fa-link"></i>
+                            </div>
+                            <div class="link-ad-info">
+                                <div class="link-ad-title">Link Ads</div>
+                                <div class="link-ad-reward">Reward: $0.04</div>
+                            </div>
+                        </div>
+                        <button onclick="visitLinkAd()" class="link-ad-btn" id="linkAdBtn">
+                            Visit Link (0/20)
                         </button>
                     </div>
                     <!-- YouTube Subscribe Task -->
@@ -1126,8 +1203,7 @@
                             </div>
                             <div class="task-info">
                                 <div class="task-title">Subscribe YouTube</div>
-                                <div class="task-description">Subscribe to our channel</div>
-                                <div class="task-reward">Reward: $0.15</div>
+                                <div class="task-reward">Reward: $0.08</div>
                             </div>
                         </div>
                         <button class="task-btn" id="youtubeTaskBtn">
@@ -1142,8 +1218,7 @@
                             </div>
                             <div class="task-info">
                                 <div class="task-title">Join Telegram</div>
-                                <div class="task-description">Join our channel</div>
-                                <div class="task-reward">Reward: $0.10</div>
+                                <div class="task-reward">Reward: $0.06</div>
                             </div>
                         </div>
                         <button class="task-btn" id="telegramTaskBtn">
@@ -1157,7 +1232,7 @@
                 <div class="referral-container">
                     <div class="referral-header">
                         <h2>Referral Program</h2>
-                        <p>Invite friends and earn $0.30 for each qualified referral!</p>
+                        <p>Invite friends and earn $0.17 for each qualified referral!</p>
                     </div>
                     <div class="referral-link-container">
                         <div class="referral-link" id="referralLink">Generating...</div>
@@ -1181,7 +1256,7 @@
                         <ul>
                             <li>Share your unique referral link with friends</li>
                             <li>They must join using your link and complete at least 5 tasks</li>
-                            <li>You'll earn $0.30 for each qualified referral</li>
+                            <li>You'll earn $0.17 for each qualified referral</li>
                             <li>No limit on how many you can refer!</li>
                         </ul>
                         <div class="referral-badge">
@@ -1189,6 +1264,15 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- NEW: Referral List Section -->
+                <div class="referral-list">
+                    <h3>Your Referrals</h3>
+                    <div id="referralListContainer">
+                        <p style="text-align: center; color: var(--gray);">No referrals yet. Start sharing your link!</p>
+                    </div>
+                </div>
+                
                 <div class="support-card">
                     <h3>Referral Benefits</h3>
                     <ul style="padding-left: 20px; color: var(--gray);">
@@ -1249,13 +1333,20 @@
                         </div>
                         <div class="info-item">
                             <span>Referral Requirement:</span>
-                            <span id="referralRequirement">30 referrals needed</span>
+                            <span id="referralRequirement">10 referrals needed</span>
                         </div>
                         <div class="info-item">
                             <span>Processing Time:</span>
                             <span>48 hours</span>
                         </div>
                     </div>
+                    
+                    <!-- NEW: Withdrawal Message -->
+                    <div class="withdraw-message">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>Important:</strong> Please contact me first before submitting any withdrawal request for verification.
+                    </div>
+                    
                     <form class="withdraw-form" id="withdrawForm">
                         <div class="form-group">
                             <label for="withdrawMethod">Withdrawal Method</label>
@@ -1315,30 +1406,10 @@
             <i class="fas fa-check-circle"></i>
             <span id="notificationText">Success!</span>
         </div>
-        
-        <!-- Verification Modal -->
-        <div class="verification-modal" id="verificationModal">
-            <div class="verification-content">
-                <div class="verification-icon">
-                    <i class="fas fa-clock"></i>
-                </div>
-                <h3 class="verification-title">Stay on the Page</h3>
-                <p class="verification-description">
-                    Please stay on this page for <strong>15 seconds</strong> to verify your visit and earn the reward.
-                </p>
-                <div class="verification-timer" id="verificationTimer">15</div>
-                <div class="verification-progress">
-                    <div class="verification-progress-fill" id="verificationProgress" style="width: 0%"></div>
-                </div>
-                <div class="verification-buttons">
-                    <button class="verification-btn verify-btn" id="verifyBtn" disabled>
-                        Verify & Claim Reward
-                    </button>
-                    <button class="verification-btn cancel-btn" id="cancelBtn">
-                        Cancel
-                    </button>
-                </div>
-            </div>
+        <!-- Ad Loading Overlay -->
+        <div class="ad-loading-overlay" id="adLoadingOverlay" style="display: none;">
+            <div class="ad-loading-spinner"></div>
+            <p>Loading ad, please wait...</p>
         </div>
     </div>
     <script>
@@ -1465,69 +1536,38 @@
             lastCheckIn: null,
             lastTaskReset: null,
             featuredAdsWatchedToday: 0,
-            referralRewardProcessed: false // New field to track if referral reward has been processed
+            linkAdsVisitedToday: 0,
+            referralRewardProcessed: false, // New field to track if referral reward has been processed
+            referrals: [] // New field to store detailed referral information
         };
-        // Ad links for check-in and premium ads
-        const adLinks = [
-            'https://www.effectivegatecpm.com/z2jn2ydz?key=696d7ad4454b7be1c8222a47f044f154',
-            'https://www.effectivegatecpm.com/ejv0m8cv?key=7775dda4ea4b32769399558afb9597af',
-            'https://www.effectivegatecpm.com/qub3zbrq3i?key=d852fef756861bd89c4f775136e1fdda',
-            'https://www.effectivegatecpm.com/vrz22uepfw?key=298621cc890b0e61db6be8866a62bc88',
-            'https://www.effectivegatecpm.com/suw0nq9i?key=466383182ed764e6be16b50776d8e8fc',
-            'https://www.effectivegatecpm.com/ebpv48yuy?key=ec6b3137e555bdf5c6d2e3664ce83ed0',
-            'https://www.effectivegatecpm.com/kfarq0tuw?key=e6a1cde9dcf8a5bf8f73fb24245c3de5',
-            'https://www.effectivegatecpm.com/tutkw1sahh?key=272554dae7b213c13d92f046080861a2',
-            'https://www.effectivegatecpm.com/tqypp62y2w?key=74cc971fb77af7a1038cdccbafd2432f',
-            'https://www.effectivegatecpm.com/abxysby62i?key=4061879b22a9fa181066a0f2c57ae72d',
-            'https://shrinkme.click/EJjdY',
-            'https://shrinkme.click/wqEEOAbM',
-            'https://shrinkme.click/tgchannel',
-            'https://shrinkme.click/FiverrSellerProfile',
-            'https://shrinkme.click/eyioEWz',
-            'https://shrinkme.click/cwYDenBL',
-            'https://shrinkme.click/omUU80PH',
-            'https://shrinkme.click/H1HE',
-            'https://shrinkme.click/FhEPlc',
-            'https://shrinkme.click/rKbEDC'
+        // Link ad URLs - Updated with 20 new links
+        const linkAdUrls = [
+            'https://www.revenuecpmgate.com/ebpv48yuy?key=ec6b3137e555bdf5c6d2e3664ce83ed0',
+            'https://www.revenuecpmgate.com/kfarq0tuw?key=e6a1cde9dcf8a5bf8f73fb24245c3de5',
+            'https://www.revenuecpmgate.com/tutkw1sahh?key=272554dae7b213c13d92f046080861a2',
+            'https://www.revenuecpmgate.com/tqypp62y2w?key=74cc971fb77af7a1038cdccbafd2432f',
+            'https://www.revenuecpmgate.com/abxysby62i?key=4061879b22a9fa181066a0f2c57ae72d',
+            'https://otieu.com/4/9923541',
+            'https://otieu.com/4/9923540',
+            'https://otieu.com/4/9923538',
+            'https://otieu.com/4/9923537',
+            'https://otieu.com/4/9904808',
+            'https://www.revenuecpmgate.com/zxvqw3rty?key=9f8a5bf8f73fb24245c3de5',
+            'https://www.revenuecpmgate.com/mnbcv4iop?key=272554dae7b213c13d92f046080861a2',
+            'https://www.revenuecpmgate.com/lkjhg5fds?key=74cc971fb77af7a1038cdccbafd2432f',
+            'https://www.revenuecpmgate.com/poiuy6trew?key=4061879b22a9fa181066a0f2c57ae72d',
+            'https://otieu.com/4/9923542',
+            'https://otieu.com/4/9923543',
+            'https://otieu.com/4/9923539',
+            'https://otieu.com/4/9923536',
+            'https://otieu.com/4/9904809',
+            'https://otieu.com/4/9904810'
         ];
         // Social task URLs
         const socialTaskUrls = {
             'youtubeTaskBtn': 'https://www.youtube.com/@SufyanCircuit',
             'telegramTaskBtn': 'https://t.me/EarnOnlineWithSufyan'
         };
-        
-        // Verification system variables
-        let verificationTimer = null;
-        let verificationStartTime = null;
-        let currentVerificationTask = null;
-        let verificationInterval = null;
-        let pageFocusLost = false;
-        let verificationWindow = null;
-        
-        // Track page visibility
-        document.addEventListener('visibilitychange', function() {
-            if (document.hidden && verificationTimer) {
-                pageFocusLost = true;
-                cancelVerification();
-                showNotification('Verification failed! Please stay on the verification page.', 'error');
-            }
-        });
-        
-        // Track window focus
-        window.addEventListener('blur', function() {
-            if (verificationTimer) {
-                pageFocusLost = true;
-            }
-        });
-        
-        window.addEventListener('focus', function() {
-            if (verificationTimer && pageFocusLost) {
-                pageFocusLost = true;
-                cancelVerification();
-                showNotification('Verification failed! Please stay on the verification page.', 'error');
-            }
-        });
-        
         // Helper function to initialize default user data
         function initializeDefaultUserData() {
             userData = {
@@ -1550,7 +1590,9 @@
                 lastCheckIn: null,
                 lastTaskReset: null,
                 featuredAdsWatchedToday: 0,
-                referralRewardProcessed: false // New field to track if referral reward has been processed
+                linkAdsVisitedToday: 0,
+                referralRewardProcessed: false, // New field to track if referral reward has been processed
+                referrals: [] // New field to store detailed referral information
             };
         }
         // Save user data to Firestore
@@ -1590,10 +1632,12 @@
                 updateTaskButtons();
                 updateCheckInButton();
                 updateFeaturedAdButton();
+                updateLinkAdButton();
                 updateSocialTaskButtons();
                 updateUI();
                 updateTaskLimit();
                 loadUserProfilePicture(userData.id, userData.photo, document.getElementById('userAvatar'));
+                updateReferralList();
             } catch (error) {
                 console.error('Error loading user data:', error);
                 showNotification('Failed to load user data', 'error');
@@ -1613,6 +1657,21 @@
                     
                     // Update the referrer's data
                     referrerData.totalRefers += 1;
+                    
+                    // Add referral to referrer's detailed list
+                    if (!referrerData.referrals) {
+                        referrerData.referrals = [];
+                    }
+                    
+                    const newReferral = {
+                        id: userData.id,
+                        name: userData.name,
+                        joinedAt: new Date().toISOString(),
+                        status: 'pending', // pending until they complete 5 tasks
+                        tasksCompleted: 0
+                    };
+                    
+                    referrerData.referrals.push(newReferral);
                     
                     // Save the referrer's updated data
                     await db.collection('users').doc(referrerData.id.toString()).set(referrerData);
@@ -1643,9 +1702,20 @@
                         const referrerDoc = referrersSnapshot.docs[0];
                         const referrerData = referrerDoc.data();
                         
-                        // Add reward to referrer
-                        referrerData.balance += 0.30;
-                        referrerData.referralEarnings += 0.30;
+                        // Add reward to referrer (decreased by 30% from $0.24 to $0.17)
+                        const rewardAmount = 0.17;
+                        referrerData.balance += rewardAmount;
+                        referrerData.referralEarnings += rewardAmount;
+                        
+                        // Update the referral status in the referrer's detailed list
+                        if (referrerData.referrals) {
+                            const referralIndex = referrerData.referrals.findIndex(r => r.id === userData.id);
+                            if (referralIndex !== -1) {
+                                referrerData.referrals[referralIndex].status = 'completed';
+                                referrerData.referrals[referralIndex].tasksCompleted = userData.tasksDoneToday;
+                                referrerData.referrals[referralIndex].completedAt = new Date().toISOString();
+                            }
+                        }
                         
                         // Save the referrer's updated data
                         await db.collection('users').doc(referrerData.id.toString()).set(referrerData);
@@ -1656,11 +1726,11 @@
                         
                         // Notify the referrer (if we had a way to send notifications)
                         // For now, we'll just log it
-                        console.log(`Referral reward of $0.30 processed for referrer ${referrerData.id}`);
+                        console.log(`Referral reward of $${rewardAmount} processed for referrer ${referrerData.id}`);
                         
                         // Show notification to the current user
                         setTimeout(() => {
-                            showNotification(`Congratulations! You've completed 5 tasks. Your referrer (${userData.referredBy}) has received $0.30!`, 'success');
+                            showNotification(`Congratulations! You've completed 5 tasks. Your referrer (${userData.referredBy}) has received $${rewardAmount}!`, 'success');
                         }, 1000);
                     }
                 } catch (error) {
@@ -1688,110 +1758,37 @@
                 }
             }
         }
-        
-        // Verification functions
-        function startVerification(taskId, url, reward) {
-            currentVerificationTask = { taskId, url, reward };
-            pageFocusLost = false;
+        // Update referral list display
+        function updateReferralList() {
+            const container = document.getElementById('referralListContainer');
+            if (!container) return;
             
-            // Open the link in a new window
-            verificationWindow = window.open(url, '_blank');
+            if (!userData.referrals || userData.referrals.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: var(--gray);">No referrals yet. Start sharing your link!</p>';
+                return;
+            }
             
-            // Show verification modal
-            const modal = document.getElementById('verificationModal');
-            modal.classList.add('show');
+            container.innerHTML = '';
             
-            // Start timer
-            let timeLeft = 15;
-            const timerElement = document.getElementById('verificationTimer');
-            const progressElement = document.getElementById('verificationProgress');
-            const verifyBtn = document.getElementById('verifyBtn');
-            
-            verificationStartTime = Date.now();
-            
-            verificationInterval = setInterval(() => {
-                timeLeft--;
-                timerElement.textContent = timeLeft;
-                progressElement.style.width = `${((15 - timeLeft) / 15) * 100}%`;
+            userData.referrals.forEach(referral => {
+                const referralItem = document.createElement('div');
+                referralItem.className = 'referral-item';
                 
-                if (timeLeft <= 0) {
-                    clearInterval(verificationInterval);
-                    verifyBtn.disabled = false;
-                    timerElement.textContent = '0';
-                    progressElement.style.width = '100%';
-                }
-            }, 1000);
-            
-            // Set up cancel button
-            document.getElementById('cancelBtn').onclick = cancelVerification;
-            verifyBtn.onclick = completeVerification;
+                const statusClass = referral.status === 'completed' ? 'completed' : 'pending';
+                const statusText = referral.status === 'completed' ? 'Completed' : 'Pending';
+                
+                referralItem.innerHTML = `
+                    <div class="referral-avatar">${getUserInitials(referral.name)}</div>
+                    <div class="referral-details">
+                        <div class="referral-name">${referral.name}</div>
+                        <div class="referral-date">Joined: ${new Date(referral.joinedAt).toLocaleDateString()}</div>
+                    </div>
+                    <div class="referral-status ${statusClass}">${statusText}</div>
+                `;
+                
+                container.appendChild(referralItem);
+            });
         }
-        
-        function cancelVerification() {
-            if (verificationInterval) {
-                clearInterval(verificationInterval);
-                verificationInterval = null;
-            }
-            
-            if (verificationWindow) {
-                verificationWindow.close();
-                verificationWindow = null;
-            }
-            
-            document.getElementById('verificationModal').classList.remove('show');
-            currentVerificationTask = null;
-            pageFocusLost = false;
-            
-            // Reset timer display
-            document.getElementById('verificationTimer').textContent = '15';
-            document.getElementById('verificationProgress').style.width = '0%';
-            document.getElementById('verifyBtn').disabled = true;
-        }
-        
-        async function completeVerification() {
-            if (!currentVerificationTask || pageFocusLost) {
-                showNotification('Verification failed! Please try again.', 'error');
-                cancelVerification();
-                return;
-            }
-            
-            const { taskId, url, reward } = currentVerificationTask;
-            
-            // Additional verification: check if user actually stayed for 15 seconds
-            const elapsedTime = Date.now() - verificationStartTime;
-            if (elapsedTime < 14000) { // Allow some margin for timing
-                showNotification('Verification failed! Please stay for the full duration.', 'error');
-                cancelVerification();
-                return;
-            }
-            
-            // Award the reward
-            userData.balance += reward;
-            userData.totalEarning += reward;
-            userData.tasksDoneToday++;
-            userData.clicks++;
-            
-            if (taskId && !userData.completedTasks.includes(taskId)) {
-                userData.completedTasks.push(taskId);
-            }
-            
-            // Check if this user qualifies for a referral reward
-            await checkReferralReward();
-            
-            await saveUserData();
-            updateUI();
-            updateTaskLimit();
-            
-            if (taskId) {
-                updateSocialTaskButton(taskId);
-            } else {
-                updateFeaturedAdButton();
-            }
-            
-            showNotification(`Verification successful! $${reward.toFixed(2)} added to your balance.`, 'success');
-            cancelVerification();
-        }
-        
         // Daily Check In function
         async function dailyCheckIn() {
             const today = new Date().toISOString().split('T')[0];
@@ -1803,13 +1800,31 @@
                 showNotification('Daily task limit reached. Try again tomorrow.', 'error');
                 return;
             }
-            
-            // Get a random ad link
-            const randomIndex = Math.floor(Math.random() * adLinks.length);
-            const adUrl = adLinks[randomIndex];
-            
-            // Start verification process
-            startVerification(null, adUrl, 0.10);
+            document.getElementById('adLoadingOverlay').style.display = 'flex';
+            try {
+                await show_9916224();
+                document.getElementById('adLoadingOverlay').style.display = 'none';
+                // Decreased by 30% from $0.08 to $0.06
+                const reward = 0.06;
+                userData.balance += reward;
+                userData.totalEarning += reward;
+                userData.clicks++;
+                userData.tasksDoneToday++;
+                userData.lastCheckIn = today;
+                
+                // Check if this user qualifies for a referral reward
+                await checkReferralReward();
+                
+                await saveUserData();
+                updateUI();
+                updateCheckInButton();
+                updateTaskLimit();
+                showNotification(`Daily check-in successful! $${reward.toFixed(2)} added to your balance.`);
+            } catch (error) {
+                document.getElementById('adLoadingOverlay').style.display = 'none';
+                showNotification('Failed to load ad. Please try again later.', 'error');
+                console.error('Ad error:', error);
+            }
         }
         // Update check-in button
         function updateCheckInButton() {
@@ -1825,20 +1840,30 @@
         }
         async function Watched() {
             if (userData.featuredAdsWatchedToday >= 100) {
-                showNotification('You have reached the daily limit of 100 premium ads. Try again tomorrow.', 'error');
+                showNotification('You have reached the daily limit of 100 featured ads. Try again tomorrow.', 'error');
                 return;
             }
             if (userData.tasksDoneToday >= 35) {
                 showNotification('Daily task limit reached. Try again tomorrow.', 'error');
                 return;
             }
-            
-            // Get a random ad link
-            const randomIndex = Math.floor(Math.random() * adLinks.length);
-            const adUrl = adLinks[randomIndex];
-            
-            // Start verification process
-            startVerification(null, adUrl, 0.05);
+            document.getElementById('adLoadingOverlay').style.display = 'flex';
+            try {
+                await show_9916224();
+                document.getElementById('adLoadingOverlay').style.display = 'none';
+                userData.featuredAdsWatchedToday++;
+                
+                // Add reward and check for referral rewards (decreased by 30% from $0.04 to $0.03)
+                await addReward(0.03);
+                
+                updateFeaturedAdButton();
+                showNotification('Congratulations! You have earned $0.03', 'success');
+            } catch (error) {
+                document.getElementById('adLoadingOverlay').style.display = 'none';
+                showNotification('Failed to load ad. Please try again later.', 'error');
+                console.error('Ad error:', error);
+                updateFeaturedAdButton();
+            }
         }
         function updateFeaturedAdButton() {
             const featuredBtn = document.getElementById('featuredAdBtn');
@@ -1851,6 +1876,59 @@
                 featuredBtn.textContent = `Watch Now (${watchedCount}/100)`;
             }
         }
+        async function visitLinkAd() {
+            if (userData.linkAdsVisitedToday >= 20) {
+                showNotification('You have reached the daily limit of 20 link ads. Try again tomorrow.', 'error');
+                return;
+            }
+            if (userData.tasksDoneToday >= 35) {
+                showNotification('Daily task limit reached. Try again tomorrow.', 'error');
+                return;
+            }
+            document.getElementById('adLoadingOverlay').style.display = 'flex';
+            try {
+                const linkIndex = userData.linkAdsVisitedToday % linkAdUrls.length;
+                const linkUrl = linkAdUrls[linkIndex];
+                tg.openLink(linkUrl);
+                document.getElementById('adLoadingOverlay').style.display = 'none';
+                userData.linkAdsVisitedToday++;
+                
+                // Add reward and check for referral rewards (decreased by 30% from $0.05 to $0.04)
+                await addReward(0.04);
+                
+                updateLinkAdButton();
+                showNotification('Congratulations! You have earned $0.04', 'success');
+            } catch (error) {
+                document.getElementById('adLoadingOverlay').style.display = 'none';
+                showNotification('Failed to open link. Please try again later.', 'error');
+                console.error('Link error:', error);
+                updateLinkAdButton();
+            }
+        }
+        function updateLinkAdButton() {
+            const linkAdBtn = document.getElementById('linkAdBtn');
+            const visitedCount = userData.linkAdsVisitedToday || 0;
+            if (visitedCount >= 20) {
+                linkAdBtn.disabled = true;
+                linkAdBtn.textContent = 'Limit Reached (20/20)';
+            } else {
+                linkAdBtn.disabled = false;
+                linkAdBtn.textContent = `Visit Link (${visitedCount}/20)`;
+            }
+        }
+        async function addReward(amount) {
+            userData.balance += amount;
+            userData.totalEarning += amount;
+            userData.tasksDoneToday++;
+            userData.clicks++;
+            
+            // Check if this user qualifies for a referral reward
+            await checkReferralReward();
+            
+            await saveUserData();
+            updateUI();
+            updateTaskLimit();
+        }
         async function openSocialTask(taskId, link, reward) {
             if (userData.completedTasks.includes(taskId)) {
                 showNotification('You have already completed this task.', 'error');
@@ -1860,9 +1938,31 @@
                 showNotification('Daily task limit reached. Try again tomorrow.', 'error');
                 return;
             }
-            
-            // Start verification process
-            startVerification(taskId, link, reward);
+            const button = document.getElementById(taskId);
+            button.disabled = true;
+            button.textContent = 'Opening...';
+            try {
+                tg.openLink(link);
+                userData.balance += reward;
+                userData.totalEarning += reward;
+                userData.tasksDoneToday++;
+                userData.clicks++;
+                userData.completedTasks.push(taskId);
+                
+                // Check if this user qualifies for a referral reward
+                await checkReferralReward();
+                
+                await saveUserData();
+                updateUI();
+                updateSocialTaskButton(taskId);
+                updateTaskLimit();
+                showNotification(`Task completed! $${reward.toFixed(2)} added to your balance.`);
+            } catch (error) {
+                console.error('Error opening link:', error);
+                showNotification('Failed to open link. Please try again.', 'error');
+                button.disabled = false;
+                button.textContent = taskId === 'youtubeTaskBtn' ? 'Subscribe Now' : 'Join Now';
+            }
         }
         function updateSocialTaskButton(taskId) {
             const button = document.getElementById(taskId);
@@ -1894,6 +1994,7 @@
             if (userData.lastTaskReset !== today) {
                 userData.tasksDoneToday = 0;
                 userData.featuredAdsWatchedToday = 0;
+                userData.linkAdsVisitedToday = 0;
                 userData.lastTaskReset = today;
                 saveUserData();
                 return true;
@@ -1914,7 +2015,7 @@
                 if (userData.hasWithdrawnBefore) {
                     document.getElementById('referralRequirement').textContent = 'No referral requirement';
                 } else {
-                    document.getElementById('referralRequirement').textContent = `${userData.totalRefers}/30 referrals needed`;
+                    document.getElementById('referralRequirement').textContent = `${userData.totalRefers}/10 referrals needed`;
                 }
                 updateWithdrawButton();
             });
@@ -1956,6 +2057,7 @@
                 checkInBtn.textContent = 'Limit Reached';
             }
             updateFeaturedAdButton();
+            updateLinkAdButton();
             updateSocialTaskButtons();
         }
         function enableTaskButtons() {
@@ -1966,6 +2068,7 @@
                 checkInBtn.textContent = 'Check In';
             }
             updateFeaturedAdButton();
+            updateLinkAdButton();
             updateSocialTaskButtons();
         }
         function updateTaskButtons() {}
@@ -2004,6 +2107,11 @@
             if (clickedNavItem) {
                 clickedNavItem.classList.add('active');
             }
+            
+            // Refresh referral list when opening the referral tab
+            if (tabName === 'referral') {
+                updateReferralList();
+            }
         }
         function updateWithdrawButton() {
             const withdrawBtn = document.getElementById('withdrawBtn');
@@ -2011,7 +2119,7 @@
             if (userData.balance < 20) {
                 withdrawBtn.disabled = true;
                 withdrawBtn.textContent = 'Insufficient Balance';
-            } else if (!userData.hasWithdrawnBefore && userData.totalRefers < 30) {
+            } else if (!userData.hasWithdrawnBefore && userData.totalRefers < 10) {
                 withdrawBtn.disabled = true;
                 withdrawBtn.textContent = 'Referral Requirement Not Met';
             } else if (amount < 20 || amount > userData.balance) {
@@ -2031,8 +2139,8 @@
                 showNotification('Invalid withdrawal amount.', 'error');
                 return;
             }
-            if (!userData.hasWithdrawnBefore && userData.totalRefers < 30) {
-                showNotification('You need 30 referrals for your first withdrawal.', 'error');
+            if (!userData.hasWithdrawnBefore && userData.totalRefers < 10) {
+                showNotification('You need 10 referrals for your first withdrawal.', 'error');
                 return;
             }
             userData.balance -= amount;
@@ -2078,7 +2186,8 @@
                 youtubeBtn.replaceWith(youtubeBtn.cloneNode(true));
                 const freshYoutubeBtn = document.getElementById('youtubeTaskBtn');
                 freshYoutubeBtn.addEventListener('click', () => {
-                    openSocialTask('youtubeTaskBtn', socialTaskUrls['youtubeTaskBtn'], 0.15);
+                    // Decreased by 30% from $0.12 to $0.08
+                    openSocialTask('youtubeTaskBtn', socialTaskUrls['youtubeTaskBtn'], 0.08);
                 });
             }
             const telegramBtn = document.getElementById('telegramTaskBtn');
@@ -2086,7 +2195,8 @@
                 telegramBtn.replaceWith(telegramBtn.cloneNode(true));
                 const freshTelegramBtn = document.getElementById('telegramTaskBtn');
                 freshTelegramBtn.addEventListener('click', () => {
-                    openSocialTask('telegramTaskBtn', socialTaskUrls['telegramTaskBtn'], 0.10);
+                    // Decreased by 30% from $0.08 to $0.06
+                    openSocialTask('telegramTaskBtn', socialTaskUrls['telegramTaskBtn'], 0.06);
                 });
             }
         }
