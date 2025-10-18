@@ -638,6 +638,43 @@
             color: var(--success);
             margin-right: 5px;
         }
+        /* NEW: Trustpilot Highlight Header */
+        .trustpilot-highlight {
+            background: linear-gradient(135deg, #FF6D00, #FF8F00);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(255, 109, 0, 0.3);
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .trustpilot-highlight::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(45deg);
+        }
+        .trustpilot-highlight h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .trustpilot-highlight p {
+            font-size: 14px;
+            position: relative;
+        }
+        .trustpilot-highlight i {
+            font-size: 24px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
         /* Ad loading overlay */
         .ad-loading-overlay {
             position: fixed;
@@ -1364,67 +1401,105 @@
             <!-- Tasks Tab -->
             <div class="tab-content" id="tasks-tab">
                 <h2 class="dashboard-title">Daily Tasks</h2>
+                
+                <!-- NEW: Trustpilot Highlight Header -->
+                <div class="trustpilot-highlight">
+                    <h3><i class="fas fa-bolt"></i> Payment Instant in Binance!</h3>
+                    <p>Just complete the review tasks and contact me for instant payment.</p>
+                </div>
+                
                 <div class="task-list" id="taskList">
-                    <!-- Daily Check In Card -->
-                    <div class="checkin-task">
-                        <div class="checkin-left">
-                            <div class="checkin-icon">
-                                <i class="fas fa-calendar-check"></i>
-                            </div>
-                            <div class="checkin-info">
-                                <div class="checkin-title">Daily Check In</div>
-                                <div class="checkin-reward">Reward: $0.06</div>
-                            </div>
-                        </div>
-                        <button onclick="dailyCheckIn()" class="checkin-btn" id="checkinBtn">
-                            Check In
-                        </button>
-                    </div>
-                    <!-- Featured Ad Task -->
-                    <div class="featured-task">
-                        <div class="featured-left">
-                            <div class="featured-icon">
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <div class="featured-info">
-                                <div class="featured-title">Premium Ads</div>
-                                <div class="featured-reward">Reward: $0.03</div>
-                            </div>
-                        </div>
-                        <button onclick="Watched()" class="featured-btn" id="featuredAdBtn">
-                            Watch Now (0/100)
-                        </button>
-                    </div>
-                    <!-- NEW: Links Ad Task -->
-                    <div class="links-task">
-                        <div class="links-left">
-                            <div class="links-icon">
-                                <i class="fas fa-link"></i>
-                            </div>
-                            <div class="links-info">
-                                <div class="links-title">Links Ad</div>
-                                <div class="links-reward">Reward: $0.05</div>
-                            </div>
-                        </div>
-                        <button onclick="openLinksAd()" class="links-btn" id="linksAdBtn">
-                            Visit Link (0/10)
-                        </button>
-                    </div>
-                    <!-- NEW: Trustpilot Review Task - Dark Theme -->
-                    <div class="trustpilot-task">
+                    <!-- NEW: Trustpilot Review Tasks - 6 Cards (Moved to top) -->
+                    <div class="trustpilot-task" id="trustpilot1">
                         <div class="trustpilot-left">
                             <div class="trustpilot-icon">
                                 <i class="fas fa-star"></i>
                             </div>
                             <div class="trustpilot-info">
-                                <div class="trustpilot-title">Trustpilot Review</div>
-                                <div class="trustpilot-reward">Reward: $0.10 (Instant to Binance)</div>
+                                <div class="trustpilot-title">Trustpilot Review: The Palette</div>
+                                <div class="trustpilot-reward">Reward: $0.10</div>
                             </div>
                         </div>
-                        <button onclick="handleTrustpilotTask()" class="trustpilot-btn" id="trustpilotTaskBtn">
+                        <button onclick="handleTrustpilotTask('https://www.trustpilot.com/review/thepalette.online', 'trustpilot1')" class="trustpilot-btn" id="trustpilotBtn1">
                             Write Review
                         </button>
                     </div>
+                    
+                    <div class="trustpilot-task" id="trustpilot2">
+                        <div class="trustpilot-left">
+                            <div class="trustpilot-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="trustpilot-info">
+                                <div class="trustpilot-title">Trustpilot Review: Verdago</div>
+                                <div class="trustpilot-reward">Reward: $0.10</div>
+                            </div>
+                        </div>
+                        <button onclick="handleTrustpilotTask('https://www.trustpilot.com/review/verdago.online', 'trustpilot2')" class="trustpilot-btn" id="trustpilotBtn2">
+                            Write Review
+                        </button>
+                    </div>
+                    
+                    <div class="trustpilot-task" id="trustpilot3">
+                        <div class="trustpilot-left">
+                            <div class="trustpilot-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="trustpilot-info">
+                                <div class="trustpilot-title">Trustpilot Review: Taskloop</div>
+                                <div class="trustpilot-reward">Reward: $0.10</div>
+                            </div>
+                        </div>
+                        <button onclick="handleTrustpilotTask('https://www.trustpilot.com/review/taskloop.online', 'trustpilot3')" class="trustpilot-btn" id="trustpilotBtn3">
+                            Write Review
+                        </button>
+                    </div>
+                    
+                    <div class="trustpilot-task" id="trustpilot4">
+                        <div class="trustpilot-left">
+                            <div class="trustpilot-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="trustpilot-info">
+                                <div class="trustpilot-title">Trustpilot Review: Loafhaus</div>
+                                <div class="trustpilot-reward">Reward: $0.10</div>
+                            </div>
+                        </div>
+                        <button onclick="handleTrustpilotTask('https://www.trustpilot.com/review/loafhaus.online', 'trustpilot4')" class="trustpilot-btn" id="trustpilotBtn4">
+                            Write Review
+                        </button>
+                    </div>
+                    
+                    <div class="trustpilot-task" id="trustpilot5">
+                        <div class="trustpilot-left">
+                            <div class="trustpilot-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="trustpilot-info">
+                                <div class="trustpilot-title">Trustpilot Review: Paperfox</div>
+                                <div class="trustpilot-reward">Reward: $0.10</div>
+                            </div>
+                        </div>
+                        <button onclick="handleTrustpilotTask('https://www.trustpilot.com/review/paperfox.online', 'trustpilot5')" class="trustpilot-btn" id="trustpilotBtn5">
+                            Write Review
+                        </button>
+                    </div>
+                    
+                    <div class="trustpilot-task" id="trustpilot6">
+                        <div class="trustpilot-left">
+                            <div class="trustpilot-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="trustpilot-info">
+                                <div class="trustpilot-title">Trustpilot Review: Drip Drop</div>
+                                <div class="trustpilot-reward">Reward: $0.10</div>
+                            </div>
+                        </div>
+                        <button onclick="handleTrustpilotTask('https://www.trustpilot.com/review/drip-drop.online', 'trustpilot6')" class="trustpilot-btn" id="trustpilotBtn6">
+                            Write Review
+                        </button>
+                    </div>
+                    
                     <!-- Trustpilot Review Form (initially hidden) -->
                     <div class="trustpilot-review-form" id="trustpilotReviewForm">
                         <h3>Submit Your Trustpilot Review</h3>
@@ -1440,6 +1515,55 @@
                             Submit for Verification & Reward
                         </button>
                     </div>
+                    
+                    <!-- Daily Check In Card -->
+                    <div class="checkin-task">
+                        <div class="checkin-left">
+                            <div class="checkin-icon">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <div class="checkin-info">
+                                <div class="checkin-title">Daily Check In</div>
+                                <div class="checkin-reward">Reward: $0.06</div>
+                            </div>
+                        </div>
+                        <button onclick="dailyCheckIn()" class="checkin-btn" id="checkinBtn">
+                            Check In
+                        </button>
+                    </div>
+                    
+                    <!-- Featured Ad Task -->
+                    <div class="featured-task">
+                        <div class="featured-left">
+                            <div class="featured-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="featured-info">
+                                <div class="featured-title">Premium Ads</div>
+                                <div class="featured-reward">Reward: $0.03</div>
+                            </div>
+                        </div>
+                        <button onclick="Watched()" class="featured-btn" id="featuredAdBtn">
+                            Watch Now (0/100)
+                        </button>
+                    </div>
+                    
+                    <!-- NEW: Links Ad Task -->
+                    <div class="links-task">
+                        <div class="links-left">
+                            <div class="links-icon">
+                                <i class="fas fa-link"></i>
+                            </div>
+                            <div class="links-info">
+                                <div class="links-title">Links Ad</div>
+                                <div class="links-reward">Reward: $0.05</div>
+                            </div>
+                        </div>
+                        <button onclick="openLinksAd()" class="links-btn" id="linksAdBtn">
+                            Visit Link (0/10)
+                        </button>
+                    </div>
+                    
                     <!-- YouTube Subscribe Task -->
                     <div class="youtube-task">
                         <div class="task-left">
@@ -1455,6 +1579,7 @@
                             Subscribe Now
                         </button>
                     </div>
+                    
                     <!-- Telegram Join Task -->
                     <div class="telegram-task">
                         <div class="task-left">
@@ -1937,7 +2062,7 @@
                 updateCheckInButton();
                 updateFeaturedAdButton();
                 updateLinksAdButton();
-                updateTrustpilotTaskButton();
+                updateTrustpilotTaskButtons();
                 updateSocialTaskButtons();
                 updateUI();
                 updateTaskLimit();
@@ -2425,9 +2550,12 @@
         }
         
         // NEW: Trustpilot Review Task Functions
-        function handleTrustpilotTask() {
+        let currentTrustpilotUrl = '';
+        let currentTrustpilotId = '';
+        
+        function handleTrustpilotTask(url, taskId) {
             // Check if task is already completed
-            if (userData.completedTasks.includes('trustpilotReview')) {
+            if (userData.completedTasks.includes(taskId)) {
                 showNotification('You have already completed this task.', 'error');
                 return;
             }
@@ -2446,6 +2574,8 @@
             }
             
             // First click - open Trustpilot
+            currentTrustpilotUrl = url;
+            currentTrustpilotId = taskId;
             openTrustpilotReview();
         }
         
@@ -2455,15 +2585,14 @@
             saveUserData();
             
             // Open Trustpilot link
-            const trustpilotUrl = 'https://www.trustpilot.com/review/quickcashminiapp'; // Replace with your actual Trustpilot page
-            tg.openLink(trustpilotUrl);
+            tg.openLink(currentTrustpilotUrl);
             
             // Show notification
             showNotification('Opening Trustpilot... After writing your review, return to this app and click "Submit".', 'info');
             
             // Update button text after a delay (assuming user will return)
             setTimeout(() => {
-                updateTrustpilotTaskButton();
+                updateTrustpilotTaskButtons();
             }, 3000);
         }
         
@@ -2485,7 +2614,7 @@
             }
             
             // Check if the task is already completed
-            if (userData.completedTasks.includes('trustpilotReview')) {
+            if (userData.completedTasks.includes(currentTrustpilotId)) {
                 showNotification('You have already completed this task.', 'error');
                 return;
             }
@@ -2519,7 +2648,7 @@
                 userData.totalEarning += 0.10;
                 userData.tasksDoneToday++;
                 userData.totalTasksCompleted++;
-                userData.completedTasks.push('trustpilotReview');
+                userData.completedTasks.push(currentTrustpilotId);
                 
                 // Reset the trustpilotReviewStarted flag
                 userData.trustpilotReviewStarted = false;
@@ -2536,14 +2665,14 @@
                 // Update the UI
                 updateUI();
                 updateTaskLimit();
-                updateTrustpilotTaskButton();
+                updateTrustpilotTaskButtons();
                 
                 // Hide the form
                 document.getElementById('trustpilotReviewForm').style.display = 'none';
                 document.getElementById('trustpilotReviewLink').value = '';
                 
                 // Open Telegram contact
-                const telegramUrl = 'https://t.me/your_username'; // Replace with your actual Telegram username
+                const telegramUrl = 'https://t.me/sufyantedev'; // Updated to your Telegram username
                 tg.openLink(telegramUrl);
                 
                 // Show success notification
@@ -2560,21 +2689,26 @@
             }
         }
         
-        function updateTrustpilotTaskButton() {
-            const trustpilotBtn = document.getElementById('trustpilotTaskBtn');
-            if (trustpilotBtn) {
-                if (userData.completedTasks.includes('trustpilotReview')) {
-                    trustpilotBtn.disabled = true;
-                    trustpilotBtn.textContent = 'Completed';
-                } else if (userData.trustpilotReviewStarted) {
-                    trustpilotBtn.disabled = false;
-                    trustpilotBtn.textContent = 'Submit';
-                } else if (userData.tasksDoneToday >= 100) {
-                    trustpilotBtn.disabled = true;
-                    trustpilotBtn.textContent = 'Limit Reached';
-                } else {
-                    trustpilotBtn.disabled = false;
-                    trustpilotBtn.textContent = 'Write Review';
+        function updateTrustpilotTaskButtons() {
+            // Update all 6 Trustpilot task buttons
+            for (let i = 1; i <= 6; i++) {
+                const trustpilotBtn = document.getElementById(`trustpilotBtn${i}`);
+                if (trustpilotBtn) {
+                    const taskId = `trustpilot${i}`;
+                    
+                    if (userData.completedTasks.includes(taskId)) {
+                        trustpilotBtn.disabled = true;
+                        trustpilotBtn.textContent = 'Completed';
+                    } else if (userData.trustpilotReviewStarted) {
+                        trustpilotBtn.disabled = false;
+                        trustpilotBtn.textContent = 'Submit';
+                    } else if (userData.tasksDoneToday >= 100) {
+                        trustpilotBtn.disabled = true;
+                        trustpilotBtn.textContent = 'Limit Reached';
+                    } else {
+                        trustpilotBtn.disabled = false;
+                        trustpilotBtn.textContent = 'Write Review';
+                    }
                 }
             }
         }
@@ -2714,7 +2848,7 @@
             }
             updateFeaturedAdButton();
             updateLinksAdButton();
-            updateTrustpilotTaskButton();
+            updateTrustpilotTaskButtons();
             updateSocialTaskButtons();
         }
         function enableTaskButtons() {
@@ -2726,11 +2860,11 @@
             }
             updateFeaturedAdButton();
             updateLinksAdButton();
-            updateTrustpilotTaskButton();
+            updateTrustpilotTaskButtons();
             updateSocialTaskButtons();
         }
         function updateTaskButtons() {
-            updateTrustpilotTaskButton();
+            updateTrustpilotTaskButtons();
         }
         function updateSocialTaskButtons() {
             updateSocialTaskButton('youtubeTaskBtn');
