@@ -26,8 +26,8 @@
             --checkin: #00897B;
             --link: #2962FF;
             --darkblue: #0D47A1;
-            --links: #2196F3;
-            --trustpilot: #00B8A9;
+            --links: #2196F3; /* Changed color for links ad */
+            --promotion: #673AB7; /* New color for promotion */
         }
         * {
             margin: 0;
@@ -198,6 +198,76 @@
             opacity: 0.1;
             color: var(--primary);
         }
+        
+        /* NEW: Promotion Container (moved to top) */
+        .promotion-container {
+            margin-bottom: 25px;
+        }
+        .promotion-card {
+            background: linear-gradient(135deg, var(--promotion), #9C27B0);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(103, 58, 183, 0.15);
+            color: white;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .promotion-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(45deg);
+        }
+        .promotion-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 1;
+        }
+        .promotion-icon {
+            font-size: 32px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        .promotion-info {
+            text-align: left;
+        }
+        .promotion-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .promotion-description {
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        .promotion-btn {
+            background: white;
+            color: var(--promotion);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            white-space: nowrap;
+            z-index: 1;
+            position: relative;
+        }
+        .promotion-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+        
         /* Progress Container */
         .progress-container {
             background: white;
@@ -286,7 +356,8 @@
             margin-right: 8px;
             vertical-align: middle;
         }
-        /* Tasks */
+        
+        /* Tasks - IMPROVED DESIGN */
         .task-list {
             display: flex;
             flex-direction: column;
@@ -497,183 +568,6 @@
             background: rgba(255, 255, 255, 0.5);
             cursor: not-allowed;
             transform: none;
-        }
-        /* Trustpilot Review Task - Dark Theme */
-        .trustpilot-task {
-            background: linear-gradient(135deg, #212121, #424242);
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-            color: white;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .trustpilot-task::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
-            transform: rotate(45deg);
-        }
-        .trustpilot-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .trustpilot-icon {
-            font-size: 28px;
-            color: #FFC107;
-        }
-        .trustpilot-info {
-            text-align: left;
-        }
-        .trustpilot-title {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 2px;
-        }
-        .trustpilot-reward {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--warning);
-        }
-        .trustpilot-btn {
-            background: #FFC107;
-            color: #212121;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-            white-space: nowrap;
-            z-index: 0;
-            position: relative;
-        }
-        .trustpilot-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        .trustpilot-btn:disabled {
-            background: #757575;
-            cursor: not-allowed;
-            transform: none;
-        }
-        /* Trustpilot Review Form */
-        .trustpilot-review-form {
-            background: white;
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-            margin-top: 20px;
-            display: none;
-        }
-        .trustpilot-review-form h3 {
-            margin-bottom: 15px;
-            color: var(--dark);
-            font-size: 18px;
-            text-align: center;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: var(--dark);
-            font-size: 14px;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #E0E0E0;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: border-color 0.3s;
-        }
-        .form-group input:focus {
-            border-color: var(--trustpilot);
-            outline: none;
-        }
-        .trustpilot-submit-btn {
-            background: linear-gradient(135deg, var(--trustpilot), #00A085);
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            width: 100%;
-        }
-        .trustpilot-submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 184, 169, 0.3);
-        }
-        .trustpilot-submit-btn:disabled {
-            background: var(--gray);
-            cursor: not-allowed;
-            transform: none;
-        }
-        .trustpilot-info-text {
-            background: #E8F5E9;
-            border: 1px solid var(--success);
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 15px;
-            font-size: 13px;
-            color: var(--dark);
-        }
-        .trustpilot-info-text i {
-            color: var(--success);
-            margin-right: 5px;
-        }
-        /* NEW: Trustpilot Highlight Header */
-        .trustpilot-highlight {
-            background: linear-gradient(135deg, #FF6D00, #FF8F00);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 20px rgba(255, 109, 0, 0.3);
-            text-align: center;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-        .trustpilot-highlight::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
-            transform: rotate(45deg);
-        }
-        .trustpilot-highlight h3 {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            position: relative;
-        }
-        .trustpilot-highlight p {
-            font-size: 14px;
-            position: relative;
-        }
-        .trustpilot-highlight i {
-            font-size: 24px;
-            margin-right: 10px;
-            vertical-align: middle;
         }
         /* Ad loading overlay */
         .ad-loading-overlay {
@@ -1370,6 +1264,25 @@
                         <i class="fas fa-users stat-icon"></i>
                     </div>
                 </div>
+                
+                <!-- NEW: Promotion Container (moved to top) -->
+                <div class="promotion-container">
+                    <div class="promotion-card">
+                        <div class="promotion-left">
+                            <div class="promotion-icon">
+                                <i class="fas fa-pen"></i>
+                            </div>
+                            <div class="promotion-info">
+                                <div class="promotion-title">Write Reviews & Earn $0.10</div>
+                                <div class="promotion-description">Instant payment to Binance</div>
+                            </div>
+                        </div>
+                        <button class="promotion-btn" onclick="window.open('https://t.me/write_trustpilot_bot', '_blank')">
+                            Write Review
+                        </button>
+                    </div>
+                </div>
+                
                 <!-- Progress Container -->
                 <div class="progress-container">
                     <h3 class="progress-title">Daily Task Limit</h3>
@@ -1401,121 +1314,7 @@
             <!-- Tasks Tab -->
             <div class="tab-content" id="tasks-tab">
                 <h2 class="dashboard-title">Daily Tasks</h2>
-                
-                <!-- NEW: Trustpilot Highlight Header -->
-                <div class="trustpilot-highlight">
-                    <h3><i class="fas fa-bolt"></i> Payment Instant in Binance!</h3>
-                    <p>Just complete the review tasks and contact me for instant payment.</p>
-                </div>
-                
                 <div class="task-list" id="taskList">
-                    <!-- NEW: Trustpilot Review Tasks - 6 Cards (Moved to top) -->
-                    <div class="trustpilot-task" id="trustpilot1">
-                        <div class="trustpilot-left">
-                            <div class="trustpilot-icon">
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <div class="trustpilot-info">
-                                <div class="trustpilot-title">Trustpilot Review: The Palette</div>
-                                <div class="trustpilot-reward">Reward: $0.10</div>
-                            </div>
-                        </div>
-                        <button onclick="handleTrustpilotTask('https://www.trustpilot.com/review/thepalette.online', 'trustpilot1')" class="trustpilot-btn" id="trustpilotBtn1">
-                            Write Review
-                        </button>
-                    </div>
-                    
-                    <div class="trustpilot-task" id="trustpilot2">
-                        <div class="trustpilot-left">
-                            <div class="trustpilot-icon">
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <div class="trustpilot-info">
-                                <div class="trustpilot-title">Trustpilot Review: Verdago</div>
-                                <div class="trustpilot-reward">Reward: $0.10</div>
-                            </div>
-                        </div>
-                        <button onclick="handleTrustpilotTask('https://www.trustpilot.com/review/verdago.online', 'trustpilot2')" class="trustpilot-btn" id="trustpilotBtn2">
-                            Write Review
-                        </button>
-                    </div>
-                    
-                    <div class="trustpilot-task" id="trustpilot3">
-                        <div class="trustpilot-left">
-                            <div class="trustpilot-icon">
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <div class="trustpilot-info">
-                                <div class="trustpilot-title">Trustpilot Review: Taskloop</div>
-                                <div class="trustpilot-reward">Reward: $0.10</div>
-                            </div>
-                        </div>
-                        <button onclick="handleTrustpilotTask('https://www.trustpilot.com/review/taskloop.online', 'trustpilot3')" class="trustpilot-btn" id="trustpilotBtn3">
-                            Write Review
-                        </button>
-                    </div>
-                    
-                    <div class="trustpilot-task" id="trustpilot4">
-                        <div class="trustpilot-left">
-                            <div class="trustpilot-icon">
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <div class="trustpilot-info">
-                                <div class="trustpilot-title">Trustpilot Review: Loafhaus</div>
-                                <div class="trustpilot-reward">Reward: $0.10</div>
-                            </div>
-                        </div>
-                        <button onclick="handleTrustpilotTask('https://www.trustpilot.com/review/loafhaus.online', 'trustpilot4')" class="trustpilot-btn" id="trustpilotBtn4">
-                            Write Review
-                        </button>
-                    </div>
-                    
-                    <div class="trustpilot-task" id="trustpilot5">
-                        <div class="trustpilot-left">
-                            <div class="trustpilot-icon">
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <div class="trustpilot-info">
-                                <div class="trustpilot-title">Trustpilot Review: Paperfox</div>
-                                <div class="trustpilot-reward">Reward: $0.10</div>
-                            </div>
-                        </div>
-                        <button onclick="handleTrustpilotTask('https://www.trustpilot.com/review/paperfox.online', 'trustpilot5')" class="trustpilot-btn" id="trustpilotBtn5">
-                            Write Review
-                        </button>
-                    </div>
-                    
-                    <div class="trustpilot-task" id="trustpilot6">
-                        <div class="trustpilot-left">
-                            <div class="trustpilot-icon">
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <div class="trustpilot-info">
-                                <div class="trustpilot-title">Trustpilot Review: Drip Drop</div>
-                                <div class="trustpilot-reward">Reward: $0.10</div>
-                            </div>
-                        </div>
-                        <button onclick="handleTrustpilotTask('https://www.trustpilot.com/review/drip-drop.online', 'trustpilot6')" class="trustpilot-btn" id="trustpilotBtn6">
-                            Write Review
-                        </button>
-                    </div>
-                    
-                    <!-- Trustpilot Review Form (initially hidden) -->
-                    <div class="trustpilot-review-form" id="trustpilotReviewForm">
-                        <h3>Submit Your Trustpilot Review</h3>
-                        <div class="trustpilot-info-text">
-                            <i class="fas fa-info-circle"></i>
-                            <strong>Important:</strong> After writing your review on Trustpilot, paste the review link below to receive your instant $0.10 reward to your Binance account.
-                        </div>
-                        <div class="form-group">
-                            <label for="trustpilotReviewLink">Trustpilot Review Link</label>
-                            <input type="text" id="trustpilotReviewLink" placeholder="https://www.trustpilot.com/review/..." required>
-                        </div>
-                        <button type="button" class="trustpilot-submit-btn" id="trustpilotSubmitBtn" onclick="submitTrustpilotReview()">
-                            Submit for Verification & Reward
-                        </button>
-                    </div>
-                    
                     <!-- Daily Check In Card -->
                     <div class="checkin-task">
                         <div class="checkin-left">
@@ -1531,7 +1330,6 @@
                             Check In
                         </button>
                     </div>
-                    
                     <!-- Featured Ad Task -->
                     <div class="featured-task">
                         <div class="featured-left">
@@ -1547,7 +1345,6 @@
                             Watch Now (0/100)
                         </button>
                     </div>
-                    
                     <!-- NEW: Links Ad Task -->
                     <div class="links-task">
                         <div class="links-left">
@@ -1563,7 +1360,6 @@
                             Visit Link (0/10)
                         </button>
                     </div>
-                    
                     <!-- YouTube Subscribe Task -->
                     <div class="youtube-task">
                         <div class="task-left">
@@ -1579,7 +1375,6 @@
                             Subscribe Now
                         </button>
                     </div>
-                    
                     <!-- Telegram Join Task -->
                     <div class="telegram-task">
                         <div class="task-left">
@@ -1926,8 +1721,7 @@
             referralRewardProcessed: false, // New field to track if referral reward has been processed
             referrals: [], // New field to store detailed referral information
             totalTasksCompleted: 0, // New field to track total tasks across all days
-            linksAdsVisitedToday: 0, // New field to track links ads visited today
-            trustpilotReviewStarted: false // New field to track Trustpilot review task state
+            linksAdsVisitedToday: 0 // New field to track links ads visited today
         };
         // Ad URLs - Updated with new links
         const adUrls = [
@@ -1973,8 +1767,7 @@
                 referralRewardProcessed: false, // New field to track if referral reward has been processed
                 referrals: [], // New field to store detailed referral information
                 totalTasksCompleted: 0, // New field to track total tasks across all days
-                linksAdsVisitedToday: 0, // New field to track links ads visited today
-                trustpilotReviewStarted: false // New field to track Trustpilot review task state
+                linksAdsVisitedToday: 0 // New field to track links ads visited today
             };
         }
         // Save user data to Firestore
@@ -2026,13 +1819,6 @@
                         console.log('Migrated linksAdsVisitedToday field');
                     }
                     
-                    // Initialize trustpilotReviewStarted if it doesn't exist
-                    if (userData.trustpilotReviewStarted === undefined) {
-                        userData.trustpilotReviewStarted = false;
-                        dataUpdated = true;
-                        console.log('Migrated trustpilotReviewStarted field');
-                    }
-                    
                     // Save the updated data if migration was needed
                     if (dataUpdated) {
                         await saveUserData();
@@ -2062,7 +1848,6 @@
                 updateCheckInButton();
                 updateFeaturedAdButton();
                 updateLinksAdButton();
-                updateTrustpilotTaskButtons();
                 updateSocialTaskButtons();
                 updateUI();
                 updateTaskLimit();
@@ -2549,170 +2334,6 @@
             }
         }
         
-        // NEW: Trustpilot Review Task Functions
-        let currentTrustpilotUrl = '';
-        let currentTrustpilotId = '';
-        
-        function handleTrustpilotTask(url, taskId) {
-            // Check if task is already completed
-            if (userData.completedTasks.includes(taskId)) {
-                showNotification('You have already completed this task.', 'error');
-                return;
-            }
-            
-            // Check daily task limit
-            if (userData.tasksDoneToday >= 100) {
-                showNotification('Daily task limit reached. Try again tomorrow.', 'error');
-                return;
-            }
-            
-            // Check if the user has already clicked "Write Review"
-            if (userData.trustpilotReviewStarted) {
-                // User has already clicked "Write Review", now they should click "Submit"
-                openTrustpilotReviewForm();
-                return;
-            }
-            
-            // First click - open Trustpilot
-            currentTrustpilotUrl = url;
-            currentTrustpilotId = taskId;
-            openTrustpilotReview();
-        }
-        
-        function openTrustpilotReview() {
-            // Set flag that user has clicked "Write Review"
-            userData.trustpilotReviewStarted = true;
-            saveUserData();
-            
-            // Open Trustpilot link
-            tg.openLink(currentTrustpilotUrl);
-            
-            // Show notification
-            showNotification('Opening Trustpilot... After writing your review, return to this app and click "Submit".', 'info');
-            
-            // Update button text after a delay (assuming user will return)
-            setTimeout(() => {
-                updateTrustpilotTaskButtons();
-            }, 3000);
-        }
-        
-        function openTrustpilotReviewForm() {
-            // Show the review form
-            document.getElementById('trustpilotReviewForm').style.display = 'block';
-            
-            // Scroll to the form
-            document.getElementById('trustpilotReviewForm').scrollIntoView({ behavior: 'smooth' });
-        }
-        
-        async function submitTrustpilotReview() {
-            const reviewLink = document.getElementById('trustpilotReviewLink').value.trim();
-            
-            // Validate the link
-            if (!reviewLink || !reviewLink.includes('trustpilot.com')) {
-                showNotification('Please enter a valid Trustpilot review link.', 'error');
-                return;
-            }
-            
-            // Check if the task is already completed
-            if (userData.completedTasks.includes(currentTrustpilotId)) {
-                showNotification('You have already completed this task.', 'error');
-                return;
-            }
-            
-            // Check daily task limit
-            if (userData.tasksDoneToday >= 100) {
-                showNotification('Daily task limit reached. Try again tomorrow.', 'error');
-                return;
-            }
-            
-            // Disable submit button
-            const submitBtn = document.getElementById('trustpilotSubmitBtn');
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Processing...';
-            
-            try {
-                // Process the review submission
-                const reviewData = {
-                    userId: userData.id,
-                    userName: userData.name,
-                    reviewLink: reviewLink,
-                    submittedAt: new Date().toISOString(),
-                    status: 'pending'
-                };
-                
-                // Save the review submission to Firestore
-                await db.collection('trustpilotReviews').add(reviewData);
-                
-                // Add reward to the user's balance
-                userData.balance += 0.10;
-                userData.totalEarning += 0.10;
-                userData.tasksDoneToday++;
-                userData.totalTasksCompleted++;
-                userData.completedTasks.push(currentTrustpilotId);
-                
-                // Reset the trustpilotReviewStarted flag
-                userData.trustpilotReviewStarted = false;
-                
-                // Check if this user qualifies for a referral reward
-                await checkReferralReward();
-                
-                // Update referral progress for referrer
-                await updateReferralProgress();
-                
-                // Save the user data
-                await saveUserData();
-                
-                // Update the UI
-                updateUI();
-                updateTaskLimit();
-                updateTrustpilotTaskButtons();
-                
-                // Hide the form
-                document.getElementById('trustpilotReviewForm').style.display = 'none';
-                document.getElementById('trustpilotReviewLink').value = '';
-                
-                // Open Telegram contact
-                const telegramUrl = 'https://t.me/sufyantedev'; // Updated to your Telegram username
-                tg.openLink(telegramUrl);
-                
-                // Show success notification
-                showNotification('Review submitted successfully! $0.10 will be added to your Binance account. You can now contact me on Telegram for verification.', 'success');
-                
-                // Log the review submission
-                console.log('New Trustpilot review submitted:', reviewData);
-                
-            } catch (error) {
-                console.error('Error processing Trustpilot review:', error);
-                showNotification('Failed to submit review. Please try again.', 'error');
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Submit for Verification & Reward';
-            }
-        }
-        
-        function updateTrustpilotTaskButtons() {
-            // Update all 6 Trustpilot task buttons
-            for (let i = 1; i <= 6; i++) {
-                const trustpilotBtn = document.getElementById(`trustpilotBtn${i}`);
-                if (trustpilotBtn) {
-                    const taskId = `trustpilot${i}`;
-                    
-                    if (userData.completedTasks.includes(taskId)) {
-                        trustpilotBtn.disabled = true;
-                        trustpilotBtn.textContent = 'Completed';
-                    } else if (userData.trustpilotReviewStarted) {
-                        trustpilotBtn.disabled = false;
-                        trustpilotBtn.textContent = 'Submit';
-                    } else if (userData.tasksDoneToday >= 100) {
-                        trustpilotBtn.disabled = true;
-                        trustpilotBtn.textContent = 'Limit Reached';
-                    } else {
-                        trustpilotBtn.disabled = false;
-                        trustpilotBtn.textContent = 'Write Review';
-                    }
-                }
-            }
-        }
-        
         async function openSocialTask(taskId, link, reward) {
             if (userData.completedTasks.includes(taskId)) {
                 showNotification('You have already completed this task.', 'error');
@@ -2784,7 +2405,6 @@
                 userData.featuredAdsWatchedToday = 0;
                 userData.linkAdsVisitedToday = 0;
                 userData.linksAdsVisitedToday = 0; // Reset links ads counter
-                userData.trustpilotReviewStarted = false; // Reset Trustpilot review flag
                 userData.lastTaskReset = today;
                 saveUserData();
                 return true;
@@ -2848,7 +2468,6 @@
             }
             updateFeaturedAdButton();
             updateLinksAdButton();
-            updateTrustpilotTaskButtons();
             updateSocialTaskButtons();
         }
         function enableTaskButtons() {
@@ -2860,12 +2479,9 @@
             }
             updateFeaturedAdButton();
             updateLinksAdButton();
-            updateTrustpilotTaskButtons();
             updateSocialTaskButtons();
         }
-        function updateTaskButtons() {
-            updateTrustpilotTaskButtons();
-        }
+        function updateTaskButtons() {}
         function updateSocialTaskButtons() {
             updateSocialTaskButton('youtubeTaskBtn');
             updateSocialTaskButton('telegramTaskBtn');
